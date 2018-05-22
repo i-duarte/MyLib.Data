@@ -1,2 +1,2 @@
 # MyLib.Data
-MyLib.Data is a lightweight, data access, object oriented library written in CSharp.
+MyLib.Data is a lightweight, easy to use ORM written in CSharp.
