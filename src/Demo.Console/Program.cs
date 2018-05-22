@@ -1,9 +1,13 @@
-﻿namespace Demo.Console
+﻿using MyLib.Data;
+
+namespace Demo.Console
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
+			var demoDatabase = new DemoDataBase();
+			//demoDatabase.Products.GetList();
 		}
 	}
 }

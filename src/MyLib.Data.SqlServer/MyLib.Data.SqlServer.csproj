@@ -39,7 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionFactory.cs" />
+    <Compile Include="DataBase.cs" />
+    <Compile Include="ParameterList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">
+      <Project>{b687b713-2732-445c-99a9-1b14e67bcb60}</Project>
+      <Name>MyLib.Data.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
