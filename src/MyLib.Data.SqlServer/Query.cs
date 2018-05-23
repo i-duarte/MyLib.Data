@@ -1,120 +1,483 @@
 ﻿using System.Data;
+using System.Data.SqlClient;
 using MyLib.Data.Common;
 
 namespace MyLib.Data.SqlServer
 {
     public class Query : IQuery
     {
-		protected ConnectionFactory ConnectionFactory { get; set; }
+		private const int DefaultTimeOut = 30;
 
-	    public Query(ConnectionFactory connectionFactory)
+		protected DataBase DataBase { get; set; }
+
+	    public Query(
+			DataBase dataBase
+		)
 	    {
-		    ConnectionFactory = connectionFactory;
+		    DataBase = dataBase;
 	    }
 
-	    public IDataReader GetDataReader(string sql)
+	    private SqlConnection GetConnection()
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				DataBase
+				.GetConnection() as SqlConnection;
 	    }
 
-	    public IDataReader GetDataReader(string sql, IParameterList parameterList)
+	    private SqlCommand GetSqlCommand(
+			string sql
+			, int timeOut = DefaultTimeOut
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				new SqlCommand(
+						sql
+						, GetConnection()
+					)
+					.SetTimeOut(timeOut);
 	    }
 
-	    public IDataReader GetDataReader(string sql, IDbConnection connection)
+	    private SqlCommand GetSqlCommand(
+			string sql
+			, IParameterList parameterlist
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+			    GetSqlCommand(sql)
+				.AddParameters(parameterlist);
 	    }
 
-	    public IDataReader GetDataReader(string sql, IParameterList parameterList, IDbConnection connection)
+	    private static SqlCommand GetSqlCommand(
+			string sql
+			, IDbConnection connection
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				new SqlCommand(
+						sql
+						, connection as SqlConnection
+					);
 	    }
 
-	    public IDataReader GetDataReader(string sql, IDbTransaction transaction)
+	    private static SqlCommand GetSqlCommand(
+		    string sql
+		    , IParameterList parameterlist
+		    , IDbConnection connection
+	    )
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetSqlCommand(
+				    sql
+				    , connection
+			    )
+				.AddParameters(parameterlist);
 	    }
 
-	    public IDataReader GetDataReader(string sql, IParameterList parameterList, IDbTransaction transaction)
+	    private static SqlCommand GetSqlCommand(
+		    string sql
+		    , IDbTransaction transaction
+	    )
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				GetSqlCommand(
+					sql
+					, transaction.Connection
+				);
 	    }
 
-	    public int Execute(string sql)
+	    private static SqlCommand GetSqlCommand(
+		    string sql
+			, IParameterList parameterList
+		    , IDbTransaction transaction
+			, int timeOut = DefaultTimeOut
+	    )
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetSqlCommand(
+					sql
+					, transaction
+				)
+				.AddParameters(parameterList)
+				.SetTimeOut(timeOut);
 	    }
 
-	    public int Execute(string sql, IParameterList parameterList)
+		private static SqlDataReader GetDataReader(
+			SqlCommand cmd
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				cmd.ExecuteReader(
+					CommandBehavior.CloseConnection
+				);
 	    }
 
-	    public int Execute(string sql, IDbConnection connection)
+		public IDataReader GetDataReader(
+			string sql
+			)
 	    {
-		    throw new System.NotImplementedException();
+			return 
+				GetDataReader(
+					GetSqlCommand(sql)
+				);
+		}
+
+	    public IDataReader GetDataReader(
+			string sql
+			, IParameterList parameterList
+		)
+	    {
+		    return 
+				GetDataReader(
+					GetSqlCommand(
+						sql
+						, parameterList
+					)
+				);
+		}
+
+	    public IDataReader GetDataReader(
+			string sql
+			, IDbConnection connection
+		)
+	    {
+		    return 
+				GetDataReader(
+					GetSqlCommand(
+						sql
+						, connection
+					)
+				);
 	    }
 
-	    public int Execute(string sql, IParameterList parameterList, IDbConnection connection)
+	    public IDataReader GetDataReader(
+			string sql
+			, IParameterList parameterList
+			, IDbConnection connection
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				GetDataReader(
+					GetSqlCommand(
+						sql
+						, parameterList
+						, connection
+					)
+				);
 	    }
 
-	    public int Execute(string sql, IDbTransaction transaction)
+	    public IDataReader GetDataReader(
+			string sql
+			, IDbTransaction transaction
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetDataReader(
+					GetSqlCommand(
+						sql
+						, transaction
+					)
+				);
 	    }
 
-	    public int Execute(string sql, IParameterList parameterList, IDbTransaction transaction)
+	    public IDataReader GetDataReader(
+			string sql
+			, IParameterList parameterList
+			, IDbTransaction transaction
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetDataReader(
+				    GetSqlCommand(
+					    sql
+					    , parameterList
+					    , transaction
+				    )
+			    );
 	    }
 
-	    public void BulkCopy(IDataReader reader, string table, int numFields, bool deleteRecords = true)
+	    public IDataReader GetDataReader(
+			string sql
+			, IParameterList parameterList
+			, IDbTransaction transaction
+			, int timeOut
+			)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				GetDataReader(
+					GetSqlCommand(
+						sql
+						, parameterList
+						, transaction
+						, timeOut
+					)
+				);
 	    }
 
-	    public void BulkCopy(IDataReader reader, string table, int numFields, IDbTransaction trans, bool deleteRecords = true)
+	    public int Execute(
+			string sql
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				GetSqlCommand(sql)
+				.ExecuteNonQuery();
 	    }
 
-	    public void BulkCopy(DataTable dt, string table, int numFields)
+	    public int Execute(
+			string sql
+			, IParameterList parameterList
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetSqlCommand(
+					sql
+					, parameterList
+				)
+				.ExecuteNonQuery();
 	    }
 
-	    public T Get<T>(string sql)
+	    public int Execute(
+			string sql
+			, IDbConnection connection
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				GetSqlCommand(
+					sql
+					, connection
+				)
+				.ExecuteNonQuery();
 	    }
 
-	    public T Get<T>(string sql, IParameterList parameterList)
+	    public int Execute(
+			string sql
+			, IParameterList parameterList
+			, IDbConnection connection
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetSqlCommand(
+				    sql
+					, parameterList
+					, connection
+				)
+				.ExecuteNonQuery();
 	    }
 
-	    public T Get<T>(string sql, IDbConnection connection)
+	    public int Execute(
+			string sql
+			, IDbTransaction transaction
+			)
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetSqlCommand(
+					sql
+					, transaction
+				)
+				.ExecuteNonQuery();
+
 	    }
 
-	    public T Get<T>(string sql, IParameterList parameterList, IDbConnection connection)
+	    public int Execute(
+			string sql
+			, IParameterList parameterList
+			, IDbTransaction transaction
+		)
 	    {
-		    throw new System.NotImplementedException();
+		    return
+			    GetSqlCommand(
+					sql
+					, parameterList
+					, transaction
+				)
+				.ExecuteNonQuery();
 	    }
 
-	    public T Get<T>(string sql, IDbTransaction transaction)
+	    private SqlBulkCopy GetBulkCopy(
+			string tableName
+			, SqlTransaction trans
+			)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				new SqlBulkCopy
+				(
+					trans.Connection,
+					SqlBulkCopyOptions.Default,
+					trans
+				)
+				{
+					DestinationTableName = tableName
+				}
+				.SetTimeOut(3600);
 	    }
 
-	    public T Get<T>(string sql, IParameterList parameterList, IDbTransaction transaction)
+	    private SqlBulkCopy GetBulkCopy(string tableName)
 	    {
-		    throw new System.NotImplementedException();
+		    return 
+				new SqlBulkCopy(GetConnection())
+				{
+					DestinationTableName = tableName
+				}
+				.SetTimeOut(3600);
 	    }
+
+	    public void BulkCopy(
+			IDataReader reader
+			, string table
+			, int numFields
+			, bool deleteRecords = true
+		)
+	    {
+			if(deleteRecords)
+		    {
+			    Execute("DELETE FROM " + table);
+		    }
+
+		    using(
+				var bc = GetBulkCopy(table)
+			)
+			{
+				bc.MapColumns(numFields);
+				bc.WriteToServer(reader);
+			}
+		}
+
+	    public void BulkCopy(
+			IDataReader reader
+			, string table
+			, int numFields
+			, IDbTransaction trans
+			, bool deleteRecords = true
+		)
+	    {
+			if(deleteRecords)
+		    {
+			    Execute("DELETE FROM " + table, trans);
+		    }
+
+			using
+		    (
+			    var bc = GetBulkCopy(table, trans as SqlTransaction)
+		    )
+			{
+				bc.MapColumns(numFields);
+			    bc.WriteToServer(reader);
+			    reader.Close();
+		    }
+		}
+
+	    public void BulkCopy(
+			DataTable dt
+			, string table
+			, int numFields
+			, bool deleteRecords = true
+		)
+	    {
+		    if (deleteRecords)
+		    {
+			    Execute("DELETE FROM " + table);
+		    }
+
+		    using(
+				var bc = GetBulkCopy(table)
+			)
+			{
+				bc.MapColumns(numFields);
+				bc.WriteToServer(dt);
+			}
+			
+		}
+
+	    public static T Get<T>(IDataReader dr)
+	    {
+			var t = default(T);
+		    if(dr.Read())
+		    {
+			    t = (T)dr[0];
+		    }
+		    dr.Close();
+		    return t;
+		}
+
+		public T Get<T>(string sql)
+		{
+			return 
+				Get<T>(
+					GetDataReader(sql)
+				);
+		}
+
+	    public T Get<T>(
+			string sql
+			, IParameterList parameterList
+		)
+	    {
+			return 
+				Get<T>(
+					GetDataReader(
+						sql
+						, parameterList
+					)
+				);
+		}
+
+	    public T Get<T>(
+			string sql
+			, IDbConnection connection
+			)
+	    {
+			return 
+				Get<T>(
+					GetDataReader(
+						sql
+						, connection
+					)
+				);
+		}
+
+	    public T Get<T>(
+			string sql
+			, IParameterList parameterList
+			, IDbConnection connection
+		)
+	    {
+			return 
+				Get<T>(
+					GetDataReader(
+						sql
+						, parameterList
+						, connection
+					)
+				);
+		}
+
+	    public T Get<T>(
+			string sql
+			, IDbTransaction transaction
+			)
+	    {
+			return 
+				Get<T>(
+					GetDataReader(
+						sql
+						, transaction
+					)
+				);
+		}
+
+	    public T Get<T>(
+			string sql
+			, IParameterList parameterList
+			, IDbTransaction transaction
+			)
+	    {
+			return 
+				Get<T>(
+					GetDataReader(
+						sql
+						, parameterList
+						, transaction
+					)
+				);
+		}
     }
 }

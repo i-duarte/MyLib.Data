@@ -7,62 +7,9 @@ using MyLib.Data.Common;
 namespace MyLib.Data.SqlServer
 {
 	public class ParameterList 
-		: List<SqlParameter>, IParameterList
+		: List<IDbDataParameter>
+			, IParameterList
 	{
-		public ParameterList()
-		{ }
-
-		public ParameterList(
-			string name
-			, int value
-		)
-		{
-			Add(name, value);
-		}
-
-		public ParameterList(
-			string name
-			, int size
-			, string value
-		)
-		{
-			Add(name, value, size);
-		}
-
-		public ParameterList(
-			string name
-			, DateTime value
-		)
-		{
-			Add(name, value);
-		}
-
-		public ParameterList(
-			string name
-			, decimal value
-		)
-		{
-			Add(name, value);
-		}
-
-		public ParameterList(
-			string name
-			, decimal value
-			, byte precision
-			, byte scale
-		)
-		{
-			Add(name, value, precision, scale);
-		}
-
-		public ParameterList(
-			string name
-			, bool value
-		)
-		{
-			Add(name, value);
-		}
-
 		public void AddChar(
 			string name
 			, string value

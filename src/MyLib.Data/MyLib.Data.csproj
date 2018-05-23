@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,9 +51,13 @@
       <Project>{B687B713-2732-445C-99A9-1B14E67BCB60}</Project>
       <Name>MyLib.Data.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyLib.Data.Entity\MyLib.Data.Entity.csproj">
+    <ProjectReference Include="..\MyLib.Data.Entity\MyLib.Data.EntityFrameWork.csproj">
       <Project>{2e1e1a91-d9ee-4b2b-af58-23058f600222}</Project>
-      <Name>MyLib.Data.Entity</Name>
+      <Name>MyLib.Data.EntityFrameWork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyLib.Data.SqlServer\MyLib.Data.SqlServer.csproj">
+      <Project>{D808E5C7-E141-4316-B7DB-08F49B308374}</Project>
+      <Name>MyLib.Data.SqlServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,7 +6,7 @@ namespace Demo.Console
 	{
 		private static void Main(string[] args)
 		{
-			var demoDatabase = new DemoDataBase();
+			var demoDatabase = new DemoDataBase("", "");
 			//demoDatabase.Products.GetList();
 		}
 	}

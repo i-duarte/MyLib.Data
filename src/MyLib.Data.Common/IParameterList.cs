@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace MyLib.Data.Common
 {
 	public interface IParameterList 
+		: IList<IDbDataParameter> 
 	{
 		void Add(string name, byte value);
 		void Add(string name, short value);

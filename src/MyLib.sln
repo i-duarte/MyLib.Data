@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.Common", "MyLib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data", "MyLib.Data\MyLib.Data.csproj", "{9D381DFA-E236-432C-8701-7DEAFA952AA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.Entity", "MyLib.Data.Entity\MyLib.Data.Entity.csproj", "{2E1E1A91-D9EE-4B2B-AF58-23058F600222}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.EntityFrameWork", "MyLib.Data.Entity\MyLib.Data.EntityFrameWork.csproj", "{2E1E1A91-D9EE-4B2B-AF58-23058F600222}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.PostgreSql", "MyLib.Data.PostgreSql\MyLib.Data.PostgreSql.csproj", "{A3562764-DCEC-443B-9A5D-FF2C7B27EF89}"
 EndProject

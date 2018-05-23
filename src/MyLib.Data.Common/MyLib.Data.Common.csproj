@@ -39,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IDataBase.cs" />
     <Compile Include="IParameterList.cs" />
     <Compile Include="IQuery.cs" />

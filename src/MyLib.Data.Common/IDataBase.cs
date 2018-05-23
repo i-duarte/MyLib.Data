@@ -1,7 +1,16 @@
-﻿namespace MyLib.Data.Common
+﻿using System.Data;
+
+namespace MyLib.Data.Common
 {
 	public interface IDataBase
 	{
-		IQuery GetQuery();
+		IDbConnection GetConnection();
+		IDbConnection GetConnection(int timeOut);
+		IDbTransaction GetTransaction();
+		IDbTransaction GetTransaction(int timeOut);
+
+		IQuery GetNewQuery();
+
+		IParameterList GetParameterList();
 	}
 }

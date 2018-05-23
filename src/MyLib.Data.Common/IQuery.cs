@@ -35,7 +35,14 @@ namespace MyLib.Data.Common
 			, IDbTransaction transaction
 		);
 
-	    int Execute(
+	    IDataReader GetDataReader(
+		    string sql
+		    , IParameterList parameterList
+		    , IDbTransaction transaction
+			, int timeOut
+	    );
+
+		int Execute(
 		    string sql
 	    );
 
@@ -67,25 +74,26 @@ namespace MyLib.Data.Common
 	    );
 
 	    void BulkCopy(
-		    IDataReader reader,
-		    string table,
-		    int numFields,
-		    bool deleteRecords = true
+		    IDataReader reader
+			, string table
+			, int numFields
+			, bool deleteRecords = true
 	    );
 
 	    void BulkCopy(
-		    IDataReader reader,
-		    string table,
-		    int numFields,
-		    IDbTransaction trans,
-		    bool deleteRecords = true
+		    IDataReader reader 
+			, string table 
+			, int numFields 
+			, IDbTransaction trans 
+			, bool deleteRecords = true
 	    );
 
 	    void BulkCopy(
-		    DataTable dt,
-		    string table,
-		    int numFields
-	    );
+		    DataTable dt 
+			, string table
+			, int numFields
+			, bool deleteRecords = true
+		);
 
 	    T Get<T>(
 			string sql

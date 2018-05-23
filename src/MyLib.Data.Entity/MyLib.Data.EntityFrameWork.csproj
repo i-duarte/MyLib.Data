@@ -7,8 +7,8 @@
     <ProjectGuid>{2E1E1A91-D9EE-4B2B-AF58-23058F600222}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MyLib.Data.Entity</RootNamespace>
-    <AssemblyName>MyLib.Data.Entity</AssemblyName>
+    <RootNamespace>MyLib.Data.EntityFramework</RootNamespace>
+    <AssemblyName>MyLib.Data.EntityFramework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,10 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSource.cs" />
+    <Compile Include="Attributes\Field.cs" />
+    <Compile Include="Attributes\PrimaryKey.cs" />
+    <Compile Include="DataAdapter.cs" />
+    <Compile Include="EntityDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queryable.cs" />
-    <Compile Include="Row.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Table.cs" />
   </ItemGroup>
   <ItemGroup>

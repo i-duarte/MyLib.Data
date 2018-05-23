@@ -1,6 +1,8 @@
-﻿namespace MyLib.Data.Model
+﻿using MyLib.Data.EntityFramework;
+
+namespace MyLib.Data.Model
 {
-    public class Product
+    public class Product : Entity
     {
 		public int IdProduct { get; set; }
 		public int IdBrand { get; set; }
