@@ -9,8 +9,8 @@ namespace MyLib.Data.Common
 		IDbTransaction GetTransaction();
 		IDbTransaction GetTransaction(int timeOut);
 
-		IQuery GetNewQuery();
+		QueryAdapterBase GetNewQuery();
 
-		IParameterList GetParameterList();
+		ParameterListBase GetParameterList();
 	}
 }

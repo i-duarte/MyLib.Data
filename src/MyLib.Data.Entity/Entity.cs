@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using MyLib.Data.Common;
+using MyLib.Data.EntityFramework.Attributes;
+using MyLib.Misc;
 
 namespace MyLib.Data.EntityFramework
 {
@@ -18,22 +21,29 @@ namespace MyLib.Data.EntityFramework
 
 		public void Load(IDataReader dr)
 		{
-			throw new System.NotImplementedException();
+			GetFields()
+			.Foreach(
+				field =>
+				{
+					field.Value = dr[field.Name];
+				}
+			);
 		}
 
-		public List<string> GetFieldNameList()
+		public IEnumerable<PropertyField> GetFields(
+		)
 		{
-			throw new NotImplementedException();
-		}
-
-		public List<string> GetFieldValueList()
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<object> GetListFields()
-		{
-			throw new NotImplementedException();
+			return
+				GetType()
+				.GetProperties()
+				.Where(
+					p =>
+						Attribute.IsDefined(
+							p
+							, typeof(Field)
+						)
+				)
+				.Select(p => new PropertyField(this, p));
 		}
 	}
 }

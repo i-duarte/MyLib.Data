@@ -39,9 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IField.cs" />
     <Compile Include="IDataBase.cs" />
-    <Compile Include="IParameterList.cs" />
-    <Compile Include="IQuery.cs" />
+    <Compile Include="ParameterListBase.cs" />
+    <Compile Include="QueryAdapterBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

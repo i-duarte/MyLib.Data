@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using MyLib.Data.Common;
+
 
 namespace MyLib.Data.SqlServer
 {
 	public class ParameterList 
-		: List<IDbDataParameter>
-			, IParameterList
+		: Common.ParameterListBase
 	{
-		public void AddChar(
+		public override void AddChar(
 			string name
 			, string value
 			, int size
@@ -24,7 +22,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, byte value
 			)
@@ -36,7 +34,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, short value
 			)
@@ -48,7 +46,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, int value
 		)
@@ -60,7 +58,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void AddInt(
+		public override void AddInt(
 			string name
 			, int? idPadre
 		)
@@ -78,7 +76,7 @@ namespace MyLib.Data.SqlServer
 			}
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, long value
 		)
@@ -90,7 +88,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, float value
 			)
@@ -102,7 +100,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, double value
 		)
@@ -114,7 +112,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, bool value
 		)
@@ -126,7 +124,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, decimal value
 			)
@@ -138,7 +136,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, decimal value
 			, byte precision
@@ -154,7 +152,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, string value
 			, int size
@@ -168,7 +166,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-	    public void Add(
+	    public override void Add(
 			string name
 			, DateTime value
 		)
@@ -180,7 +178,7 @@ namespace MyLib.Data.SqlServer
 			);
 		}
 
-		public void Add(
+		public override void Add(
 			string name
 			, TimeSpan value
 		)
@@ -191,7 +189,7 @@ namespace MyLib.Data.SqlServer
 				, value
 			);
 		}
-
+		
 		private void AddParameter(
 			string name,
 			SqlDbType type,

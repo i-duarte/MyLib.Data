@@ -4,13 +4,13 @@ using MyLib.Data.Common;
 
 namespace MyLib.Data.SqlServer
 {
-    public class Query : IQuery
+    public class QueryAdatper : QueryAdapterBase
     {
 		private const int DefaultTimeOut = 30;
 
 		protected DataBase DataBase { get; set; }
 
-	    public Query(
+	    public QueryAdatper(
 			DataBase dataBase
 		)
 	    {
@@ -39,7 +39,7 @@ namespace MyLib.Data.SqlServer
 
 	    private SqlCommand GetSqlCommand(
 			string sql
-			, IParameterList parameterlist
+			, ParameterListBase parameterlist
 		)
 	    {
 		    return 
@@ -61,7 +61,7 @@ namespace MyLib.Data.SqlServer
 
 	    private static SqlCommand GetSqlCommand(
 		    string sql
-		    , IParameterList parameterlist
+		    , ParameterListBase parameterlist
 		    , IDbConnection connection
 	    )
 	    {
@@ -87,7 +87,7 @@ namespace MyLib.Data.SqlServer
 
 	    private static SqlCommand GetSqlCommand(
 		    string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 		    , IDbTransaction transaction
 			, int timeOut = DefaultTimeOut
 	    )
@@ -111,7 +111,7 @@ namespace MyLib.Data.SqlServer
 				);
 	    }
 
-		public IDataReader GetDataReader(
+		public override IDataReader GetDataReader(
 			string sql
 			)
 	    {
@@ -121,9 +121,9 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public IDataReader GetDataReader(
+	    public override IDataReader GetDataReader(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 		)
 	    {
 		    return 
@@ -135,7 +135,7 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public IDataReader GetDataReader(
+	    public override IDataReader GetDataReader(
 			string sql
 			, IDbConnection connection
 		)
@@ -149,9 +149,9 @@ namespace MyLib.Data.SqlServer
 				);
 	    }
 
-	    public IDataReader GetDataReader(
+	    public override IDataReader GetDataReader(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbConnection connection
 		)
 	    {
@@ -165,7 +165,7 @@ namespace MyLib.Data.SqlServer
 				);
 	    }
 
-	    public IDataReader GetDataReader(
+	    public override IDataReader GetDataReader(
 			string sql
 			, IDbTransaction transaction
 		)
@@ -179,9 +179,9 @@ namespace MyLib.Data.SqlServer
 				);
 	    }
 
-	    public IDataReader GetDataReader(
+	    public override IDataReader GetDataReader(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbTransaction transaction
 		)
 	    {
@@ -195,9 +195,9 @@ namespace MyLib.Data.SqlServer
 			    );
 	    }
 
-	    public IDataReader GetDataReader(
+	    public override IDataReader GetDataReader(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbTransaction transaction
 			, int timeOut
 			)
@@ -213,7 +213,7 @@ namespace MyLib.Data.SqlServer
 				);
 	    }
 
-	    public int Execute(
+	    public override int Execute(
 			string sql
 		)
 	    {
@@ -222,9 +222,9 @@ namespace MyLib.Data.SqlServer
 				.ExecuteNonQuery();
 	    }
 
-	    public int Execute(
+	    public override int Execute(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 		)
 	    {
 		    return
@@ -235,7 +235,7 @@ namespace MyLib.Data.SqlServer
 				.ExecuteNonQuery();
 	    }
 
-	    public int Execute(
+	    public override int Execute(
 			string sql
 			, IDbConnection connection
 		)
@@ -248,9 +248,9 @@ namespace MyLib.Data.SqlServer
 				.ExecuteNonQuery();
 	    }
 
-	    public int Execute(
+	    public override int Execute(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbConnection connection
 		)
 	    {
@@ -263,7 +263,7 @@ namespace MyLib.Data.SqlServer
 				.ExecuteNonQuery();
 	    }
 
-	    public int Execute(
+	    public override int Execute(
 			string sql
 			, IDbTransaction transaction
 			)
@@ -277,9 +277,9 @@ namespace MyLib.Data.SqlServer
 
 	    }
 
-	    public int Execute(
+	    public override int Execute(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbTransaction transaction
 		)
 	    {
@@ -320,7 +320,7 @@ namespace MyLib.Data.SqlServer
 				.SetTimeOut(3600);
 	    }
 
-	    public void BulkCopy(
+	    public override void BulkCopy(
 			IDataReader reader
 			, string table
 			, int numFields
@@ -341,7 +341,7 @@ namespace MyLib.Data.SqlServer
 			}
 		}
 
-	    public void BulkCopy(
+	    public override void BulkCopy(
 			IDataReader reader
 			, string table
 			, int numFields
@@ -365,7 +365,7 @@ namespace MyLib.Data.SqlServer
 		    }
 		}
 
-	    public void BulkCopy(
+	    public override void BulkCopy(
 			DataTable dt
 			, string table
 			, int numFields
@@ -387,7 +387,7 @@ namespace MyLib.Data.SqlServer
 			
 		}
 
-	    public static T Get<T>(IDataReader dr)
+	    private static T Get<T>(IDataReader dr)
 	    {
 			var t = default(T);
 		    if(dr.Read())
@@ -398,7 +398,7 @@ namespace MyLib.Data.SqlServer
 		    return t;
 		}
 
-		public T Get<T>(string sql)
+		public override T Get<T>(string sql)
 		{
 			return 
 				Get<T>(
@@ -406,9 +406,9 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public T Get<T>(
+	    public override T Get<T>(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 		)
 	    {
 			return 
@@ -420,7 +420,7 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public T Get<T>(
+	    public override T Get<T>(
 			string sql
 			, IDbConnection connection
 			)
@@ -434,9 +434,9 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public T Get<T>(
+	    public override T Get<T>(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbConnection connection
 		)
 	    {
@@ -450,7 +450,7 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public T Get<T>(
+	    public override T Get<T>(
 			string sql
 			, IDbTransaction transaction
 			)
@@ -464,9 +464,9 @@ namespace MyLib.Data.SqlServer
 				);
 		}
 
-	    public T Get<T>(
+	    public override T Get<T>(
 			string sql
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 			, IDbTransaction transaction
 			)
 	    {

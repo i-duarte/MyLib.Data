@@ -4,7 +4,7 @@ using MyLib.Data.Common;
 
 namespace MyLib.Data.SqlServer
 {
-	public class DataBase : IDataBase 
+	public class DataBase : IDataBase
 	{
 		private const byte TimeOutDefault = 30;
 
@@ -88,14 +88,16 @@ namespace MyLib.Data.SqlServer
 			       + "connection timeout=" + timeOut + ";";
 		}
 
-		public IQuery GetNewQuery()
+		public QueryAdapterBase GetNewQuery()
 		{
-			return new Query(this);
+			return new QueryAdatper(this);
 		}
 
-		public IParameterList GetParameterList()
+		public ParameterListBase GetParameterList()
 		{
 			return new ParameterList();
 		}
+
+		
 	}
 }

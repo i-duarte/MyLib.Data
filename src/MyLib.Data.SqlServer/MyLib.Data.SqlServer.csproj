@@ -40,10 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataBase.cs" />
-    <Compile Include="MyExtension.cs" />
+    <Compile Include="MyExtensions.cs" />
     <Compile Include="ParameterList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query.cs" />
+    <Compile Include="QueryAdatper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">

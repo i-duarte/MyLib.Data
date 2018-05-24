@@ -14,7 +14,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected IEnumerable<T> GetEnumerable(
 			string sql
-			, IParameterList param
+			, ParameterListBase param
 			)
 		{
 			return 
@@ -28,7 +28,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected IEnumerable<T> GetEnumerable(
 			string sql
-			, IParameterList param
+			, ParameterListBase param
 			, IDbTransaction transaction
 			)
 		{
@@ -43,7 +43,7 @@ namespace MyLib.Data.EntityFramework
 		}
 		protected IEnumerable<TT> GetEnumerable<TT>(
 			string sql
-			, IParameterList param
+			, ParameterListBase param
 			) where TT : Entity, new()
 		{
 			return 
@@ -57,7 +57,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected IEnumerable<TT> GetEnumerable<TT>(
 			string sql
-			, IParameterList param
+			, ParameterListBase param
 			, IDbTransaction transaction
 			) where TT : Entity, new()
 		{
@@ -107,7 +107,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected T GetEntity(
 			string sql,
-			IParameterList param,
+			ParameterListBase param,
 			IDbTransaction transaction
 			)
 		{
@@ -123,7 +123,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected T GetEntity(
 			string sql,
-			IParameterList param,
+			ParameterListBase param,
 			IDbTransaction transaction
 			, int timeOut
 			)
@@ -141,7 +141,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected T GetEntity(
 			string sql,
-			IParameterList param
+			ParameterListBase param
 			)
 		{
 			return 
@@ -155,7 +155,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected TT GetEntity<TT>(
 			string sql,
-			IParameterList param
+			ParameterListBase param
 			) where TT : Entity, new()
 		{
 			return 
@@ -169,7 +169,7 @@ namespace MyLib.Data.EntityFramework
 
 		protected TT GetEntity<TT>(
 		   string sql,
-		   IParameterList param,
+		   ParameterListBase param,
 		   IDbTransaction transaction
 		   ) where TT : Entity, new()
 		{

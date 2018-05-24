@@ -6,8 +6,8 @@ namespace MyLib.Data.EntityFramework
 	{
 		protected IDataBase DataBase { get; set; }
 
-		private IQuery _query;
-		protected IQuery Query 
+		private QueryAdapterBase _query;
+		protected QueryAdapterBase Query 
 			=> _query 
 			?? (_query = DataBase.GetNewQuery());
 

@@ -1,10 +1,9 @@
 ﻿using System.Data.SqlClient;
-using System.Linq;
 using MyLib.Data.Common;
 
 namespace MyLib.Data.SqlServer
 {
-	internal static class MyExtension
+	internal static class MyExtensions
 	{
 		public static SqlBulkCopy MapColumns(
 			this SqlBulkCopy bc
@@ -38,7 +37,7 @@ namespace MyLib.Data.SqlServer
 
 		public static SqlCommand AddParameters(
 			this SqlCommand cmd
-			, IParameterList parameterList
+			, ParameterListBase parameterList
 		)
 		{
 			cmd.Parameters.AddRange(parameterList.ToArray());
