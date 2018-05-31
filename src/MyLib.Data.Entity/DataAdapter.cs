@@ -4,19 +4,19 @@ namespace MyLib.Data.EntityFramework
 {
 	public class DataAdapter 
 	{
-		protected IDataBase DataBase { get; set; }
+		protected IDataBaseAdapter DataBase { get; set; }
 
 		private QueryAdapterBase _query;
 		protected QueryAdapterBase Query 
 			=> _query 
-			?? (_query = DataBase.GetNewQuery());
+			?? (_query = DataBase.CreateQueryAdapter());
 
-		public DataAdapter(IDataBase dataBase)
+		public DataAdapter(IDataBaseAdapter dataBase)
 		{
 			SetDataBase(dataBase);
 		}
 
-		public void SetDataBase(IDataBase database)
+		public void SetDataBase(IDataBaseAdapter database)
 		{
 			DataBase = database;
 		}

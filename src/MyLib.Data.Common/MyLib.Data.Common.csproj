@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IField.cs" />
-    <Compile Include="IDataBase.cs" />
+    <Compile Include="IDataBaseAdapter.cs" />
     <Compile Include="ParameterListBase.cs" />
     <Compile Include="QueryAdapterBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

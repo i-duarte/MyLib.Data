@@ -9,18 +9,19 @@ namespace MyLib.Data.EntityFramework
 	{
 		private Entity Entity { get; }
 		private PropertyInfo Property { get; }
-		private Field Attributes { get; }
+		private Field FieldAttribute { get; }
 
 		public bool IsPrimaryKey { get; }
+		public bool IsIdentity { get; }
 
 		public string Name 
-			=> string.IsNullOrEmpty(Attributes?.Name) 
+			=> string.IsNullOrEmpty(FieldAttribute?.Name) 
 			? Property.Name 
-			: Attributes.Name;
+			: FieldAttribute.Name;
 
-		public int Size => Attributes.Size;
-		public byte Precision => Attributes.Precision;
-		public byte Scale => Attributes.Scale;
+		public int Size => FieldAttribute.Size;
+		public byte Precision => FieldAttribute.Precision;
+		public byte Scale => FieldAttribute.Scale;
 
 		public object Value
 		{
@@ -38,11 +39,14 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
-		public PropertyField(Entity entity, PropertyInfo property)
+		public PropertyField(
+			Entity entity
+			, PropertyInfo property
+		)
 		{
 			Entity = entity;
 			Property = property;
-			Attributes = 
+			FieldAttribute = 
 				(Field)
 				Attribute
 					.GetCustomAttribute(
@@ -51,11 +55,30 @@ namespace MyLib.Data.EntityFramework
 					);
 
 			IsPrimaryKey = 
+				IsPresent(
+					property
+					, typeof(PrimaryKey)
+				);
+
+			IsIdentity = 
+				IsPresent(
+					property
+					, typeof(Identity)
+				);
+		}
+
+		private static bool IsPresent(
+			PropertyInfo property
+			, Type t
+		)
+		{
+			return
 				Attribute
 				.GetCustomAttribute(
 					property.GetType()
-					, typeof(PrimaryKey)
+					, t
 				) != null;
 		}
 	}
 }
+

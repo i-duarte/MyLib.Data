@@ -2,6 +2,7 @@
 using MyLib.Data.EntityFramework;
 using MyLib.Data.EntityFramework.Attributes;
 using MyLib.Data.Model;
+using MyLib.Data.SqlServer;
 
 namespace MyLib.Data.DataSource
 {
@@ -9,9 +10,23 @@ namespace MyLib.Data.DataSource
 	public class Products 
 		: TableAdapter<Product>
 	{
-		public Products(IDataBase dataBase) 
+		public Products(IDataBaseAdapter dataBase) 
 			: base(dataBase)
 		{
+		}
+
+		public Product GetItem(int idProduct)
+		{
+			return 
+				GetEntity(
+					"SELECT * "
+						+ "FROM Products "
+						+ "WHERE IdProduct = @idProduct"
+					, new ParameterList
+					{
+						{"idProduct", idProduct}
+					}
+				);
 		}
 	}
 }

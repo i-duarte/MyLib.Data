@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 
 namespace MyLib.Data.Common
 {
-    public abstract class QueryAdapterBase : List<IDbDataParameter>
+    public abstract class QueryAdapterBase 
     {
 	    public abstract IDataReader GetDataReader(
 			string sql

@@ -5,36 +5,42 @@ using System.Data.SqlClient;
 
 namespace MyLib.Data.SqlServer
 {
-	public class ParameterList 
-		: Common.ParameterListBase
-	{
-		public override void AddChar(
-			string name
-			, string value
-			, int size
-		)
-		{
-			AddParameter(
-				name
-				, SqlDbType.Char
-				, value
-				, size
-			);
-		}
+    public class ParameterList
+        : Common.ParameterListBase
+    {
+        public override void AddChar(
+            string name
+            , string value
+        )
+            => AddChar(
+                name
+                , value
+                , value.Length
+            );
 
-		public override void Add(
-			string name
-			, byte value
-			)
-		{
-			AddParameter(
-				name
-				, SqlDbType.TinyInt
-				, value
-			);
-		}
+        public override void AddChar(
+            string name
+            , string value
+            , int size
+        ) 
+            => AddParameter(
+                name
+                , SqlDbType.Char
+                , value
+                , size
+            );
 
-		public override void Add(
+        public override void Add(
+            string name
+            , byte value
+        ) 
+            => AddParameter(
+                name
+                , SqlDbType.TinyInt
+                , value
+            );
+
+        public override void Add(
 			string name
 			, short value
 			)
@@ -49,21 +55,19 @@ namespace MyLib.Data.SqlServer
 		public override void Add(
 			string name
 			, int value
-		)
-		{
-			AddParameter(
+		) 
+			=> AddParameter(
 				name
 				, SqlDbType.Int
 				, value
 			);
-		}
 
 		public override void AddInt(
 			string name
-			, int? idPadre
+			, int? value
 		)
 		{
-			if(idPadre == null)
+			if(value == null)
 			{
 				AddParameter(
 					name
@@ -72,124 +76,112 @@ namespace MyLib.Data.SqlServer
 			}
 			else
 			{
-				Add(name, idPadre.Value);
+				Add(name, value.Value);
 			}
 		}
 
 		public override void Add(
 			string name
 			, long value
-		)
-		{
-			AddParameter(
+		) 
+			=> AddParameter(
 				name
 				, SqlDbType.BigInt
 				, value
 			);
-		}
 
 		public override void Add(
 			string name
 			, float value
-			)
-		{
-			AddParameter(
+		) 
+			=> AddParameter(
 				name
 				, SqlDbType.Real
 				, value
 			);
-		}
 
 		public override void Add(
 			string name
 			, double value
 		)
-		{
-			AddParameter(
+			=> AddParameter(
 				name
 				, SqlDbType.Float
 				, value
 			);
-		}
 
 		public override void Add(
 			string name
 			, bool value
 		)
-		{
-			AddParameter(
+			=> AddParameter(
 				name
 				, SqlDbType.Bit
 				, value
 			);
-		}
 
 		public override void Add(
 			string name
 			, decimal value
-			)
-		{
-			AddParameter(
+		)
+			=> AddParameter(
 				name
 				, SqlDbType.Decimal
 				, value
 			);
-		}
 
 		public override void Add(
 			string name
 			, decimal value
 			, byte precision
 			, byte scale
-			)
-		{
-			AddParameter(
+		)
+			=> AddParameter(
 				name
 				, SqlDbType.Decimal
 				, value
 				, precision
 				, scale
 			);
-		}
+
+		public override void Add(
+			string name
+			, string value
+		)
+			=> Add(name, value, value.Length);
 
 		public override void Add(
 			string name
 			, string value
 			, int size
-			)
-		{
-			AddParameter(
+		) 
+			=> AddParameter(
 				name
 				, SqlDbType.VarChar
 				, value
 				, size
 			);
-		}
 
-	    public override void Add(
+		public override void Add(
 			string name
 			, DateTime value
-		)
-		{
-			AddParameter(
+		) 
+			=> AddParameter(
 				name
 				, SqlDbType.DateTime
 				, value
 			);
-		}
 
 		public override void Add(
 			string name
 			, TimeSpan value
-		)
-		{
-			AddParameter(
+		) 
+			=> AddParameter(
 				name
 				, SqlDbType.Time
 				, value
 			);
-		}
-		
+
 		private void AddParameter(
 			string name,
 			SqlDbType type,
@@ -206,11 +198,11 @@ namespace MyLib.Data.SqlServer
 		}
 
 		private void AddParameter(
-			string name,
-			SqlDbType type,
-			object value,
-			byte presicion,
-			byte scale
+			string name
+			, SqlDbType type
+			, object value
+			, byte presicion
+			, byte scale
 		)
 		{
 			var param = 
@@ -241,7 +233,10 @@ namespace MyLib.Data.SqlServer
 			Add(param);
 		}
 
-		private void AddParameter(string name, SqlDbType type)
+		private void AddParameter(
+			string name
+			, SqlDbType type
+		)
 		{
 			var param =
 				new SqlParameter(name, type)

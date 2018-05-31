@@ -2,15 +2,14 @@
 
 namespace MyLib.Data.Common
 {
-	public interface IDataBase
+	public interface IDataBaseAdapter
 	{
 		IDbConnection GetConnection();
 		IDbConnection GetConnection(int timeOut);
 		IDbTransaction GetTransaction();
 		IDbTransaction GetTransaction(int timeOut);
 
-		QueryAdapterBase GetNewQuery();
-
-		ParameterListBase GetParameterList();
+		QueryAdapterBase CreateQueryAdapter();
+		ParameterListBase CreateParameterList();
 	}
 }

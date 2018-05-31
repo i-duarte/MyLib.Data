@@ -6,6 +6,7 @@ namespace MyLib.Data.Model
     public class Product : Entity
     {
 		[PrimaryKey]
+		[Identity]
 		[Field]
 		public int IdProduct { get; set; }
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
@@ -13,12 +11,14 @@ namespace MyLib.Data.EntityFramework
 		: EntityDataSource<T> 
 			where T : Entity, new()
 	{
-		public TableAdapter(IDataBase dataBase) 
+		public TableAdapter(
+			IDataBaseAdapter dataBase
+			) 
 			: base(dataBase)
 		{
 		}
 
-		public IEnumerable<T> Select()
+		public IEnumerable<T> SelectAll()
 		{
 			var sql = 
 				$@"
@@ -35,13 +35,14 @@ namespace MyLib.Data.EntityFramework
 			var fields = 
 				entity
 					.GetFields()
+					.Where(p=> !p.IsIdentity)
 					.ToList();
 
 			var sql =
 				$@"
 					INSERT INTO {GetTableName()}(
 						{GetFieldNameList(fields)}
-					) VALUES(
+					) VALUES (
 						{GetFieldParamList(fields)}
 					)
 				";
@@ -99,7 +100,9 @@ namespace MyLib.Data.EntityFramework
 			IEnumerable<PropertyField> fields
 		)
 		{
-			var list = DataBase.GetParameterList();
+			var list =
+				DataBase
+				.CreateParameterList();
 
 			fields
 			.Foreach(list.Add);

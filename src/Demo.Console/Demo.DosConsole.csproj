@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E4BE1EE7-1E3A-4C08-BB3A-03ED8403EF0F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Demo.Console</RootNamespace>
-    <AssemblyName>Demo.Console</AssemblyName>
+    <RootNamespace>Demo.DosConsole</RootNamespace>
+    <AssemblyName>Demo.DosConsole</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

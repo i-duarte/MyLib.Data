@@ -3,7 +3,7 @@ using MyLib.Data.SqlServer;
 
 namespace MyLib.Data
 {
-	public class DemoDataBase : DataBase
+	public class DemoDataBase : DataBaseAdapter
 	{
 		private Products _products;
 		public Products Products

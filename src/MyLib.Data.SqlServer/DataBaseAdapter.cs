@@ -4,7 +4,7 @@ using MyLib.Data.Common;
 
 namespace MyLib.Data.SqlServer
 {
-	public class DataBase : IDataBase
+	public class DataBaseAdapter : IDataBaseAdapter
 	{
 		private const byte TimeOutDefault = 30;
 
@@ -14,7 +14,7 @@ namespace MyLib.Data.SqlServer
 		private string Password { get; set; }
 		private bool WindowsAuthentication { get; set; }
 
-		public DataBase(
+		public DataBaseAdapter(
 			string dataSource
 			, string dbName
 			, string user
@@ -28,7 +28,7 @@ namespace MyLib.Data.SqlServer
 			WindowsAuthentication = false;
 		}
 
-		public DataBase(
+		public DataBaseAdapter(
 			string dataSource
 			, string dbName
 		)
@@ -88,12 +88,12 @@ namespace MyLib.Data.SqlServer
 			       + "connection timeout=" + timeOut + ";";
 		}
 
-		public QueryAdapterBase GetNewQuery()
+		public QueryAdapterBase CreateQueryAdapter()
 		{
 			return new QueryAdatper(this);
 		}
 
-		public ParameterListBase GetParameterList()
+		public ParameterListBase CreateParameterList()
 		{
 			return new ParameterList();
 		}

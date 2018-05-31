@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.PostgreSql", "My
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.SqlServer", "MyLib.Data.SqlServer\MyLib.Data.SqlServer.csproj", "{D808E5C7-E141-4316-B7DB-08F49B308374}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Console", "Demo.Console\Demo.Console.csproj", "{E4BE1EE7-1E3A-4C08-BB3A-03ED8403EF0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DosConsole", "Demo.Console\Demo.DosConsole.csproj", "{E4BE1EE7-1E3A-4C08-BB3A-03ED8403EF0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Misc", "MyLib.Misc\MyLib.Misc.csproj", "{DD448613-E26E-41BF-9801-B077D923E986}"
 EndProject

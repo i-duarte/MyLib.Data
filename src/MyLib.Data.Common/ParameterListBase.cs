@@ -17,10 +17,48 @@ namespace MyLib.Data.Common
 		public abstract void Add(string name, double value);
 		public abstract void Add(string name, decimal value);
 		public abstract void Add(string name, decimal value, byte precision, byte scale);
+		public abstract void Add(string name, string value);
 		public abstract void Add(string name, string value, int size);
+		public abstract void AddChar(string name, string value);
 		public abstract void AddChar(string name, string value, int size);
 		public abstract void Add(string name, DateTime value);
 		public abstract void Add(string name, TimeSpan value);
+
+		public void Add(string name, object value)
+		{
+			switch(value.GetType().ToString())
+			{
+				case "System.Byte":
+					Add(name, (byte)value);
+					break;
+				case "System.Int16":
+					Add(name, (short)value);
+					break;
+				case "System.Int32":
+					Add(name, (int)value);
+					break;
+				case "System.DateTime":
+					Add(name, (DateTime)value);
+					break;
+				case "System.Char":
+					AddChar(name, (string)value);
+					break;
+				case "System.String":
+					Add(name, (string)value);
+					break;
+				case "System.Decimal":
+					Add(name, (decimal)value);
+					break;
+				case "System.Single":
+					Add(name, (float)value);
+					break;
+				case "System.Double":
+					Add(name, (double)value);
+					break;
+				default:
+					throw new ArgumentException("Tipo de dato inesperado");
+			}
+		}
 
 		public void Add(
 			IField field

@@ -10,7 +10,7 @@ namespace MyLib.Data.EntityFramework
 {
 	public class Entity : DataAdapter
 	{
-		public Entity(IDataBase dataBase) 
+		public Entity(IDataBaseAdapter dataBase) 
 			: base(dataBase)
 		{
 		}

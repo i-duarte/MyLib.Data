@@ -8,10 +8,10 @@ namespace MyLib.Data.SqlServer
     {
 		private const int DefaultTimeOut = 30;
 
-		protected DataBase DataBase { get; set; }
+		protected DataBaseAdapter DataBase { get; set; }
 
 	    public QueryAdatper(
-			DataBase dataBase
+			DataBaseAdapter dataBase
 		)
 	    {
 		    DataBase = dataBase;

@@ -7,7 +7,7 @@ namespace MyLib.Data.EntityFramework
 	public class EntityDataSource<T> 
 		: DataAdapter where T : Entity, new()
 	{
-		public EntityDataSource(IDataBase dataBase) 
+		public EntityDataSource(IDataBaseAdapter dataBase) 
 			: base(dataBase)
 		{
 		}

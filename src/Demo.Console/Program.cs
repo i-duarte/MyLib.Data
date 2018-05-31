@@ -1,24 +1,42 @@
-﻿using MyLib.Data;
-using MyLib.Misc;
+﻿using System;
+using MyLib.Data;
+using MyLib.Data.Model;
 
-namespace Demo.Console
+namespace Demo.DosConsole
 {
 	internal class Program
 	{
 		private static void Main(string[] args)
 		{
-			var demoDatabase = new DemoDataBase("(local)\\dev2016", "StockData");
-			foreach (var x in demoDatabase.Products.Select())
-			{
-				System.Console.WriteLine(x.Name);
-			}
-
-			demoDatabase
-				.Products
-				.Select()
-				.Foreach(
-					p => System.Console.WriteLine(p.Name)
+			var db = 
+				new DemoDataBase(
+					"(local)\\dev2016"
+					, "StockData"
 				);
+
+			Console.WriteLine(
+				GetInfo(
+					db
+					.Products
+					.GetItem(3)
+				)
+			);
+
+			//db
+			//	.Products
+			//	.SelectAll()
+			//	.Foreach(
+			//		p =>
+			//		Console
+			//			.WriteLine(
+			//				GetInfo(p)
+			//			)
+			//	);
+		}
+
+		private static string GetInfo(Product p)
+		{
+			return $"{p.Name} - {p.Description}";
 		}
 	}
 }
