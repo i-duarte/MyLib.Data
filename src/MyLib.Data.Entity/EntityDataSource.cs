@@ -7,229 +7,33 @@ namespace MyLib.Data.EntityFramework
 	public class EntityDataSource<T> 
 		: DataAdapter where T : Entity, new()
 	{
-		public EntityDataSource(IDataBaseAdapter dataBase) 
+		public EntityDataSource(
+			IDataBaseAdapter dataBase
+			) 
 			: base(dataBase)
 		{
 		}
 
-		protected IEnumerable<T> GetEnumerable(
-			string sql
-			, ParameterListBase param
-			)
-		{
-			return 
-				LoadEnumerable(
-					Query.GetDataReader(
-						sql
-						, param
-					)
-				);
-		}
-
-		protected IEnumerable<T> GetEnumerable(
-			string sql
-			, ParameterListBase param
-			, IDbTransaction transaction
-			)
-		{
-			return 
-				LoadEnumerable(
-					Query.GetDataReader(
-						sql
-						, param
-						, transaction
-					)
-				);
-		}
-		protected IEnumerable<TT> GetEnumerable<TT>(
-			string sql
-			, ParameterListBase param
-			) where TT : Entity, new()
-		{
-			return 
-				LoadEnumerable<TT>(
-					Query.GetDataReader(
-						sql
-						, param
-					)
-				);
-		}
-
-		protected IEnumerable<TT> GetEnumerable<TT>(
-			string sql
-			, ParameterListBase param
-			, IDbTransaction transaction
-			) where TT : Entity, new()
-		{
-			return 
-				LoadEnumerable<TT>(
-					Query.GetDataReader(
-						sql
-						, param
-						, transaction
-					)
-				);
-		}
-
-		protected IEnumerable<TT> GetEnumerable<TT>(
-			string sql
-			, IDbTransaction transaction
-			) where TT : Entity, new()
-		{
-			return 
-				LoadEnumerable<TT>(
-					Query.GetDataReader(
-						sql
-						, transaction
-					)
-				);
-		}
-
-		protected IEnumerable<T> GetEnumerable(
-			string sql
-		)
-		{
-			return 
-				LoadEnumerable(
-					Query.GetDataReader(sql)
-				);
-		}
-
-		protected IEnumerable<TT> GetEnumerable<TT>(
-			string sql
-			) where TT : Entity, new()
-		{
-			return 
-				LoadEnumerable<TT>(
-					Query.GetDataReader(sql)
-				);
-		}
-
-		protected T GetEntity(
-			string sql,
-			ParameterListBase param,
-			IDbTransaction transaction
-			)
-		{
-			return 
-				LoadEntityWithRead(
-					Query.GetDataReader(
-						sql
-						, param
-						, transaction
-					)
-				);
-		}
-
-		protected T GetEntity(
-			string sql,
-			ParameterListBase param,
-			IDbTransaction transaction
-			, int timeOut
-			)
-		{
-			return 
-				LoadEntityWithRead(
-					Query.GetDataReader(
-						sql
-						, param
-						, transaction
-						, timeOut
-					)
-				);
-		}
-
-		protected T GetEntity(
-			string sql,
-			ParameterListBase param
-			)
-		{
-			return 
-				LoadEntityWithRead(
-					Query.GetDataReader(
-						sql
-						, param
-					)
-				);
-		}
-
 		protected TT GetEntity<TT>(
-			string sql,
-			ParameterListBase param
+			QueryBase query
 			) where TT : Entity, new()
 		{
-			return 
-				LoadEntityWithRead<TT>(
-					Query.GetDataReader(
-						sql
-						, param
-					)
+			var dr = 
+				QueryAdapter
+				.GetDataReader(
+					query
 				);
-		}
 
-		protected TT GetEntity<TT>(
-		   string sql,
-		   ParameterListBase param,
-		   IDbTransaction transaction
-		   ) where TT : Entity, new()
-		{
-			return 
-				LoadEntityWithRead<TT>(
-					Query.GetDataReader(
-						sql
-						, param
-						, transaction
-					)
-				);
-		}
-
-		protected T GetEntity(
-			string sql
-			)
-		{
-			return 
-				LoadEntityWithRead(
-					Query.GetDataReader(sql)
-				);
-		}
-
-		private T LoadEntityWithRead(
-			IDataReader dr
-		)
-		{
-			T e = null;
-			if(dr.Read())
-			{
-				e = LoadEntityWithoutRead(dr);
-			}
-			dr.Close();
-			return e;
-		}
-
-		private TT LoadEntityWithRead<TT>(
-			IDataReader dr
-			) where TT : Entity, new()
-		{
 			TT e = null;
-			if(dr.Read())
+			if (dr.Read())
 			{
-				e = LoadEntityWithoutRead<TT>(dr);
+				e = GetEntity<TT>(dr);
 			}
 			dr.Close();
-			return e;
+			return e;			
 		}
 
-		private T LoadEntityWithoutRead(
-			IDataReader dr
-			)
-		{
-			var e = new T();
-			e.Load(dr);
-			e.SetDataBase(DataBase);
-			return e;
-		}
-
-		private TT LoadEntityWithoutRead<TT>(
+		private TT GetEntity<TT>(
 			IDataReader dr
 			) where TT : Entity, new()
 		{
@@ -239,24 +43,37 @@ namespace MyLib.Data.EntityFramework
 			return e;
 		}
 
-		private IEnumerable<T> LoadEnumerable(
-			IDataReader dr
-		)
+		protected IEnumerable<T> GetEnumerable(
+			QueryBase query
+			)
 		{
-			while(dr.Read())
-			{
-				yield return LoadEntityWithoutRead(dr);
-			}
-			dr.Close();
+			return
+				GetEnumerable<T>(
+					QueryAdapter.GetDataReader(
+						query
+					)
+				);
 		}
 
-		private IEnumerable<TT> LoadEnumerable<TT>(
+		protected IEnumerable<TT> GetEnumerable<TT>(
+			QueryBase query
+			) where TT : Entity, new()
+		{
+			return
+				GetEnumerable<TT>(
+					QueryAdapter.GetDataReader(
+						query
+					)
+				);
+		}
+
+		private IEnumerable<TT> GetEnumerable<TT>(
 			IDataReader dr
 			) where TT : Entity, new()
 		{
 			while(dr.Read())
 			{
-				yield return LoadEntityWithoutRead<TT>(dr);
+				yield return GetEntity<TT>(dr);
 			}
 			dr.Close();
 		}

@@ -10,6 +10,6 @@ namespace MyLib.Data.Common
 		IDbTransaction GetTransaction(int timeOut);
 
 		QueryAdapterBase CreateQueryAdapter();
-		ParameterListBase CreateParameterList();
+		
 	}
 }

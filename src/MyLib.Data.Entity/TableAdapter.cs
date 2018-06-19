@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
+using MyLib.Data.SqlServer;
 using MyLib.Misc;
 
 namespace MyLib.Data.EntityFramework
@@ -18,14 +20,69 @@ namespace MyLib.Data.EntityFramework
 		{
 		}
 
-		public IEnumerable<T> SelectAll()
+		public T Select(object key)
 		{
-			var sql = 
+			var q = 
+				new SqlQuery(
 				$@"
 					SELECT * 
 					FROM {GetTableName()}
-				";
-			return GetEnumerable(sql);
+					WHERE {GetPrimaryKey()} = @{GetPrimaryKey()}
+				"
+				);
+			q.Parameters.Add(GetPrimaryKey(), key);
+			return GetEntity<T>(q);
+		}
+
+		public IEnumerable<T> SelectAll()
+		{
+			return 
+				GetEnumerable(
+					new SqlQuery(
+					$@"
+						SELECT * 
+						FROM {GetTableName()}
+					"
+					)
+				);
+		}
+
+		public int Update(T row)
+		{
+			return Update(row, null);
+		}
+
+		public int Update(
+			T row
+			, IDbTransaction transaction
+		)
+		{
+			var fields = 
+				row
+					.GetFields();
+
+			var noKeyFields =
+				fields
+					.Where(p => !p.IsPrimaryKey)
+					.ToList();
+
+			var keys =
+				fields
+				.Where(p => p.IsPrimaryKey);
+
+			return 
+				QueryAdapter
+				.Execute(
+					new SqlQuery(
+						$@"
+							UPDATE {GetTableName()}
+							SET {GetUpdateFieldList(noKeyFields)}
+							WHERE {GetWhereAndFieldList(keys)}
+						"
+						, GetParameters(fields)
+						, transaction
+					)
+				);			
 		}
 
 		public int Insert(
@@ -38,18 +95,32 @@ namespace MyLib.Data.EntityFramework
 					.Where(p=> !p.IsIdentity)
 					.ToList();
 
-			var sql =
-				$@"
-					INSERT INTO {GetTableName()}(
-						{GetFieldNameList(fields)}
-					) VALUES (
-						{GetFieldParamList(fields)}
+			return
+				QueryAdapter
+				.Execute(
+					new SqlQuery(
+						$@"
+							INSERT INTO {GetTableName()}(
+								{GetInsertFieldList(fields)}
+							) VALUES (
+								{GetInsertParamList(fields)}
+							)
+						"
+						, GetParameters(fields)
 					)
-				";
+				);
+		}
 
-			var param = GetParameters(fields);
-
-			return Query.Execute(sql, param);
+		private string GetPrimaryKey()
+		{
+			var att =
+				(PrimaryKey)
+				Attribute
+				.GetCustomAttribute(
+					GetType()
+					, typeof(PrimaryKey)
+				);
+			return att?.Name ?? GetType().Name;
 		}
 
 		private string GetTableName()
@@ -64,35 +135,87 @@ namespace MyLib.Data.EntityFramework
 			return att?.Name ?? GetType().Name;
 		}
 
-		private static string GetFieldNameList(
+		private static string GetWhereAndFieldList(
 			IEnumerable<PropertyField> fields
-		) 
+		)
+		{
+			return GetWhereFieldList(fields, " AND ");
+		}
+
+		private static string GetWhereOrFieldList(
+			IEnumerable<PropertyField> fields
+		)
+		{
+			return GetWhereFieldList(fields, " OR ");
+		}
+
+		private static string GetWhereFieldList(
+			IEnumerable<PropertyField> fields
+			, string separador
+		)
 		{
 			return
-				fields
-				.Select(i => i.Name)
-				.Aggregate(
-					""
-					, (res, item)
-						=> res == ""
-							? ""
-							: $"{res}, @{item}"
+				Concat(
+					fields
+					, (PropertyField f) 
+						=> $"{f.Name} = @{f.Name}"
+					, separador
 				);
 		}
 
-		private static string GetFieldParamList(
+		private static string GetUpdateFieldList(
 			IEnumerable<PropertyField> fields
 		)
 		{
 			return
-				fields
-				.Select(i => i.Name)
+				Concat(
+					fields
+					, (PropertyField f) 
+						=> $"{f.Name} = @{f.Name}"
+					, ", "
+				);
+		}
+
+		private static string GetInsertFieldList(
+			IEnumerable<PropertyField> fields
+		) 
+		{
+			return
+				Concat(
+					fields
+					, (PropertyField f) 
+						=> $"{f.Name}"
+					, ", "
+				);
+		}
+
+		private static string GetInsertParamList(
+			IEnumerable<PropertyField> fields
+		)
+		{
+			return
+				Concat(
+					fields
+					, (PropertyField f)
+						=> $"@{f.Name}"
+					, ", "
+				);
+		}
+
+		private static string Concat<TF>(
+			IEnumerable<TF> enumerable
+			, Func<TF, string> f
+			, string separador
+		) 
+		{
+			return
+				enumerable
 				.Aggregate(
 					""
-					, (res, item) 
-						=> res == "" 
-						? "" 
-						: $"{res}, @{item}"
+					, (list, i)
+						=> list == ""
+						? f(i)
+						: $"{list}{separador}{f(i)}"
 				);
 		}
 
@@ -101,8 +224,7 @@ namespace MyLib.Data.EntityFramework
 		)
 		{
 			var list =
-				DataBase
-				.CreateParameterList();
+				QueryAdapter.CreateParameterList();
 
 			fields
 			.Foreach(list.Add);

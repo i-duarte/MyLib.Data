@@ -1,13 +1,29 @@
-﻿using System;
+﻿using MyLib.Data.Common;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
 
 namespace MyLib.Data.SqlServer
 {
-    public class ParameterList
-        : Common.ParameterListBase
+    public class SqlParameterList
+        : ParameterListBase
     {
+		public SqlParameterList()
+		{
+
+		}
+
+		public SqlParameterList(object value)
+		{
+			Add(value);
+		}
+
+		public SqlParameterList(string name, object value)
+		{
+			Add(name, value);
+		}
+
         public override void AddChar(
             string name
             , string value

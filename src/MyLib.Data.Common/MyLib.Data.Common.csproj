@@ -42,6 +42,7 @@
     <Compile Include="IField.cs" />
     <Compile Include="IDataBaseAdapter.cs" />
     <Compile Include="ParameterListBase.cs" />
+    <Compile Include="QueryBase.cs" />
     <Compile Include="QueryAdapterBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
