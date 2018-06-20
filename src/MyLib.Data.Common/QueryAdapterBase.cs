@@ -5,7 +5,7 @@ namespace MyLib.Data.Common
     public abstract class QueryAdapterBase 
     {
 		public abstract ParameterListBase CreateParameterList();
-		public abstract ParameterListBase CreateParameterList<T>(T t);
+		public abstract ParameterListBase CreateParameterList<T>(string name, T t);
 
 		public abstract IDataReader GetDataReader(
 			QueryBase query

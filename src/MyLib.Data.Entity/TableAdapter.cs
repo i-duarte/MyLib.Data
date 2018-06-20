@@ -111,16 +111,21 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
-		private string GetPrimaryKey()
+		private string GetPrimaryKey() 
 		{
-			var att =
-				(PrimaryKey)
-				Attribute
-				.GetCustomAttribute(
-					GetType()
-					, typeof(PrimaryKey)
-				);
-			return att?.Name ?? GetType().Name;
+			return 
+				typeof(T)
+				.GetProperties()
+				.Where(
+					p =>
+						Attribute.IsDefined(
+							p
+							, typeof(Field)
+						)
+				)
+				.Select(p => new PropertyField(p))
+				.First(p => p.IsPrimaryKey)
+				.Name;
 		}
 
 		private string GetTableName()

@@ -14,11 +14,6 @@ namespace MyLib.Data.SqlServer
 
 		}
 
-		public SqlParameterList(object value)
-		{
-			Add(value);
-		}
-
 		public SqlParameterList(string name, object value)
 		{
 			Add(name, value);

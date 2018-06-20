@@ -2,6 +2,7 @@
 using System.Reflection;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
+using System.Linq;
 
 namespace MyLib.Data.EntityFramework
 {
@@ -11,17 +12,19 @@ namespace MyLib.Data.EntityFramework
 		private PropertyInfo Property { get; }
 		private Field FieldAttribute { get; }
 
-		public bool IsPrimaryKey { get; }
-		public bool IsIdentity { get; }
-
 		public string Name 
 			=> string.IsNullOrEmpty(FieldAttribute?.Name) 
 			? Property.Name 
 			: FieldAttribute.Name;
 
+		public bool IsPrimaryKey => FieldAttribute.IsPrimaryKey;
+		public bool IsIdentity => FieldAttribute.IsIdentity;
+		public bool AllowNulls => FieldAttribute.AllowNulls;
 		public int Size => FieldAttribute.Size;
 		public byte Precision => FieldAttribute.Precision;
 		public byte Scale => FieldAttribute.Scale;
+
+		public Type Type => Property.GetType();
 
 		public object Value
 		{
@@ -39,32 +42,39 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
+		public PropertyField(PropertyInfo property)
+		{
+			Property = property;
+
+			var list =
+				Attribute
+					.GetCustomAttributes(
+						property
+						, typeof(Field)
+					);
+			if (list.Length > 0)
+			{
+				if (list.Length == 1)
+				{
+					FieldAttribute = (Field)list[0];
+				}
+				else
+				{
+					FieldAttribute = (Field)list.First(att => att.GetType().Name == nameof(Field));
+					if (FieldAttribute == null)
+					{
+						FieldAttribute = (Field)list[0];
+					}
+				}
+			}
+		}
+
 		public PropertyField(
 			Entity entity
 			, PropertyInfo property
-		)
+		) : this(property)
 		{
 			Entity = entity;
-			Property = property;
-			FieldAttribute = 
-				(Field)
-				Attribute
-					.GetCustomAttribute(
-						property.GetType()
-						, typeof(Field)
-					);
-
-			IsPrimaryKey = 
-				IsPresent(
-					property
-					, typeof(PrimaryKey)
-				);
-
-			IsIdentity = 
-				IsPresent(
-					property
-					, typeof(Identity)
-				);
 		}
 
 		private static bool IsPresent(

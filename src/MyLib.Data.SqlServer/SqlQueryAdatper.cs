@@ -79,10 +79,11 @@ namespace MyLib.Data.SqlServer
 		    , IDbTransaction transaction
 	    )
 	    {
-		    return 
-				GetSqlCommand(
+			return 
+				new SqlCommand(
 					sql
-					, transaction.Connection
+					, (SqlConnection)transaction.Connection
+					, (SqlTransaction)transaction
 				);
 	    }
 
@@ -326,9 +327,9 @@ namespace MyLib.Data.SqlServer
 			return new SqlParameterList();
 		}
 
-		public override ParameterListBase CreateParameterList<T>(T t)
+		public override ParameterListBase CreateParameterList<T>(string name, T t)
 		{
-			return new SqlParameterList(t);
+			return new SqlParameterList(name, t);
 		}
 	}
 }

@@ -24,11 +24,6 @@ namespace MyLib.Data.Common
 		public abstract void Add(string name, DateTime value);
 		public abstract void Add(string name, TimeSpan value);
 
-		public void Add(object value)
-		{
-			Add(nameof(value), value);
-		}
-
 		public void Add(string name, object value)
 		{
 			switch(value.GetType().ToString())

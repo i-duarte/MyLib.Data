@@ -26,9 +26,9 @@ namespace MyLib.Data.EntityFramework
 			return QueryAdapter.CreateParameterList();
 		}
 
-		protected ParameterListBase CreateParameterList<T>(T t)
+		protected ParameterListBase CreateParameterList<T>(string name, T t)
 		{
-			return QueryAdapter.CreateParameterList(t);
+			return QueryAdapter.CreateParameterList(name, t);
 		}
 	}
 }

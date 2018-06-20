@@ -2,6 +2,9 @@
 {
 	public interface IField
 	{
+		bool IsPrimaryKey { get; }
+		bool IsIdentity { get; }
+		bool AllowNulls { get; }
 		string Name { get;  }
 		int Size { get;  }
 		byte Precision { get; }

@@ -25,9 +25,29 @@ namespace MyLib.Data.EntityFramework
 			.Foreach(
 				field =>
 				{
-					field.Value = dr[field.Name];
+					try
+					{
+						if(DBNull.Value == dr[field.Name])
+						{
+							if(field.AllowNulls)
+							{
+								field.Value = null;
+							}
+
+						}
+						else
+						{
+							field.Value = dr[field.Name];
+						}
+						
+					}
+					catch(Exception e)
+					{
+						throw new Exception($"Error al acceder al campo {field.Name} en {GetType().Name}", e);
+					}
 				}
 			);
+
 		}
 
 		public IEnumerable<PropertyField> GetFields(
@@ -44,6 +64,6 @@ namespace MyLib.Data.EntityFramework
 						)
 				)
 				.Select(p => new PropertyField(this, p));
-		}
+		}		
 	}
 }

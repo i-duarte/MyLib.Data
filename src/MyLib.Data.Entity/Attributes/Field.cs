@@ -6,52 +6,12 @@ namespace MyLib.Data.EntityFramework.Attributes
 		: NamedAttribute
 			, IField
 	{
-		public int Size { get; }
-		public byte Precision { get; }
-		public byte Scale { get; }
+		public bool IsPrimaryKey { get; set; }
+		public bool IsIdentity { get; set; }
+		public bool AllowNulls { get; set; }
+		public int Size { get; set; }
+		public byte Precision { get; set; }
+		public byte Scale { get; set; }
 		public object Value { get; set; }
-
-		public Field()
-		{
-		}
-
-		public Field(string name)
-			: base(name)
-		{
-		}
-
-		public Field(
-			int size
-		)
-		{
-			Size = size;
-		}
-
-		public Field(
-			string name
-			, int size
-		) : base(name)
-		{
-			Size = size;
-		}
-
-		public Field(
-			string name
-			, byte precision
-			, byte scale
-		) : base(name)
-		{
-			Precision = precision;
-			Scale = scale;
-		}
-
-		public Field(
-			byte precision
-			, byte scale
-		)
-		{
-			Precision = precision;
-			Scale = scale;
-		}
 	}
 }

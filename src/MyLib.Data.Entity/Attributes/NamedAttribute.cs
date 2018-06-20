@@ -3,7 +3,7 @@
 	public class NamedAttribute
 		: System.Attribute
 	{
-		public string Name { get; protected set; }
+		public string Name { get; set; }
 
 		public NamedAttribute()
 		{
