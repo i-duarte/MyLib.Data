@@ -43,7 +43,6 @@
     <Compile Include="StockData.cs" />
     <Compile Include="Tables\Products.cs" />
     <Compile Include="Tables\Rows\Product.cs" />
-    <Compile Include="Tables\Rows\Product.Design.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">
