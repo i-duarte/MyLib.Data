@@ -1,6 +1,7 @@
 ﻿using System;
-using MyLib.Data;
-using MyLib.Data.Model;
+using Demo.Data;
+using Demo.Data.Tables.Rows;
+using MyLib.Misc;
 
 namespace Demo.DosConsole
 {
@@ -9,29 +10,32 @@ namespace Demo.DosConsole
 		private static void Main(string[] args)
 		{
 			var db = 
-				new DemoDataBase(
+				new StockData(
 					"(local)\\dev2016"
 					, "StockData"
 				);
+
+			Console.WriteLine("Demo single read");
 
 			Console.WriteLine(
 				GetInfo(
 					db
 					.Products
-					.GetItem(3)
+					.Select(3)
 				)
 			);
 
-			//db
-			//	.Products
-			//	.SelectAll()
-			//	.Foreach(
-			//		p =>
-			//		Console
-			//			.WriteLine(
-			//				GetInfo(p)
-			//			)
-			//	);
+			Console.WriteLine("Demo multiple read");
+			db
+				.Products
+				.SelectAll()
+				.Foreach(
+					p =>
+					Console
+						.WriteLine(
+							GetInfo(p)
+						)
+				);
 		}
 
 		private static string GetInfo(Product p)

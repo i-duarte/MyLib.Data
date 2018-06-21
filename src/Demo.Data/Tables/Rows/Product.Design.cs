@@ -1,22 +1,20 @@
 ﻿using MyLib.Data.EntityFramework;
 using MyLib.Data.EntityFramework.Attributes;
 
-namespace MyLib.Data.Model
+namespace Demo.Data.Tables.Rows
 {
-    public class Product : Entity
-    {
-		[PrimaryKey]
-		[Identity]
-		[Field]
-		public int IdProduct { get; set; }
+	partial class Product : Entity
+	{
+		[Field(IsPrimaryKey = true)]
+		public int IdProduct { get; set;}
 
-	    [Field]
+		[Field]
 		public int IdBrand { get; set; }
 
-	    [Field(50)]
+		[Field(Size = 50)]
 		public string Name { get; set; }
-
-	    [Field(400)]
+		
+		[Field(Size = 400)]
 		public string Description { get; set; }
-    }
+	}
 }

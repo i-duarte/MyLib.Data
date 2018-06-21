@@ -44,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Demo.Data\Demo.Data.csproj">
+      <Project>{F7B00765-116B-48DC-AB98-B35F7025BB58}</Project>
+      <Name>Demo.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyLib.Data.Entity\MyLib.Data.EntityFrameWork.csproj">
       <Project>{2e1e1a91-d9ee-4b2b-af58-23058f600222}</Project>
       <Name>MyLib.Data.EntityFrameWork</Name>
@@ -51,10 +55,6 @@
     <ProjectReference Include="..\MyLib.Data.SqlServer\MyLib.Data.SqlServer.csproj">
       <Project>{d808e5c7-e141-4316-b7db-08f49b308374}</Project>
       <Name>MyLib.Data.SqlServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MyLib.Data\MyLib.Data.csproj">
-      <Project>{9d381dfa-e236-432c-8701-7deafa952aa3}</Project>
-      <Name>MyLib.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyLib.Misc\MyLib.Misc.csproj">
       <Project>{dd448613-e26e-41bf-9801-b077d923e986}</Project>
