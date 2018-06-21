@@ -111,6 +111,20 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
+		public int Delete(object key)
+		{
+			var q =
+				new SqlQuery(
+				$@"
+					DELETE 
+					FROM {GetTableName()}
+					WHERE {GetPrimaryKey()} = @{GetPrimaryKey()}
+				"
+				);
+			q.Parameters.Add(GetPrimaryKey(), key);
+			return QueryAdapter.Execute(q);
+		}
+
 		private string GetPrimaryKey() 
 		{
 			return 
