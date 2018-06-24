@@ -59,7 +59,8 @@ namespace MyLib.Data.EntityFramework
 		{
 			var fields = 
 				row
-					.GetFields();
+					.GetFields()
+					.ToList();
 
 			var noKeyFields =
 				fields

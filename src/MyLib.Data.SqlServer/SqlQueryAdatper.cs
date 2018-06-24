@@ -229,7 +229,29 @@ namespace MyLib.Data.SqlServer
 			
 		}
 
-	    private static T Get<T>(IDataReader dr)
+		public override void BulkCopy(
+			DataTable dt
+			, string table
+			, int numFields
+			, IDbTransaction trans
+			, bool deleteRecords = true
+		)
+		{
+			if (deleteRecords)
+			{
+				Execute(new SqlQuery("DELETE FROM " + table, trans));
+			}
+
+			using (
+				var bc = GetBulkCopy(table, trans as SqlTransaction)
+			)
+			{
+				bc.MapColumns(numFields);
+				bc.WriteToServer(dt);
+			}
+		}
+
+		private static T Get<T>(IDataReader dr)
 	    {
 			var t = default(T);
 		    if(dr.Read())
@@ -331,5 +353,7 @@ namespace MyLib.Data.SqlServer
 		{
 			return new SqlParameterList(name, t);
 		}
+
+		
 	}
 }

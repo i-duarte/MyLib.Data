@@ -30,7 +30,7 @@ namespace MyLib.Data.EntityFramework
 		{
 			get => 
 				Property.GetValue(
-					Property
+					Entity
 					, null
 				);
 

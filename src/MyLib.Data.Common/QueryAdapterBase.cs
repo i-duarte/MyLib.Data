@@ -40,5 +40,13 @@ namespace MyLib.Data.Common
 			, int numFields
 			, bool deleteRecords = true
 		);
+
+		public abstract void BulkCopy(
+			DataTable dt
+			, string table
+			, int numFields
+			, IDbTransaction trans
+			, bool deleteRecords = true
+		);
 	}
 }
