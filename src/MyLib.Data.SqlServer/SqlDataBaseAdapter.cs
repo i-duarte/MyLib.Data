@@ -14,7 +14,44 @@ namespace MyLib.Data.SqlServer
 		private string Password { get; set; }
 		private bool WindowsAuthentication { get; set; }
 
+		public SqlDataBaseAdapter()
+		{
+		}
+
 		public SqlDataBaseAdapter(
+			string dataSource
+			, string dbName
+		)
+		{
+			SetCnnStr(dataSource, dbName);
+		}
+
+		public SqlDataBaseAdapter(
+			string dataSource
+			, string dbName
+			, string user
+			, string password
+		)
+		{
+			SetCnnStr(
+				dataSource
+				, dbName
+				, user
+				, password
+			);
+		}
+
+		protected void SetCnnStr(
+			string dataSource
+			, string dbName
+		)
+		{
+			DataSource = dataSource;
+			DbName = dbName;
+			WindowsAuthentication = true;
+		}
+
+		protected void SetCnnStr(
 			string dataSource
 			, string dbName
 			, string user
@@ -28,15 +65,6 @@ namespace MyLib.Data.SqlServer
 			WindowsAuthentication = false;
 		}
 
-		public SqlDataBaseAdapter(
-			string dataSource
-			, string dbName
-		)
-		{
-			DataSource = dataSource;
-			DbName = dbName;
-			WindowsAuthentication = true;
-		}
 
 		public IDbConnection GetConnection()
 		{
