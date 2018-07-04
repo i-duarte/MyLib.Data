@@ -1,16 +1,17 @@
-﻿using System.Data.SqlClient;
-using MyLib.Data.Common;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 
-namespace MyLib.Data.SqlServer
+namespace MyLib.Extensions.Data
 {
-	internal static class MyExtensions
+	public static class Sql
 	{
 		public static SqlBulkCopy MapColumns(
 			this SqlBulkCopy bc
 			, int numColumns
 		)
 		{
-			for(var i = 0; i < numColumns; i++)
+			for (var i = 0; i < numColumns; i++)
 			{
 				bc.ColumnMappings.Add(i, i);
 			}
@@ -35,9 +36,9 @@ namespace MyLib.Data.SqlServer
 			return cmd;
 		}
 
-		public static SqlCommand AddParameters(
+		public static SqlCommand AddParameters<T>(
 			this SqlCommand cmd
-			, ParameterListBase parameterList
+			, List<T> parameterList
 		)
 		{
 			cmd.Parameters.AddRange(parameterList.ToArray());

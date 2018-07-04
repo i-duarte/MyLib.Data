@@ -56,9 +56,9 @@
       <Project>{d808e5c7-e141-4316-b7db-08f49b308374}</Project>
       <Name>MyLib.Data.SqlServer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyLib.Misc\MyLib.Misc.csproj">
-      <Project>{dd448613-e26e-41bf-9801-b077d923e986}</Project>
-      <Name>MyLib.Misc</Name>
+    <ProjectReference Include="..\MyLib.Extensions\MyLib.Extensions.csproj">
+      <Project>{abd1f12a-210d-4740-afa4-1a4df837a1ff}</Project>
+      <Name>MyLib.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

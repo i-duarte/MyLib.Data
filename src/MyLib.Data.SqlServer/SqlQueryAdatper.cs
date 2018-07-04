@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using MyLib.Data.Common;
+using MyLib.Extensions.Data;
 
 namespace MyLib.Data.SqlServer
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MyLib.Misc
+namespace MyLib.Extensions.Collection
 {
-	public static class MyExtensions
-	{
+	public static class IEnumerable
+    {
 		public static void Foreach<T>(
 				this IEnumerable<T> enumerable
 				, Action<T> action

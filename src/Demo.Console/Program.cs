@@ -1,7 +1,7 @@
 ﻿using System;
 using Demo.Data;
 using Demo.Data.Tables.Rows;
-using MyLib.Misc;
+using MyLib.Extensions.Collection;
 
 namespace Demo.DosConsole
 {
