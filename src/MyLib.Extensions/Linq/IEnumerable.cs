@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MyLib.Extensions.Collection
+namespace MyLib.Extensions.Linq
 {
 	public static class IEnumerable
     {

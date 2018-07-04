@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MyLib.Extensions.Process
+namespace MyLib.Extensions.Linq
 {
-	public static class Job
+	public static class Process
 	{
 		public static B Pipe<A, B>(this A x, Func<A, B> f) => f(x);
 

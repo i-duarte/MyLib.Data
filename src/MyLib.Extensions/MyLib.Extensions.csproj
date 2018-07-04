@@ -39,8 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collection\IEnumerable.cs" />
-    <Compile Include="Process\Job.cs" />
+    <Compile Include="Linq\IEnumerable.cs" />
+    <Compile Include="Linq\Process.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\Sql.cs" />
   </ItemGroup>
