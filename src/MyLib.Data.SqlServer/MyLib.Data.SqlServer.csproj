@@ -46,10 +46,6 @@
     <Compile Include="SqlQueryAdatper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">
-      <Project>{b687b713-2732-445c-99a9-1b14e67bcb60}</Project>
-      <Name>MyLib.Data.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MyLib.Extensions\MyLib.Extensions.csproj">
       <Project>{abd1f12a-210d-4740-afa4-1a4df837a1ff}</Project>
       <Name>MyLib.Extensions</Name>
