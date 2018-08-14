@@ -48,6 +48,10 @@
       <Project>{F7B00765-116B-48DC-AB98-B35F7025BB58}</Project>
       <Name>Demo.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">
+      <Project>{B687B713-2732-445C-99A9-1B14E67BCB60}</Project>
+      <Name>MyLib.Data.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyLib.Data.Entity\MyLib.Data.EntityFrameWork.csproj">
       <Project>{2e1e1a91-d9ee-4b2b-af58-23058f600222}</Project>
       <Name>MyLib.Data.EntityFrameWork</Name>

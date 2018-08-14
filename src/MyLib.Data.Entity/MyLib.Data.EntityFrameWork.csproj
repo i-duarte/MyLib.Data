@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Attributes\NamedAttribute.cs" />
     <Compile Include="Attributes\Table.cs" />
+    <Compile Include="DataBase.cs" />
     <Compile Include="PropertyField.cs" />
     <Compile Include="Attributes\Field.cs" />
     <Compile Include="DataAdapter.cs" />
@@ -50,6 +51,10 @@
     <Compile Include="TableAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">
+      <Project>{b687b713-2732-445c-99a9-1b14e67bcb60}</Project>
+      <Name>MyLib.Data.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyLib.Data.SqlServer\MyLib.Data.SqlServer.csproj">
       <Project>{D808E5C7-E141-4316-B7DB-08F49B308374}</Project>
       <Name>MyLib.Data.SqlServer</Name>

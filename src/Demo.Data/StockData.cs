@@ -1,23 +1,20 @@
 ﻿using Demo.Data.Tables;
-using MyLib.Data.SqlServer;
+using MyLib.Data.Common;
+using MyLib.Data.EntityFramework;
 
 namespace Demo.Data
 {
-	public class StockData : SqlDataBaseAdapter
+	public class StockData 
+		: DataBase
 	{
-		public StockData(string dataSource, string dbName) 
-			: base(dataSource, dbName)
-		{
-		}
-
-		public StockData(string dataSource, string dbName, string user, string password) 
-			: base(dataSource, dbName, user, password)
+		public StockData(IDataBaseAdapter dataBaseAdapter) 			
+			: base(dataBaseAdapter)
 		{
 		}
 
 		private Products _products;
 		public Products Products 
 			=> _products 
-			?? (_products = new Products(this));
+			?? (_products = new Products(DataBaseAdapter));
 	}
 }

@@ -1,21 +1,28 @@
 ﻿using System;
 using Demo.Data;
 using Demo.Data.Tables.Rows;
-using MyLib.Extensions.Collection;
+using MyLib.Data.SqlServer;
+using MyLib.Extensions.Linq;
 
 namespace Demo.DosConsole
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		private static void Main(
+			string[] args
+		)
 		{
 			var db = 
 				new StockData(
-					"(local)\\dev2016"
-					, "StockData"
+					new SqlDataBaseAdapter(
+						"(local)\\dev2016"
+						, "StockData"
+					)
 				);
 
-			Console.WriteLine("Demo single read");
+			Console.WriteLine(
+				"Demo single read"
+			);
 
 			Console.WriteLine(
 				GetInfo(
@@ -25,7 +32,10 @@ namespace Demo.DosConsole
 				)
 			);
 
-			Console.WriteLine("Demo multiple read");
+			Console.WriteLine(
+				"Demo multiple read"
+			);
+
 			db
 				.Products
 				.SelectAll()
@@ -38,7 +48,9 @@ namespace Demo.DosConsole
 				);
 		}
 
-		private static string GetInfo(Product p)
+		private static string GetInfo(
+			Product p
+		)
 		{
 			return $"{p.Name} - {p.Description}";
 		}
