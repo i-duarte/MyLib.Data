@@ -41,6 +41,10 @@ namespace MyLib.Data.EntityFramework
 						}
 						
 					}
+					catch(IndexOutOfRangeException e)
+					{
+						throw new Exception($"No se encontro el campo {field.Name} en {GetType().Name}", e);
+					}
 					catch(Exception e)
 					{
 						throw new Exception($"Error al acceder al campo {field.Name} en {GetType().Name}", e);
