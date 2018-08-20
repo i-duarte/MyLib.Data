@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
-using MyLib.Data.EntityFramework.Attributes;
 using MyLib.Data.SqlServer;
 using MyLib.Extensions.Linq;
 
@@ -18,33 +17,6 @@ namespace MyLib.Data.EntityFramework
 			) 
 			: base(dataBase)
 		{
-		}
-
-		public T Select(object key)
-		{
-			var q = 
-				new SqlQuery(
-				$@"
-					SELECT * 
-					FROM {GetTableName()}
-					WHERE {GetPrimaryKey()} = @{GetPrimaryKey()}
-				"
-				);
-			q.Parameters.Add(GetPrimaryKey(), key);
-			return GetEntity<T>(q);
-		}
-
-		public IEnumerable<T> SelectAll()
-		{
-			return 
-				GetEnumerable(
-					new SqlQuery(
-					$@"
-						SELECT * 
-						FROM {GetTableName()}
-					"
-					)
-				);
 		}
 
 		public int Update(T row)
@@ -126,35 +98,7 @@ namespace MyLib.Data.EntityFramework
 			return QueryAdapter.Execute(q);
 		}
 
-		private string GetPrimaryKey() 
-		{
-			return 
-				typeof(T)
-				.GetProperties()
-				.Where(
-					p =>
-						Attribute.IsDefined(
-							p
-							, typeof(Field)
-						)
-				)
-				.Select(p => new PropertyField(p))
-				.First(p => p.IsPrimaryKey)
-				.Name;
-		}
-
-		private string GetTableName()
-		{
-			var att = 
-				(Table)
-				Attribute
-				.GetCustomAttribute(
-					GetType()
-					, typeof(Table)
-				);
-			return att?.Name ?? GetType().Name;
-		}
-
+		
 		private static string GetWhereAndFieldList(
 			IEnumerable<PropertyField> fields
 		)

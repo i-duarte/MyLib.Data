@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using MyLib.Data.Common;
+using MyLib.Data.EntityFramework.Attributes;
+using MyLib.Data.SqlServer;
 
 namespace MyLib.Data.EntityFramework
 {
@@ -12,6 +16,33 @@ namespace MyLib.Data.EntityFramework
 			) 
 			: base(dataBase)
 		{
+		}
+
+		public T Select(object key)
+		{
+			var q = 
+				new SqlQuery(
+				$@"
+					SELECT * 
+					FROM {GetTableName()}
+					WHERE {GetPrimaryKey()} = @{GetPrimaryKey()}
+				"
+				);
+			q.Parameters.Add(GetPrimaryKey(), key);
+			return GetEntity<T>(q);
+		}
+
+		public IEnumerable<T> SelectAll()
+		{
+			return 
+				GetEnumerable(
+					new SqlQuery(
+					$@"
+						SELECT * 
+						FROM {GetTableName()}
+					"
+					)
+				);
 		}
 
 		protected TT GetEntity<TT>(
@@ -76,6 +107,35 @@ namespace MyLib.Data.EntityFramework
 				yield return GetEntity<TT>(dr);
 			}
 			dr.Close();
+		}
+
+		protected string GetTableName()
+		{
+			var att =
+				(Table)
+				Attribute
+				.GetCustomAttribute(
+					GetType()
+					, typeof(Table)
+				);
+			return att?.Name ?? GetType().Name;
+		}
+
+		protected string GetPrimaryKey()
+		{
+			return
+				typeof(T)
+				.GetProperties()
+				.Where(
+					p =>
+						Attribute.IsDefined(
+							p
+							, typeof(Field)
+						)
+				)
+				.Select(p => new PropertyField(p))
+				.First(p => p.IsPrimaryKey)
+				.Name;
 		}
 	}
 }
