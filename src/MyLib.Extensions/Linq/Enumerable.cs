@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MyLib.Extensions.Linq
 {
-	public static class IEnumerable
+	public static class Enumerable
     {
 		public static void Foreach<T>(
 				this IEnumerable<T> enumerable
@@ -14,6 +14,14 @@ namespace MyLib.Extensions.Linq
 			{
 				action(item);
 			}
+		}
+
+		public static string Concat(
+			this IEnumerable<string> iEnum
+			, string c
+		)
+		{
+			return string.Join(c, iEnum);			
 		}
 	}
 }

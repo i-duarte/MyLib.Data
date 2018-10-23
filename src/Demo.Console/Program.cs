@@ -27,8 +27,8 @@ namespace Demo.DosConsole
 			Console.WriteLine(
 				GetInfo(
 					db
-					.Products
-					.Select(3)
+						.Products
+						.Get(3)
 				)
 			);
 

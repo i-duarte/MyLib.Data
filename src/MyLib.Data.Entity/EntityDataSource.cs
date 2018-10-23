@@ -5,6 +5,7 @@ using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
 using MyLib.Data.SqlServer;
+using MyLib.Extensions.Linq;
 
 namespace MyLib.Data.EntityFramework
 {
@@ -18,19 +19,62 @@ namespace MyLib.Data.EntityFramework
 		{
 		}
 
-		public T Select(object key)
+		public T Get(object key)
 		{
+			var keyName = GetPrimaryKey();
 			var q = 
 				new SqlQuery(
 				$@"
 					SELECT * 
 					FROM {GetTableName()}
-					WHERE {GetPrimaryKey()} = @{GetPrimaryKey()}
+					WHERE {keyName} = @{keyName}					
 				"
 				);
-			q.Parameters.Add(GetPrimaryKey(), key);
+			q.Parameters.Add(keyName, key);
 			return GetEntity<T>(q);
 		}
+
+		public IEnumerable<T> Select(object key)
+		{
+			var keyName = GetPrimaryKey();
+			var q =
+				new SqlQuery(
+					$@"
+					SELECT * 
+					FROM {GetTableName()}
+					WHERE {keyName} = @{keyName}					
+				"
+				);
+			q.Parameters.Add(keyName, key);
+			return GetEnumerable(q);
+		}
+
+		public T Select(List<Filter> listFilter)
+		{
+			var q =
+				new SqlQuery(
+				$@"
+					SELECT * 
+					FROM {GetTableName()}
+					WHERE {GetWhereFilter(listFilter)}				
+				"
+				);
+			listFilter
+				.ForEach(
+					f => q.Parameters.Add(f.Name, f.Value)
+				);
+			return GetEntity<T>(q);
+		}
+
+		private static string GetWhereFilter(
+			IEnumerable<Filter> iEnum
+		)
+		{
+			return
+				iEnum
+				.Select(p => $"{p.Name} = @{p.Name}")
+				.Concat(" AND ");			
+		}	
 
 		public IEnumerable<T> SelectAll()
 		{
@@ -43,6 +87,25 @@ namespace MyLib.Data.EntityFramework
 					"
 					)
 				);
+		}
+
+		protected T GetEntity(
+			QueryBase query
+		)
+		{
+			var dr =
+				QueryAdapter
+					.GetDataReader(
+						query
+					);
+
+			T e = null;
+			if (dr.Read())
+			{
+				e = GetEntity<T>(dr);
+			}
+			dr.Close();
+			return e;
 		}
 
 		protected TT GetEntity<TT>(
@@ -136,6 +199,23 @@ namespace MyLib.Data.EntityFramework
 				.Select(p => new PropertyField(p))
 				.First(p => p.IsPrimaryKey)
 				.Name;
+		}
+
+		protected IEnumerable<string> GetPrimaryKeyFieldNames()
+		{
+			return
+				typeof(T)
+				.GetProperties()
+				.Where(
+					p =>
+						Attribute.IsDefined(
+							p
+							, typeof(Field)
+						)
+				)
+				.Select(p => new PropertyField(p))
+				.Where(p => p.IsPrimaryKey)
+				.Select(p => p.Name);
 		}
 	}
 }

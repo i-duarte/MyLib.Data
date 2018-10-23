@@ -42,6 +42,7 @@
     <Compile Include="Attributes\NamedAttribute.cs" />
     <Compile Include="Attributes\Table.cs" />
     <Compile Include="DataBase.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="PropertyField.cs" />
     <Compile Include="Attributes\Field.cs" />
     <Compile Include="DataAdapter.cs" />
