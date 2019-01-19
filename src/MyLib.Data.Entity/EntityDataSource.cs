@@ -21,20 +21,15 @@ namespace MyLib.Data.EntityFramework
 
 		public T Get(object key)
 		{
-			var keyName = GetPrimaryKey();
-			var q = 
-				new SqlQuery(
-				$@"
-					SELECT * 
-					FROM {GetTableName()}
-					WHERE {keyName} = @{keyName}					
-				"
-				);
-			q.Parameters.Add(keyName, key);
-			return GetEntity<T>(q);
+			return GetEntity(GetQueryKey(key));
 		}
 
-		public IEnumerable<T> Select(object key)
+		//public void Set(object key, ListFilter listFilter)
+		//{
+			
+		//}
+
+		private QueryBase GetQueryKey(object key)
 		{
 			var keyName = GetPrimaryKey();
 			var q =
@@ -46,14 +41,21 @@ namespace MyLib.Data.EntityFramework
 				"
 				);
 			q.Parameters.Add(keyName, key);
-			return GetEnumerable(q);
+			return q;
 		}
 
-		public T Select(List<Filter> listFilter)
+		public T Get(ListFilter listFilter)
+		{
+			return GetEntity(GetQueryFilter(listFilter));
+		}
+
+		private QueryBase GetQueryFilter(
+			ListFilter listFilter
+		)
 		{
 			var q =
 				new SqlQuery(
-				$@"
+					$@"
 					SELECT * 
 					FROM {GetTableName()}
 					WHERE {GetWhereFilter(listFilter)}				
@@ -63,17 +65,37 @@ namespace MyLib.Data.EntityFramework
 				.ForEach(
 					f => q.Parameters.Add(f.Name, f.Value)
 				);
-			return GetEntity<T>(q);
+			return q;
+		}
+
+		public IEnumerable<T> Select(object key)
+		{
+			return GetEnumerable(GetQueryKey(key));
+		}
+
+		public IEnumerable<T> Select(
+			ListFilter listFilter
+		)
+		{
+			return 
+				GetEnumerable(
+					GetQueryFilter(listFilter)
+				);
 		}
 
 		private static string GetWhereFilter(
 			IEnumerable<Filter> iEnum
 		)
 		{
-			return
+			return 
 				iEnum
 				.Select(p => $"{p.Name} = @{p.Name}")
-				.Concat(" AND ");			
+				.JoinWith(" AND ");
+			//return
+			//	string.Join(" AND ",
+			//		iEnum
+			//		.Select(p => $"{p.Name} = @{p.Name}")
+			//	);
 		}	
 
 		public IEnumerable<T> SelectAll()

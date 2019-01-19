@@ -22,7 +22,7 @@ namespace MyLib.Data.EntityFramework
 		public void Load(IDataReader dr)
 		{
 			GetFields()
-			.Foreach(
+			.ForEach(
 				field =>
 				{
 					try

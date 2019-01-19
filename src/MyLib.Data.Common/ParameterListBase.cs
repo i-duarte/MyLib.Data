@@ -56,7 +56,7 @@ namespace MyLib.Data.Common
 					Add(name, (double)value);
 					break;
 				default:
-					throw new ArgumentException("Tipo de dato inesperado");
+					throw new ArgumentException($"Tipo de dato inesperado {value.GetType()}");
 			}
 		}
 

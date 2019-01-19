@@ -39,7 +39,7 @@ namespace Demo.DosConsole
 			db
 				.Products
 				.SelectAll()
-				.Foreach(
+				.ForEach(
 					p =>
 					Console
 						.WriteLine(

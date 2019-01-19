@@ -191,7 +191,7 @@ namespace MyLib.Data.EntityFramework
 				QueryAdapter.CreateParameterList();
 
 			fields
-			.Foreach(list.Add);
+			.ForEach(list.Add);
 
 			return list;
 		}

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using MyLib.Data.Common;
 
@@ -16,6 +17,22 @@ namespace MyLib.Data.SqlServer
 
 		public SqlDataBaseAdapter()
 		{
+		}
+
+		public SqlDataBaseAdapter(string pipeCnn)
+		{
+			var arr = pipeCnn.Split('|');
+			switch (arr.Length)
+			{
+				case 2:
+					SetCnnStr(arr[0], arr[1]);
+					break;
+				case 4:
+					SetCnnStr(arr[0], arr[1], arr[2], arr[3]);
+					break;
+				default: 
+					throw new Exception("Formato incorrecto de pipeCnn");
+			}
 		}
 
 		public SqlDataBaseAdapter(
