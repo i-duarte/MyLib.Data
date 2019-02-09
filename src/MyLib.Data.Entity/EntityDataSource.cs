@@ -130,35 +130,6 @@ namespace MyLib.Data.EntityFramework
 			return e;
 		}
 
-		protected TT GetEntity<TT>(
-			QueryBase query
-			) where TT : Entity, new()
-		{
-			var dr = 
-				QueryAdapter
-				.GetDataReader(
-					query
-				);
-
-			TT e = null;
-			if (dr.Read())
-			{
-				e = GetEntity<TT>(dr);
-			}
-			dr.Close();
-			return e;			
-		}
-
-		private TT GetEntity<TT>(
-			IDataReader dr
-			) where TT : Entity, new()
-		{
-			var e = new TT();
-			e.Load(dr);
-			e.SetDataBase(DataBase);
-			return e;
-		}
-
 		protected IEnumerable<T> GetEnumerable(
 			QueryBase query
 			)
@@ -169,29 +140,6 @@ namespace MyLib.Data.EntityFramework
 						query
 					)
 				);
-		}
-
-		protected IEnumerable<TT> GetEnumerable<TT>(
-			QueryBase query
-			) where TT : Entity, new()
-		{
-			return
-				GetEnumerable<TT>(
-					QueryAdapter.GetDataReader(
-						query
-					)
-				);
-		}
-
-		private IEnumerable<TT> GetEnumerable<TT>(
-			IDataReader dr
-			) where TT : Entity, new()
-		{
-			while(dr.Read())
-			{
-				yield return GetEntity<TT>(dr);
-			}
-			dr.Close();
 		}
 
 		protected string GetTableName()
