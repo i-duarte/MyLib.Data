@@ -1,11 +1,13 @@
-﻿using System;
+﻿using MyLib.Extensions.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 
 namespace MyLib.Data.Common
 {
 	public abstract class ParameterListBase 
-		: List<IDbDataParameter>
+		: List<DbParameter>
 	{
 		public abstract void Add(string name, bool value);
 		public abstract void Add(string name, byte value);
@@ -23,6 +25,12 @@ namespace MyLib.Data.Common
 		public abstract void AddChar(string name, string value, int size);
 		public abstract void Add(string name, DateTime value);
 		public abstract void Add(string name, TimeSpan value);
+
+		public ParameterListBase AddRange(IEnumerable<IField> list)
+		{
+			list.ForEach(Add);
+			return this;
+		}
 
 		public void Add(string name, object value)
 		{
@@ -101,6 +109,6 @@ namespace MyLib.Data.Common
 				default:
 					throw new ArgumentException("Tipo de dato inesperado");
 			}
-		}
+		}		
 	}
 }

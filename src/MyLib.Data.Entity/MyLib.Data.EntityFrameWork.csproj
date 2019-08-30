@@ -44,6 +44,9 @@
     <Compile Include="DataBase.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="ListFilter.cs" />
+    <Compile Include="FieldOrder.cs" />
+    <Compile Include="MyExtensions.cs" />
+    <Compile Include="OrderList.cs" />
     <Compile Include="PropertyField.cs" />
     <Compile Include="Attributes\Field.cs" />
     <Compile Include="DataAdapter.cs" />

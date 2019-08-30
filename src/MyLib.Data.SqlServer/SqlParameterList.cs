@@ -41,7 +41,7 @@ namespace MyLib.Data.SqlServer
                 , size
             );
 
-        public override void Add(
+		public override void Add(
             string name
             , byte value
         ) 
@@ -205,7 +205,7 @@ namespace MyLib.Data.SqlServer
 					Direction = ParameterDirection.Input,
 					Value = value
 				};
-			Add(param);
+			Add(param);			
 		}
 
 		private void AddParameter(

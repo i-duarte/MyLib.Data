@@ -129,9 +129,7 @@ namespace MyLib.Data.SqlServer
 		)
 	    {
 		    return
-			    GetSqlCommand(
-					query
-				)
+			    GetSqlCommand(query)
 				.ExecuteNonQuery();
 	    }
 

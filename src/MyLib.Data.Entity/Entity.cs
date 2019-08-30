@@ -67,7 +67,10 @@ namespace MyLib.Data.EntityFramework
 							, typeof(Field)
 						)
 				)
-				.Select(p => new PropertyField(this, p));
+				.Select(
+					p => 
+					new PropertyField(this, p)
+				);
 		}		
 	}
 }

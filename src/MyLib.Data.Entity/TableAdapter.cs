@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
@@ -31,17 +30,8 @@ namespace MyLib.Data.EntityFramework
 		{
 			var fields = 
 				row
-					.GetFields()
-					.ToList();
-
-			var noKeyFields =
-				fields
-					.Where(p => !p.IsPrimaryKey)
-					.ToList();
-
-			var keys =
-				fields
-				.Where(p => p.IsPrimaryKey);
+				.GetFields()
+				.ToList();
 
 			return 
 				QueryAdapter
@@ -49,8 +39,18 @@ namespace MyLib.Data.EntityFramework
 					new SqlQuery(
 						$@"
 							UPDATE {GetTableName()}
-							SET {GetUpdateFieldList(noKeyFields)}
-							WHERE {GetWhereAndFieldList(keys)}
+							SET 
+								{
+									fields
+									.Where(p => !p.IsPrimaryKey)
+									.SelectUpdate()
+								}
+							WHERE 
+								{
+									fields
+									.Where(p => p.IsPrimaryKey)
+									.JoinWithAnd()
+								}
 						"
 						, GetParameters(fields)
 						, transaction
@@ -74,9 +74,9 @@ namespace MyLib.Data.EntityFramework
 					new SqlQuery(
 						$@"
 							INSERT INTO {GetTableName()}(
-								{GetInsertFieldList(fields)}
+								{fields.SelectInsertField()}
 							) VALUES (
-								{GetInsertParamList(fields)}
+								{fields.SelectInsertParam()}
 							)
 						"
 						, GetParameters(fields)
@@ -98,102 +98,11 @@ namespace MyLib.Data.EntityFramework
 			return QueryAdapter.Execute(q);
 		}
 
-		
-		private static string GetWhereAndFieldList(
+		private ParameterListBase GetParameters(
 			IEnumerable<PropertyField> fields
-		)
-		{
-			return GetWhereFieldList(fields, " AND ");
-		}
-
-		private static string GetWhereOrFieldList(
-			IEnumerable<PropertyField> fields
-		)
-		{
-			return GetWhereFieldList(fields, " OR ");
-		}
-
-		private static string GetWhereFieldList(
-			IEnumerable<PropertyField> fields
-			, string separador
-		)
-		{
-			return
-				Concat(
-					fields
-					, (PropertyField f) 
-						=> $"{f.Name} = @{f.Name}"
-					, separador
-				);
-		}
-
-		private static string GetUpdateFieldList(
-			IEnumerable<PropertyField> fields
-		)
-		{
-			return
-				Concat(
-					fields
-					, (PropertyField f) 
-						=> $"{f.Name} = @{f.Name}"
-					, ", "
-				);
-		}
-
-		private static string GetInsertFieldList(
-			IEnumerable<PropertyField> fields
-		) 
-		{
-			return
-				Concat(
-					fields
-					, (PropertyField f) 
-						=> $"{f.Name}"
-					, ", "
-				);
-		}
-
-		private static string GetInsertParamList(
-			IEnumerable<PropertyField> fields
-		)
-		{
-			return
-				Concat(
-					fields
-					, (PropertyField f)
-						=> $"@{f.Name}"
-					, ", "
-				);
-		}
-
-		private static string Concat<TF>(
-			IEnumerable<TF> enumerable
-			, Func<TF, string> f
-			, string separador
-		) 
-		{
-			return
-				enumerable
-				.Aggregate(
-					""
-					, (list, i)
-						=> list == ""
-						? f(i)
-						: $"{list}{separador}{f(i)}"
-				);
-		}
-
-		private ParameterListBase GetParameters(	
-			IEnumerable<PropertyField> fields
-		)
-		{
-			var list =
-				QueryAdapter.CreateParameterList();
-
-			fields
-			.ForEach(list.Add);
-
-			return list;
-		}
+		) => 
+			QueryAdapter
+			.CreateParameterList()
+			.AddRange(fields);
 	}
 }

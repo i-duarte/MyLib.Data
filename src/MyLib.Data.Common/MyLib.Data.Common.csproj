@@ -46,5 +46,11 @@
     <Compile Include="QueryAdapterBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyLib.Extensions\MyLib.Extensions.csproj">
+      <Project>{ABD1F12A-210D-4740-AFA4-1A4DF837A1FF}</Project>
+      <Name>MyLib.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
