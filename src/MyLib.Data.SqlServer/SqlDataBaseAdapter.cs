@@ -15,10 +15,6 @@ namespace MyLib.Data.SqlServer
 		private string Password { get; set; }
 		private bool WindowsAuthentication { get; set; }
 
-		public SqlDataBaseAdapter()
-		{
-		}
-
 		public SqlDataBaseAdapter(string pipeCnn)
 		{
 			var arr = pipeCnn.Split('|');
@@ -137,9 +133,5 @@ namespace MyLib.Data.SqlServer
 		{
 			return new SqlQueryAdatper(this);
 		}
-
-		
-
-		
 	}
 }

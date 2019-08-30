@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
@@ -24,11 +23,6 @@ namespace MyLib.Data.EntityFramework
 			return GetEntity(GetQueryKey(key));
 		}
 
-		//public void Set(object key, ListFilter listFilter)
-		//{
-			
-		//}
-
 		private QueryBase GetQueryKey(object key)
 		{
 			var keyName = GetPrimaryKey();
@@ -48,6 +42,37 @@ namespace MyLib.Data.EntityFramework
 		{
 			return GetEntity(GetQueryFilter(listFilter));
 		}
+
+		private QueryBase GetQueryFilter(
+			ListFilter listFilter
+			, OrderList orderList
+		)
+		{
+			var q =
+				new SqlQuery(
+					$@"
+					SELECT * 
+					FROM {GetTableName()}
+					WHERE {GetWhereFilter(listFilter)}
+					{GetOrder(orderList)}
+					"
+				);
+			listFilter
+				.ForEach(
+					f => q.Parameters.Add(f.Name, f.Value)
+				);
+			return q;
+		}
+
+		private static string GetOrder(
+			OrderList orderList
+		) => 
+			orderList.Count == 0
+			? ""
+			: " ORDER BY "
+				+ orderList
+				.Select(o => $" {o.Name} {(o.Ascending?"ASC":"DESC")} ")
+				.JoinWith(", ");
 
 		private QueryBase GetQueryFilter(
 			ListFilter listFilter
@@ -83,6 +108,20 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
+		public IEnumerable<T> Select(
+			ListFilter listFilter
+			, OrderList orderList
+		)
+		{
+			return
+				GetEnumerable(
+					GetQueryFilter(
+						listFilter
+						, orderList
+					)
+				);
+		}
+
 		private static string GetWhereFilter(
 			IEnumerable<Filter> iEnum
 		)
@@ -91,11 +130,6 @@ namespace MyLib.Data.EntityFramework
 				iEnum
 				.Select(p => $"{p.Name} = @{p.Name}")
 				.JoinWith(" AND ");
-			//return
-			//	string.Join(" AND ",
-			//		iEnum
-			//		.Select(p => $"{p.Name} = @{p.Name}")
-			//	);
 		}	
 
 		public IEnumerable<T> SelectAll()

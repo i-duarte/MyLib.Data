@@ -28,7 +28,10 @@ namespace MyLib.Data.EntityFramework
 			return QueryAdapter.CreateParameterList();
 		}
 
-		protected ParameterListBase CreateParameterList<T>(string name, T t)
+		protected ParameterListBase CreateParameterList<T>(
+			string name
+			, T t
+		)
 		{
 			return QueryAdapter.CreateParameterList(name, t);
 		}
@@ -68,9 +71,8 @@ namespace MyLib.Data.EntityFramework
 		{
 			return
 				GetEnumerable<TT>(
-					QueryAdapter.GetDataReader(
-						query
-					)
+					QueryAdapter
+					.GetDataReader(query)
 				);
 		}
 
@@ -81,6 +83,30 @@ namespace MyLib.Data.EntityFramework
 			while (dr.Read())
 			{
 				yield return GetEntity<TT>(dr);
+			}
+			dr.Close();
+		}
+
+		protected IEnumerable<TT> GetSingleEnumerable<TT>(
+			QueryBase query
+			, int column = 0
+		)
+		{
+			return GetSingleEnumerable<TT>(
+				QueryAdapter
+				.GetDataReader(query)
+				, column
+			);
+		}
+
+		protected IEnumerable<TT> GetSingleEnumerable<TT>(
+			IDataReader dr
+			, int column = 0
+		) 
+		{
+			while (dr.Read())
+			{
+				yield return (TT)dr[column];
 			}
 			dr.Close();
 		}

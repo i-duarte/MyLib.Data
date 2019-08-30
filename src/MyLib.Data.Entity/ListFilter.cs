@@ -4,7 +4,10 @@ namespace MyLib.Data.EntityFramework
 {
 	public class ListFilter : List<Filter>
 	{
-		public void Add(string name, object value)
+		public void Add(
+			string name
+			, object value
+		)
 		{
 			Add(
 				new Filter{

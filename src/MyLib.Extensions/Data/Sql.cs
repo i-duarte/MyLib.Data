@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace MyLib.Extensions.Data
@@ -26,6 +27,26 @@ namespace MyLib.Extensions.Data
 			return bc;
 		}
 
+		public static object GetFirstValue(
+			this SqlDataReader dr
+			, bool close = true
+		)
+		{
+			object v = null;
+
+			if (dr.Read())
+			{
+				v = dr[0];
+			}
+
+			if (close)
+			{
+				dr.Close();
+			}
+
+			return v;
+		}
+
 		public static SqlCommand SetTimeOut(
 			this SqlCommand cmd
 			, int timeOut
@@ -40,8 +61,51 @@ namespace MyLib.Extensions.Data
 			, List<T> parameterList
 		)
 		{
-			cmd.Parameters.AddRange(parameterList.ToArray());
+			if (parameterList != null)
+			{
+				cmd.Parameters.AddRange(parameterList.ToArray());
+			}
 			return cmd;
+		}
+
+		public static SqlDataReader ExecuteReader(
+			this SqlCommand cmd
+			, int timeOut
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			return cmd.ExecuteReader();
+		}
+
+		public static SqlDataReader ExecuteReader(
+			this SqlCommand cmd
+			, CommandBehavior commnadBehavior
+			, int timeOut 
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			return cmd.ExecuteReader(commnadBehavior);
+		}
+
+		public static int ExecuteNonQueryAndClose(
+			this SqlCommand cmd
+			, int timeOut = 30
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			var i = cmd.ExecuteNonQuery();
+			cmd.Connection.Close();
+			cmd.Dispose();
+			return i;
+		}
+
+		public static int ExecuteNonQuery(
+			this SqlCommand cmd
+			, int timeOut = 30
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			return cmd.ExecuteNonQuery();
 		}
 	}
 }
