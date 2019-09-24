@@ -3,7 +3,6 @@ using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.SqlServer;
-using MyLib.Extensions.Linq;
 
 namespace MyLib.Data.EntityFramework
 {

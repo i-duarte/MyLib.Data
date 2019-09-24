@@ -2,6 +2,7 @@
 using Demo.Data;
 using Demo.Data.Tables.Rows;
 using MyLib.Data.SqlServer;
+using MyLib.Data.PostgreSql;
 using MyLib.Extensions.Linq;
 
 namespace Demo.DosConsole
@@ -12,7 +13,22 @@ namespace Demo.DosConsole
 			string[] args
 		)
 		{
-			var db = 
+			TestPost();
+		}
+
+		private static void TestPost()
+		{
+			var db =
+				new StockData(
+					new PostDataBaseAdapter(
+						""
+					)
+				);
+		}
+
+		private static void TestSql()
+		{
+			var db =
 				new StockData(
 					new SqlDataBaseAdapter(
 						"(local)\\dev2016"

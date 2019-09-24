@@ -1,45 +1,34 @@
-﻿using System;
+﻿using MyLib.Data.Common;
+using System;
 using System.Data;
-using System.Data.SqlClient;
-using MyLib.Data.Common;
+using Npgsql;
 
-namespace MyLib.Data.SqlServer
+namespace MyLib.Data.PostgreSql
 {
-	public class SqlDataBaseAdapter : IDataBaseAdapter
+	public class PostDataBaseAdapter : IDataBaseAdapter
 	{
+
 		private const byte TimeOutDefault = 30;
 
 		private string DataSource { get; set; }
 		private string DbName { get; set; }
 		private string User { get; set; }
 		private string Password { get; set; }
-		private bool WindowsAuthentication { get; set; }
 
-		public SqlDataBaseAdapter(string pipeCnn)
+		public PostDataBaseAdapter(string pipeCnn)
 		{
 			var arr = pipeCnn.Split('|');
 			switch (arr.Length)
 			{
-				case 2:
-					SetCnnStr(arr[0], arr[1]);
-					break;
 				case 4:
 					SetCnnStr(arr[0], arr[1], arr[2], arr[3]);
 					break;
-				default: 
+				default:
 					throw new Exception("Formato incorrecto de pipeCnn");
 			}
 		}
 
-		public SqlDataBaseAdapter(
-			string dataSource
-			, string dbName
-		)
-		{
-			SetCnnStr(dataSource, dbName);
-		}
-
-		public SqlDataBaseAdapter(
+		public PostDataBaseAdapter(
 			string dataSource
 			, string dbName
 			, string user
@@ -57,16 +46,6 @@ namespace MyLib.Data.SqlServer
 		protected void SetCnnStr(
 			string dataSource
 			, string dbName
-		)
-		{
-			DataSource = dataSource;
-			DbName = dbName;
-			WindowsAuthentication = true;
-		}
-
-		protected void SetCnnStr(
-			string dataSource
-			, string dbName
 			, string user
 			, string password
 		)
@@ -75,9 +54,7 @@ namespace MyLib.Data.SqlServer
 			DbName = dbName;
 			User = user;
 			Password = password;
-			WindowsAuthentication = false;
 		}
-
 
 		public IDbConnection GetConnection()
 		{
@@ -88,15 +65,18 @@ namespace MyLib.Data.SqlServer
 			int timeOut
 		)
 		{
-			var cnn = new SqlConnection(
-				GetStrConexion(timeOut));
+			var cnn = 
+				new NpgsqlConnection(
+					GetStrConexion(timeOut)
+				);
 			cnn.Open();
 			return cnn;
 		}
 
 		//public IDbTransaction GetTransaction()
 		//{
-		//	return GetConnection().BeginTransaction();
+		//	var cnn = GetConnection();
+		//	return cnn.BeginTransaction();
 		//}
 
 		//public IDbTransaction GetTransaction(
@@ -111,26 +91,17 @@ namespace MyLib.Data.SqlServer
 			int timeOut = TimeOutDefault
 		)
 		{
-			if(WindowsAuthentication)
-			{
-				return "Server=" + DataSource + ";" +
-				       "Database=" + DbName + ";" +
-				       "Trusted_Connection=True;" +
-				       "Pooling=false;" +
-				       "connection timeout=" + timeOut + ";";
-			}
-
 			return "Data Source=" + DataSource + ";"
-			       + "Initial Catalog=" + DbName + ";"
-			       + "User ID=" + User + ";"
-			       + "Password=" + Password + ";"
-			       + "Pooling=false;"
-			       + "connection timeout=" + timeOut + ";";
+				   + "Initial Catalog=" + DbName + ";"
+				   + "User ID=" + User + ";"
+				   + "Password=" + Password + ";"
+				   + "Pooling=false;"
+				   + "connection timeout=" + timeOut + ";";
 		}
 
 		public QueryAdapterBase CreateQueryAdapter()
 		{
-			return new SqlQueryAdatper(this);
+			return new PostQueryAdapter(this);
 		}
 	}
 }

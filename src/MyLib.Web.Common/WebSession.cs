@@ -31,7 +31,7 @@ namespace MyLib.Web.Common
 		{
 			get =>
 				string.IsNullOrEmpty(Convert.ToString(Session[Nombre]))
-					? default(T)
+					? default
 					: (T)Session[Nombre];
 
 			set => Session[Nombre] = value;

@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MyLib.Extensions.Linq
 {
-
 	public static class Enumerable
     {
+		public static IEnumerable<T> ToEnumerable<T>(
+			this ICollection source
+		)
+		{
+			foreach (var i in source)
+			{
+				yield return (T)i;
+			}
+		}
+
 		public static IEnumerable<T> AddRowNumbers<T>(
 			this IEnumerable<T> source
 		) where T : INumbered => 
@@ -151,18 +161,18 @@ namespace MyLib.Extensions.Linq
 		    }
 	    }
 
-	    public static void ForEachI<TSource>(
-		    this IEnumerable<TSource> source
-			, Action<TSource, int> action
-		)
-	    {
-			var i = 0;
-		    foreach (var item in source)
-		    {
-			    action(item, i);
-			    i++;
-		    }
-		}
+	 //   public static void ForEachI<TSource>(
+		//    this IEnumerable<TSource> source
+		//	, Action<TSource, int> action
+		//)
+	 //   {
+		//	var i = 0;
+		//    foreach (var item in source)
+		//    {
+		//	    action(item, i);
+		//	    i++;
+		//    }
+		//}
 
 		public static void ForEach<T>(
 			this IEnumerable<T> enumerable
@@ -174,6 +184,18 @@ namespace MyLib.Extensions.Linq
 			{
 				action(item, i);
 				i++;
+			}
+		}
+
+		public static IEnumerable<T> Prepend<T>(
+			this IEnumerable<T> source
+			, T item
+		)
+		{
+			yield return item;
+			foreach(var i in source)
+			{
+				yield return i;
 			}
 		}
 
