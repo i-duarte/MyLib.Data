@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
@@ -176,6 +177,18 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
+		protected IEnumerable<T> GetEnumerable(
+			IDataReader dr
+			, bool close = true
+			)
+		{
+			return
+				GetEnumerable<T>(
+					dr
+					, close
+				);
+		}
+		
 		protected string GetTableName()
 		{
 			var att =

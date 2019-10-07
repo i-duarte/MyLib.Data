@@ -78,13 +78,17 @@ namespace MyLib.Data.EntityFramework
 
 		protected IEnumerable<TT> GetEnumerable<TT>(
 			IDataReader dr
+			, bool close = true
 		) where TT : Entity, new()
 		{
 			while (dr.Read())
 			{
 				yield return GetEntity<TT>(dr);
 			}
-			dr.Close();
+			if (close)
+			{
+				dr.Close();
+			}
 		}
 
 		protected IEnumerable<TT> GetSingleEnumerable<TT>(

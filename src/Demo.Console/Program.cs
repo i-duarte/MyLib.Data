@@ -13,7 +13,7 @@ namespace Demo.DosConsole
 			string[] args
 		)
 		{
-			TestPost();
+			TestSql2();
 		}
 
 		private static void TestPost()
@@ -26,7 +26,24 @@ namespace Demo.DosConsole
 				);
 		}
 
-		private static void TestSql()
+		private static void TestSql2()
+		{
+			var db =
+				new StockData(
+					new SqlDataBaseAdapter(
+						"(local)\\EXP2008"
+						, "FacthorDiv"
+					)
+				);
+
+			Console.WriteLine(
+				"Demo master deatil"
+			);
+
+			var clientes = db.Clientes.Select(7, 201901, 201909);
+		}
+
+		private static void TestSql1()
 		{
 			var db =
 				new StockData(
