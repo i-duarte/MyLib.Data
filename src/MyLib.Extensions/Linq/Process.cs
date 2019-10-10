@@ -5,6 +5,15 @@ namespace MyLib.Extensions.Linq
 {
 	public static class Process
 	{
+		public static T Pipe<T>(
+			this T source
+			, Action<T> a
+		)
+		{
+			a(source);
+			return source;
+		}
+
 		public static TR Pipe<T, TR>(
 			this T x
 			, Func<T, TR> f
@@ -30,7 +39,7 @@ namespace MyLib.Extensions.Linq
 				? f(x)
 				: f2(x);
 
-		public static void Do<T>(this T x, Action<T> f) => f(x);
+		public static void Do<T>(this T x, Action<T> a) => a(x);
 
 		public static List<T> WrapToList<T>(this T x) => new List<T> { x };
 

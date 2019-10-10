@@ -23,5 +23,10 @@ namespace Demo.Data
 			=> _clientes
 			?? (_clientes = new Clientes(DataBaseAdapter));
 
+		private Facturas _facturas;
+		public Facturas Facturas
+			=> _facturas
+			?? (_facturas = new Facturas(DataBaseAdapter));
+
 	}
 }

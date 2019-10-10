@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using MyLib.Data.Common;
+using MyLib.Extensions.Linq;
 
 namespace MyLib.Data.SqlServer
 {
@@ -78,21 +79,31 @@ namespace MyLib.Data.SqlServer
 			WindowsAuthentication = false;
 		}
 
-
 		public IDbConnection GetConnection()
 		{
 			return GetConnection(TimeOutDefault);
 		}
 
+		private IDbConnection GetConnection(string strCnn)
+		{
+			return new SqlConnection(strCnn);
+		}
+
+		private void Open(IDbConnection cnn) => cnn.Open();
+
 		public IDbConnection GetConnection(
 			int timeOut
-		)
-		{
-			var cnn = new SqlConnection(
-				GetStrConexion(timeOut));
-			cnn.Open();
-			return cnn;
-		}
+		) =>
+			GetStrConexion(timeOut)
+			.Pipe(GetConnection)
+			.Pipe(Open);
+
+		//var cnn = 
+		//	new SqlConnection(
+		//		GetStrConexion(timeOut)
+		//	);
+		//cnn.Open();
+		//return cnn;
 
 		//public IDbTransaction GetTransaction()
 		//{

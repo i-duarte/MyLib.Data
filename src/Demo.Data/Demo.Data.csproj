@@ -42,7 +42,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StockData.cs" />
     <Compile Include="Tables\Clientes.cs" />
+    <Compile Include="Tables\Facturas.cs" />
     <Compile Include="Tables\Products.cs" />
+    <Compile Include="Tables\Rows\DetalleFactura.cs" />
+    <Compile Include="Tables\Rows\Factura.cs" />
     <Compile Include="Tables\Rows\Consumo.cs" />
     <Compile Include="Tables\Rows\Cliente.cs" />
     <Compile Include="Tables\Rows\Product.cs" />
