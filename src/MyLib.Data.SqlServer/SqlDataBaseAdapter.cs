@@ -35,25 +35,20 @@ namespace MyLib.Data.SqlServer
 		public SqlDataBaseAdapter(
 			string dataSource
 			, string dbName
-		)
-		{
-			SetCnnStr(dataSource, dbName);
-		}
+		) => SetCnnStr(dataSource, dbName);
 
 		public SqlDataBaseAdapter(
 			string dataSource
 			, string dbName
 			, string user
 			, string password
-		)
-		{
+		) => 
 			SetCnnStr(
 				dataSource
 				, dbName
 				, user
 				, password
 			);
-		}
 
 		protected void SetCnnStr(
 			string dataSource
@@ -79,17 +74,14 @@ namespace MyLib.Data.SqlServer
 			WindowsAuthentication = false;
 		}
 
-		public IDbConnection GetConnection()
-		{
-			return GetConnection(TimeOutDefault);
-		}
+		public IDbConnection GetConnection() 
+			=> GetConnection(TimeOutDefault);
 
-		private IDbConnection GetConnection(string strCnn)
-		{
-			return new SqlConnection(strCnn);
-		}
+		private IDbConnection GetConnection(string strCnn) 
+			=> new SqlConnection(strCnn);
 
-		private void Open(IDbConnection cnn) => cnn.Open();
+		private void Open(IDbConnection cnn) 
+			=> cnn.Open();
 
 		public IDbConnection GetConnection(
 			int timeOut
@@ -98,46 +90,21 @@ namespace MyLib.Data.SqlServer
 			.Pipe(GetConnection)
 			.Pipe(Open);
 
-		//var cnn = 
-		//	new SqlConnection(
-		//		GetStrConexion(timeOut)
-		//	);
-		//cnn.Open();
-		//return cnn;
-
-		//public IDbTransaction GetTransaction()
-		//{
-		//	return GetConnection().BeginTransaction();
-		//}
-
-		//public IDbTransaction GetTransaction(
-		//	int timeOut
-		//)
-		//{
-		//	var cnn = GetConnection(timeOut);
-		//	return cnn.BeginTransaction();
-		//}
-
 		public string GetStrConexion(
 			int timeOut = TimeOutDefault
-		)
-		{
-			if(WindowsAuthentication)
-			{
-				return "Server=" + DataSource + ";" +
-				       "Database=" + DbName + ";" +
-				       "Trusted_Connection=True;" +
-				       "Pooling=false;" +
-				       "connection timeout=" + timeOut + ";";
-			}
+		) => 
+			"Server=" + DataSource + ";" +
+			"Database=" + DbName + ";" +
+			GetLoginCnnStr() +
+			"Pooling=false;" +
+			"connection timeout=" + timeOut + ";";
 
-			return "Data Source=" + DataSource + ";"
-			       + "Initial Catalog=" + DbName + ";"
-			       + "User ID=" + User + ";"
-			       + "Password=" + Password + ";"
-			       + "Pooling=false;"
-			       + "connection timeout=" + timeOut + ";";
-		}
+		private string GetLoginCnnStr(
+		) => 
+			WindowsAuthentication
+			? "Trusted_Connection=True;"
+			: "User ID=" + User + ";"
+				+ "Password=" + Password + ";";
 
 		public QueryAdapterBase CreateQueryAdapter()
 		{

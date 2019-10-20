@@ -45,6 +45,9 @@ namespace MyLib.Data.Common
 				case "System.Int32":
 					Add(name, (int)value);
 					break;
+				case "System.Int64":
+					Add(name, (long)value);
+					break;
 				case "System.DateTime":
 					Add(name, (DateTime)value);
 					break;
@@ -64,7 +67,10 @@ namespace MyLib.Data.Common
 					Add(name, (double)value);
 					break;
 				default:
-					throw new ArgumentException($"Tipo de dato inesperado {value.GetType()}");
+					throw 
+						new ArgumentException(
+							$"Tipo de dato inesperado {value.GetType()}"
+						);
 			}
 		}
 

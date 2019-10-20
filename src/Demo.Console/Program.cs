@@ -57,7 +57,13 @@ namespace Demo.DosConsole
 				"Demo master deatil"
 			);
 
+			var inicio = DateTime.Now;
+
 			var facturas = db.Facturas.Select(new DateTime(2019, 9, 1));
+
+			var fin = DateTime.Now;
+
+			var diferencia = fin - inicio;
 		}
 
 		private static void TestSql1()

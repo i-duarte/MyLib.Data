@@ -20,11 +20,11 @@ namespace MyLib.Data.EntityFramework
 		public bool IsPrimaryKey => FieldAttribute.IsPrimaryKey;
 		public bool IsIdentity => FieldAttribute.IsIdentity;
 		public bool AllowNulls => FieldAttribute.AllowNulls;
+		public bool ConvertValue => FieldAttribute.ConvertValue;
 		public int Size => FieldAttribute.Size;
 		public byte Precision => FieldAttribute.Precision;
 		public byte Scale => FieldAttribute.Scale;
-
-		public Type Type => Property.GetType();
+		public Type Type => Property.PropertyType;
 
 		public object Value
 		{
@@ -42,7 +42,9 @@ namespace MyLib.Data.EntityFramework
 				);
 		}
 
-		public PropertyField(PropertyInfo property)
+		public PropertyField(
+			PropertyInfo property
+		)
 		{
 			Property = property;
 
@@ -52,6 +54,7 @@ namespace MyLib.Data.EntityFramework
 						property
 						, typeof(Field)
 					);
+
 			if (list.Length > 0)
 			{
 				if (list.Length == 1)
@@ -60,7 +63,14 @@ namespace MyLib.Data.EntityFramework
 				}
 				else
 				{
-					FieldAttribute = (Field)list.First(att => att.GetType().Name == nameof(Field));
+					FieldAttribute = 
+						(Field)
+						list
+						.First(
+							att => 
+							att.GetType().Name == nameof(Field)
+						);
+
 					if (FieldAttribute == null)
 					{
 						FieldAttribute = (Field)list[0];

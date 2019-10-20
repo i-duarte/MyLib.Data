@@ -33,25 +33,88 @@ namespace MyLib.Data.EntityFramework
 							{
 								field.Value = null;
 							}
-
+							else
+							{
+								throw new Exception(
+									$"Valor nulo en propiedad que no acepta nulos " 
+									+ $"[{GetType().Name}->{field.Name}]"
+								);
+							}
 						}
 						else
 						{
-							field.Value = dr[field.Name];
+							if (field.ConvertValue)
+							{
+								field.Value =
+									AutoConvert(
+										dr[field.Name]
+										, field.Type
+									);
+							}
+							else
+							{
+								field.Value = dr[field.Name];
+							}
 						}
 						
 					}
 					catch(IndexOutOfRangeException e)
 					{
-						throw new Exception($"No se encontro el campo {field.Name} en {GetType().Name}", e);
+						throw 
+							new Exception(
+								$"No se encontro el campo " 
+									+ $"{field.Name} en {GetType().Name}"
+								, e
+							);
 					}
 					catch(Exception e)
 					{
-						throw new Exception($"Error al acceder al campo {field.Name} en {GetType().Name}", e);
+						throw 
+							new Exception(
+								$"Error al acceder al campo " 
+									+ $"{field.Name} en {GetType().Name}"
+								, e
+							);
 					}
 				}
 			);
 
+		}
+
+		private object AutoConvert(
+			object v
+			, Type type
+		)
+		{
+			switch (type.ToString())
+			{
+				case "System.Byte":
+					return Convert.ToByte(v);
+				case "System.Int16":
+					return Convert.ToInt16(v);
+				case "System.Int32":
+					return Convert.ToInt32(v);
+				case "System.Int64":
+				case "System.Nullable`1[System.Int64]":
+					return Convert.ToInt64(v);				
+				case "System.DateTime":
+					return Convert.ToDateTime(v);
+				case "System.Char":
+					return Convert.ToChar(v);
+				case "System.String":
+					return Convert.ToString(v);
+				case "System.Decimal":
+					return Convert.ToDecimal(v);
+				case "System.Single":
+					return Convert.ToSingle(v);
+				case "System.Double":
+					return Convert.ToDouble(v);
+				default:
+					throw 
+						new ArgumentException(
+							$"Tipo de dato inesperado {GetType()}"
+						);
+			}
 		}
 
 		public IEnumerable<PropertyField> GetFields(
