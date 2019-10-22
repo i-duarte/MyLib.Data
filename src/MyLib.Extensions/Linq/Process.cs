@@ -43,5 +43,7 @@ namespace MyLib.Extensions.Linq
 
 		public static List<T> WrapToList<T>(this T x) => new List<T> { x };
 
+		
+
 	}
 }

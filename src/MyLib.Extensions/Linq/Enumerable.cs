@@ -161,19 +161,6 @@ namespace MyLib.Extensions.Linq
 		    }
 	    }
 
-	 //   public static void ForEachI<TSource>(
-		//    this IEnumerable<TSource> source
-		//	, Action<TSource, int> action
-		//)
-	 //   {
-		//	var i = 0;
-		//    foreach (var item in source)
-		//    {
-		//	    action(item, i);
-		//	    i++;
-		//    }
-		//}
-
 		public static void ForEach<T>(
 			this IEnumerable<T> enumerable
 			, Action<T, int> action

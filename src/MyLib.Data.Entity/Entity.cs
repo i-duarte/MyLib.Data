@@ -104,6 +104,7 @@ namespace MyLib.Data.EntityFramework
 				case "System.String":
 					return Convert.ToString(v);
 				case "System.Decimal":
+				case "System.Nullable`1[System.Decimal]":
 					return Convert.ToDecimal(v);
 				case "System.Single":
 					return Convert.ToSingle(v);

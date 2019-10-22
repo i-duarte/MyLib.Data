@@ -11,6 +11,6 @@ namespace MyLib.Extensions
 
 		public static bool In<T>(this T source, params T[] list)
 			where  T : IComparable
-		=> list.Any(i => source.CompareTo(i) == 0);
+		=> list.Any(i => source.Equals(i));
 	}
 }
