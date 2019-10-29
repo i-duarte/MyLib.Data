@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using MyLib.Extensions.Linq;
 using System.Linq;
+using MyLib.Data.Common;
 
 namespace MyLib.Data.EntityFramework
 {
 	public static class MyExtensions
 	{
 		public static string SelectInsertParam(
-			this IEnumerable<PropertyField> fields
+			this IEnumerable<IField> fields
 		) => 
 			fields
 			.JoinWithCommaSpace(
@@ -16,7 +17,7 @@ namespace MyLib.Data.EntityFramework
 			);
 
 		public static string SelectInsertField(
-			this IEnumerable<PropertyField> fields
+			this IEnumerable<IField> fields
 		) => 
 			fields
 			.JoinWithCommaSpace(
@@ -24,7 +25,7 @@ namespace MyLib.Data.EntityFramework
 			);
 
 		public static string SelectUpdate(
-			this IEnumerable<PropertyField> fields
+			this IEnumerable<IField> fields
 		)
 		{
 			return
@@ -35,19 +36,27 @@ namespace MyLib.Data.EntityFramework
 		}
 
 		public static IEnumerable<string> SelectEqualsParam(
-			this IEnumerable<PropertyField> fields
+			this IEnumerable<IField> fields
 
 		) => 
 			fields
 			.Select(f => $"{f.Name} = @{f.Name}");
 
 		public static string JoinWithAnd(
-			this IEnumerable<PropertyField> source
-		) => source.SelectEqualsParam().JoinWith(" AND ");
+			this IEnumerable<IField> source
+		) => source.SelectEqualsParam().JoinWithAnd();
+
+		public static string JoinWithAnd(
+			this IEnumerable<string> source
+		) => source.JoinWith(" AND ");
 
 		public static string JoinWithOr(
-			this IEnumerable<PropertyField> source
-		) => source.SelectEqualsParam().JoinWith(" OR ");
+			this IEnumerable<IField> source
+		) => source.SelectEqualsParam().JoinWithOr();
+
+		public static string JoinWithOr(
+			this IEnumerable<string> source
+		) => source.JoinWith(" OR ");
 
 		public static string JoinWithCommaSpace<TT>(
 			this IEnumerable<TT> source

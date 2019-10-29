@@ -39,8 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filter.cs" />
     <Compile Include="IField.cs" />
     <Compile Include="IDataBaseAdapter.cs" />
+    <Compile Include="ListFilter.cs" />
     <Compile Include="ParameterListBase.cs" />
     <Compile Include="QueryBase.cs" />
     <Compile Include="QueryAdapterBase.cs" />

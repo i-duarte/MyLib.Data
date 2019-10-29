@@ -4,14 +4,13 @@ using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
-using MyLib.Data.SqlServer;
-using MyLib.Extensions.Linq;
 
 namespace MyLib.Data.EntityFramework
 {
-	public class EntityDataSource<T> 
+	public abstract class EntityDataSource<T> 
 		: DataAdapter where T : Entity, new()
 	{
+
 		public EntityDataSource(
 			IDataBaseAdapter dataBase
 			) 
@@ -24,127 +23,69 @@ namespace MyLib.Data.EntityFramework
 			return GetEntity(GetQueryKey(key));
 		}
 
-		private QueryBase GetQueryKey(object key)
-		{
-			var keyName = GetPrimaryKey();
-			var q =
-				new SqlQuery(
-					$@"
-					SELECT * 
-					FROM {GetTableName()}
-					WHERE {keyName} = @{keyName}					
-				"
-				);
-			q.Parameters.Add(keyName, key);
-			return q;
-		}
-
-		public T Get(ListFilter listFilter)
-		{
-			return GetEntity(GetQueryFilter(listFilter));
-		}
-
-		private QueryBase GetQueryFilter(
-			ListFilter listFilter
-			, OrderList orderList
-		)
-		{
-			var q =
-				new SqlQuery(
-					$@"
-					SELECT * 
-					FROM {GetTableName()}
-					WHERE {GetWhereFilter(listFilter)}
-					{GetOrder(orderList)}
-					"
-				);
-			listFilter
-				.ForEach(
-					f => q.Parameters.Add(f.Name, f.Value)
-				);
-			return q;
-		}
-
-		private static string GetOrder(
-			OrderList orderList
+		private QueryBase GetQueryKey(
+			object keyValue
 		) => 
-			orderList.Count == 0
-			? ""
-			: " ORDER BY "
-				+ orderList
-				.Select(o => $" {o.Name} {(o.Ascending?"ASC":"DESC")} ")
-				.JoinWith(", ");
+			QueryAdapter
+			.CreateQueryGet(
+				GetTableName()
+				, GetPrimaryKey()
+				, keyValue
+			);
+
+		public T Get(
+			ListFilter listFilter
+		) => 
+			GetEntity(GetQueryFilter(listFilter));
 
 		private QueryBase GetQueryFilter(
 			ListFilter listFilter
-		)
-		{
-			var q =
-				new SqlQuery(
-					$@"
-					SELECT * 
-					FROM {GetTableName()}
-					WHERE {GetWhereFilter(listFilter)}				
-				"
-				);
-			listFilter
-				.ForEach(
-					f => q.Parameters.Add(f.Name, f.Value)
-				);
-			return q;
-		}
+			, OrderList orderList
+		) =>
+			QueryAdapter
+			.CreateQuerySelect(
+				GetTableName()
+				, listFilter
+				, orderList
+			);
 
-		public IEnumerable<T> Select(object key)
-		{
-			return GetEnumerable(GetQueryKey(key));
-		}
+		private QueryBase GetQueryFilter(
+			ListFilter listFilter
+		) =>
+			QueryAdapter
+			.CreateQuerySelect(
+				GetTableName()
+				, listFilter
+			);
+
+		public IEnumerable<T> Select(
+			object key
+		) => 
+			GetEnumerable(GetQueryKey(key));
 
 		public IEnumerable<T> Select(
 			ListFilter listFilter
-		)
-		{
-			return 
-				GetEnumerable(
-					GetQueryFilter(listFilter)
-				);
-		}
+		) => 
+			GetEnumerable(
+				GetQueryFilter(listFilter)
+			);
 
 		public IEnumerable<T> Select(
 			ListFilter listFilter
 			, OrderList orderList
-		)
-		{
-			return
-				GetEnumerable(
-					GetQueryFilter(
-						listFilter
-						, orderList
-					)
-				);
-		}
+		) => 
+			GetEnumerable(
+				GetQueryFilter(
+					listFilter
+					, orderList
+				)
+			);
 
-		private static string GetWhereFilter(
-			IEnumerable<Filter> iEnum
-		)
-		{
-			return 
-				iEnum
-				.Select(p => $"{p.Name} = @{p.Name}")
-				.JoinWith(" AND ");
-		}	
-
-		public IEnumerable<T> SelectAll()
-		{
-			return 
-				GetEnumerable(
-					new SqlQuery(
-					$@"
-						SELECT * 
-						FROM {GetTableName()}
-					"
-					)
-				);
-		}
+		public IEnumerable<T> SelectAll(
+		) => 
+			GetEnumerable(
+				QueryAdapter.CreateQuerySelect(GetTableName())
+			);
 
 		protected T GetEntity(
 			QueryBase query
@@ -167,72 +108,48 @@ namespace MyLib.Data.EntityFramework
 
 		protected IEnumerable<T> GetEnumerable(
 			QueryBase query
-			)
-		{
-			return
-				GetEnumerable<T>(
-					QueryAdapter.GetDataReader(
-						query
-					)
-				);
-		}
+		) => 
+			GetEnumerable<T>(
+				QueryAdapter.GetDataReader(query)
+			);
 
 		protected IEnumerable<T> GetEnumerable(
 			IDataReader dr
 			, bool close = true
-			)
-		{
-			return
-				GetEnumerable<T>(
-					dr
-					, close
-				);
-		}
-		
-		protected string GetTableName()
-		{
-			var att =
+		) => 
+			GetEnumerable<T>(dr, close);
+
+		protected string GetTableName(
+		) => 
+			(
 				(Table)
 				Attribute
 				.GetCustomAttribute(
 					GetType()
 					, typeof(Table)
-				);
-			return att?.Name ?? GetType().Name;
-		}
-
-		protected string GetPrimaryKey()
-		{
-			return
-				typeof(T)
-				.GetProperties()
-				.Where(
-					p =>
-						Attribute.IsDefined(
-							p
-							, typeof(Field)
-						)
 				)
-				.Select(p => new PropertyField(p))
-				.First(p => p.IsPrimaryKey)
-				.Name;
-		}
+			)
+			?.Name
+			?? GetType().Name;
 
-		protected IEnumerable<string> GetPrimaryKeyFieldNames()
-		{
-			return
-				typeof(T)
-				.GetProperties()
-				.Where(
-					p =>
-						Attribute.IsDefined(
-							p
-							, typeof(Field)
-						)
-				)
-				.Select(p => new PropertyField(p))
-				.Where(p => p.IsPrimaryKey)
-				.Select(p => p.Name);
-		}
+		protected string GetPrimaryKey(
+		) => 
+			GetProperties()
+			.First(p => p.IsPrimaryKey)
+			.Name;
+
+		protected IEnumerable<string> GetPrimaryKeyFieldNames(
+		) => 
+			GetProperties()
+			.Where(p => p.IsPrimaryKey)
+			.Select(p => p.Name);
+
+		protected IEnumerable<PropertyField> GetProperties(
+		) => 
+			typeof(T)
+			.GetProperties()
+			.Where(p => Attribute.IsDefined(p, typeof(Field)))
+			.Select(p => new PropertyField(p))
+			;
 	}
 }

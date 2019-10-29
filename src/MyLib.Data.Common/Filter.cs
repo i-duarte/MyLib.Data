@@ -1,4 +1,4 @@
-﻿namespace MyLib.Data.EntityFramework
+﻿namespace MyLib.Data.Common
 {
 	public class Filter
 	{

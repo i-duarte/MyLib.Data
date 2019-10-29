@@ -118,7 +118,7 @@ namespace MyLib.Data.EntityFramework
 			}
 		}
 
-		public IEnumerable<PropertyField> GetFields(
+		public IEnumerable<IField> GetFields(
 		)
 		{
 			return

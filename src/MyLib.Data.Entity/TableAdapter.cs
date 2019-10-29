@@ -2,7 +2,6 @@
 using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
-using MyLib.Data.SqlServer;
 
 namespace MyLib.Data.EntityFramework
 {
@@ -32,26 +31,13 @@ namespace MyLib.Data.EntityFramework
 				.GetFields()
 				.ToList();
 
-			return 
+			return
 				QueryAdapter
 				.Execute(
-					new SqlQuery(
-						$@"
-							UPDATE {GetTableName()}
-							SET 
-								{
-									fields
-									.Where(p => !p.IsPrimaryKey)
-									.SelectUpdate()
-								}
-							WHERE 
-								{
-									fields
-									.Where(p => p.IsPrimaryKey)
-									.JoinWithAnd()
-								}
-						"
-						, GetParameters(fields)
+					QueryAdapter
+					.CreateQueryUpdate(
+						GetTableName()
+						, fields
 						, transaction
 					)
 				);			
@@ -70,38 +56,27 @@ namespace MyLib.Data.EntityFramework
 			return
 				QueryAdapter
 				.Execute(
-					new SqlQuery(
-						$@"
-							INSERT INTO {GetTableName()}(
-								{fields.SelectInsertField()}
-							) VALUES (
-								{fields.SelectInsertParam()}
-							)
-						"
-						, GetParameters(fields)
+					QueryAdapter
+					.CreateQueryInsert(
+						GetTableName()
+						, fields
 					)
 				);
 		}
 
-		public int Delete(object key)
+		public int Delete(object keyValue)
 		{
+			var keyName = GetPrimaryKey();
 			var q =
-				new SqlQuery(
-				$@"
-					DELETE 
-					FROM {GetTableName()}
-					WHERE {GetPrimaryKey()} = @{GetPrimaryKey()}
-				"
-				);
-			q.Parameters.Add(GetPrimaryKey(), key);
+				QueryAdapter
+				.CreateQueryDelete(
+					GetTableName()
+					, keyName
+				);				
+			q.Parameters.Add(keyName, keyValue);
 			return QueryAdapter.Execute(q);
 		}
 
-		private ParameterListBase GetParameters(
-			IEnumerable<PropertyField> fields
-		) => 
-			QueryAdapter
-			.CreateParameterList()
-			.AddRange(fields);
+		
 	}
 }

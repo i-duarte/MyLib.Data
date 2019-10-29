@@ -1,4 +1,5 @@
 ﻿using MyLib.Data.Common;
+using System;
 
 namespace MyLib.Data.EntityFramework.Attributes
 {
@@ -14,5 +15,6 @@ namespace MyLib.Data.EntityFramework.Attributes
 		public byte Precision { get; set; }
 		public byte Scale { get; set; }
 		public object Value { get; set; }
+		public Type Type { get; }
 	}
 }

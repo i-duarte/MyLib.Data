@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿ using System.Data;
 using MyLib.Data.Common;
 
 namespace MyLib.Data.SqlServer
@@ -11,15 +11,45 @@ namespace MyLib.Data.SqlServer
 		{
 		}
 
-		public SqlQuery(string sql, ParameterListBase parameters) : base(sql, parameters)
+		public SqlQuery(
+			string sql
+			, ParameterListBase parameters
+		) 
+			: base(sql, parameters)
+		{
+		}
+		
+		public SqlQuery(
+			string sql
+			, string keyName
+			, object keyValue
+		) 
+			: base(sql, keyName, keyValue)
 		{
 		}
 
-		public SqlQuery(string sql, IDbTransaction transaction) : base(sql, transaction)
+		public SqlQuery(
+			string sql
+			, ListFilter listFilter
+		) 
+			: base(sql, listFilter)
 		{
 		}
 
-		public SqlQuery(string sql, ParameterListBase parameters, IDbTransaction transaction) : base(sql, parameters, transaction)
+		public SqlQuery(
+			string sql
+			, IDbTransaction transaction
+		) 
+			: base(sql, transaction)
+		{
+		}
+
+		public SqlQuery(
+			string sql
+			, ParameterListBase parameters
+			, IDbTransaction transaction
+		) 
+			: base(sql, parameters, transaction)
 		{
 		}
 

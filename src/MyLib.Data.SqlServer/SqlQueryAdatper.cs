@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using MyLib.Data.Common;
+using MyLib.Data.EntityFramework;
 using MyLib.Extensions.Data;
+using MyLib.Extensions.Linq;
 
 namespace MyLib.Data.SqlServer
 {
-    public class SqlQueryAdatper : QueryAdapterBase
+	public class SqlQueryAdatper : QueryAdapterBase
     {
 		private const int DefaultTimeOut = 30;
 
@@ -353,6 +357,135 @@ namespace MyLib.Data.SqlServer
 			return new SqlParameterList(name, t);
 		}
 
-		
+
+		public override QueryBase CreateQueryGet(
+			string tableName
+			, string keyName
+			, object keyValue
+		)
+		{
+			return 
+				new SqlQuery(
+				$@"
+					SELECT * 
+					FROM {tableName}
+					WHERE {keyName} = @{keyName}					
+				"
+				, keyName
+				, keyValue
+			);
+		}
+
+		public override QueryBase CreateQuerySelect(
+			string tableName
+		) => 
+			new SqlQuery(
+				$@"
+					SELECT * 
+					FROM {tableName}
+				"
+			);
+
+		public override QueryBase CreateQueryUpdate(
+			string tableName
+			, List<IField> fields
+			, IDbTransaction transaction
+		) => 
+			new SqlQuery(
+				$@"
+					UPDATE {tableName}
+					SET 
+						{
+							fields
+							.Where(p => !p.IsPrimaryKey)
+							.SelectUpdate()
+						}
+					WHERE 
+						{
+							fields
+							.Where(p => p.IsPrimaryKey)
+							.JoinWithAnd()
+						}
+				"
+				, GetParameters(fields)
+				, transaction
+			);
+
+		private ParameterListBase GetParameters(
+			IEnumerable<IField> fields
+		) =>
+			CreateParameterList()
+			.AddRange(fields);
+
+		public override QueryBase CreateQuerySelect(
+			string tableName
+			, ListFilter listFilter
+			, OrderList orderList = null
+		)
+		{
+			return
+				new SqlQuery(
+					$@"
+						SELECT * 
+						FROM {tableName}
+						WHERE {GetWhereFilter(listFilter)}
+						{GetOrder(orderList)}
+					"
+					, listFilter
+				)
+				;
+		}
+
+		private string GetWhereFilter(
+			IEnumerable<Filter> iEnum
+		)
+		{
+			return
+				iEnum
+				.Select(p => $"{p.Name} = @{p.Name}")
+				.JoinWithAnd();
+		}
+
+		private string GetOrder(
+			OrderList orderList
+		) =>
+			orderList == null
+			? ""
+			: orderList.Count == 0
+				? ""
+				: " ORDER BY "
+					+ orderList
+					.Select(o => $" {o.Name} {(o.Ascending ? "ASC" : "DESC")} ")
+					.JoinWith(", ");
+
+		public override QueryBase CreateQueryInsert(
+			string tableName
+			, List<IField> fields
+		) => 
+			new SqlQuery(
+				$@"
+					INSERT INTO {tableName}(
+						{fields.SelectInsertField()}
+					) VALUES (
+						{fields.SelectInsertParam()}
+					)
+				"
+				, GetParameters(fields)
+			);
+
+		public override QueryBase CreateQueryDelete(
+			string tableName
+			, string keyName
+		)
+		{
+			return
+				new SqlQuery(
+				$@"
+					DELETE 
+					FROM {tableName}
+					WHERE {keyName} = @{keyName}
+				"
+				);
+		}
 	}
 }

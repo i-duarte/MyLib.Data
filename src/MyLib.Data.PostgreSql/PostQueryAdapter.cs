@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using MyLib.Data.Common;
 using Npgsql;
@@ -196,6 +197,36 @@ namespace MyLib.Data.PostgreSql
 		}
 
 		public override IDataReader GetDataReader(QueryBase query)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override QueryBase CreateQueryGet(string tableName, string keyName, object keyValue)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override QueryBase CreateQuerySelect(string tableName, ListFilter listFilter, OrderList orderList = null)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override QueryBase CreateQuerySelect(string tableName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override QueryBase CreateQueryUpdate(string tableName, List<IField> fields, IDbTransaction transaction)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override QueryBase CreateQueryInsert(string tableName, List<IField> fields)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override QueryBase CreateQueryDelete(string tableName, string keyName)
 		{
 			throw new NotImplementedException();
 		}

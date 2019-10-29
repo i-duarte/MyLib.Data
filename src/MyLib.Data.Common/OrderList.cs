@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyLib.Data.EntityFramework
+namespace MyLib.Data.Common
 {
 	public class OrderList : List<FieldOrder>
 	{

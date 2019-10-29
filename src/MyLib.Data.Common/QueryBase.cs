@@ -20,18 +20,50 @@ namespace MyLib.Data.Common
 
 		public QueryBase() { }
 
-		public QueryBase(string sql)
+		public QueryBase(
+			string sql
+		)
 		{
 			Sql = sql;
 		}
 
-		public QueryBase(string sql, ParameterListBase parameters)
+		public QueryBase(
+			string sql
+			, ParameterListBase parameters
+		)
 		{
 			Sql = sql;
 			_paramterList = parameters;
 		}
 
-		public QueryBase(string sql, ParameterListBase parameters, IDbTransaction transaction)
+		public QueryBase(
+			string sql
+			, string keyName
+			, object keyValue
+		)
+		{
+			Sql = sql;
+			Parameters.Add(keyName, keyValue);
+		}
+
+		public QueryBase(
+			string sql
+			, ListFilter listFilter
+		)
+		{
+			Sql = sql;
+
+			listFilter
+			.ForEach(
+				f => Parameters.Add(f.Name, f.Value)
+			);
+		}
+
+		public QueryBase(
+			string sql
+			, ParameterListBase parameters
+			, IDbTransaction transaction
+		)
 		{
 			Sql = sql;
 			_paramterList = parameters;

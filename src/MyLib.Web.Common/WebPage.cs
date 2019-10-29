@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -12,6 +13,25 @@ namespace MyLib.Web.Common
 
 		protected bool IsEmpty(TextBox txt)
 			=> string.IsNullOrEmpty(txt.Text);
+
+		protected string GetPhysicalDir(string nombre)
+		{
+			var dir =
+				Path.Combine(
+					Request.PhysicalApplicationPath
+					, nombre
+				);
+			ForceExistsDir(dir);
+			return dir;
+		}
+
+		private void ForceExistsDir(string dir)
+		{
+			if (!Directory.Exists(dir))
+			{
+				Directory.CreateDirectory(dir);
+			}
+		}
 
 		protected IEnumerable<DataItem> GetDataItemEnumerable(
 			string[] lista

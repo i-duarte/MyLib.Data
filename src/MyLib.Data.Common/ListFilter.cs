@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyLib.Data.EntityFramework
+namespace MyLib.Data.Common
 {
 	public class ListFilter : List<Filter>
 	{
@@ -10,9 +10,11 @@ namespace MyLib.Data.EntityFramework
 		)
 		{
 			Add(
-				new Filter{
+				new Filter
+				{
 					Name = name
-					, Value = value
+					,
+					Value = value
 				}
 			);
 		}
