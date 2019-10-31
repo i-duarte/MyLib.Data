@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyExtensions.cs" />
     <Compile Include="SqlDataBaseAdapter.cs" />
     <Compile Include="SqlParameterList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

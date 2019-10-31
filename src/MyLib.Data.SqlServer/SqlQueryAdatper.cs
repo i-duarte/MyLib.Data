@@ -177,7 +177,9 @@ namespace MyLib.Data.SqlServer
 			    Execute(new SqlQuery("DELETE FROM " + table));
 		    }
 
-		    using(
+			var x = reader as SqlDataReader;
+
+			using (
 				var bc = GetBulkCopy(table)
 			)
 			{

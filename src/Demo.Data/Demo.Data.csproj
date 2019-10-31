@@ -44,6 +44,7 @@
     <Compile Include="Tables\Clientes.cs" />
     <Compile Include="Tables\Facturas.cs" />
     <Compile Include="Tables\Products.cs" />
+    <Compile Include="Tables\Rows\BulkCliente.cs" />
     <Compile Include="Tables\Rows\DetalleFactura.cs" />
     <Compile Include="Tables\Rows\Factura.cs" />
     <Compile Include="Tables\Rows\Consumo.cs" />
@@ -62,6 +63,10 @@
     <ProjectReference Include="..\MyLib.Data.SqlServer\MyLib.Data.SqlServer.csproj">
       <Project>{d808e5c7-e141-4316-b7db-08f49b308374}</Project>
       <Name>MyLib.Data.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyLib.Extensions\MyLib.Extensions.csproj">
+      <Project>{ABD1F12A-210D-4740-AFA4-1A4DF837A1FF}</Project>
+      <Name>MyLib.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

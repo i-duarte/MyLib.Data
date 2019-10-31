@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Demo.Data;
 using Demo.Data.Tables.Rows;
 using MyLib.Data.SqlServer;
 using MyLib.Data.PostgreSql;
 using MyLib.Extensions.Linq;
+using System.Collections.Generic;
 
 namespace Demo.DosConsole
 {
@@ -13,7 +15,34 @@ namespace Demo.DosConsole
 			string[] args
 		)
 		{
-			TestSql3();
+			TestEnumToDataReader();
+			//TestSql3();
+		}
+
+		private static void TestEnumToDataReader()
+		{
+			
+			var db =
+				new StockData(
+					new SqlDataBaseAdapter(
+						"(local)\\EXP2008"
+						, "Test"
+					)
+				);
+
+			Console.WriteLine(
+				"Demo master deatil"
+			);
+			
+		    db.Clientes.BulkInsert(GetEnumTest()); 
+		}
+
+		private static IEnumerable<BulkCliente> GetEnumTest()
+		{
+			foreach(var i in System.Linq.Enumerable.Range(1, 10))
+			{
+				yield return new BulkCliente{ NumCuenta = $"C{i}" };
+			}			
 		}
 
 		private static void TestPost()

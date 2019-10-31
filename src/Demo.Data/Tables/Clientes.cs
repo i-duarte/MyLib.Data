@@ -2,6 +2,7 @@
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework;
 using MyLib.Data.SqlServer;
+using MyLib.Extensions.Data;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -13,6 +14,13 @@ namespace Demo.Data.Tables
 		public Clientes(IDataBaseAdapter dataBase) 
 			: base(dataBase)
 		{
+		}
+
+		public void BulkInsert(
+			IEnumerable<BulkCliente> listaClientes
+		)
+		{
+			QueryAdapter.BulkCopy(listaClientes.ToDataTable(), "Test", 1);
 		}
 
 		public List<Cliente> Select(int idZona, int desde, int hasta)
