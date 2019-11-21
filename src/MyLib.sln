@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Web.Controls", "MyLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Win.Extensions", "MyLib.Win.Extensions\MyLib.Win.Extensions.csproj", "{03DEC5C5-4624-4078-829F-6601AB11E705}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.Csv", "MyLib.Data.Csv\MyLib.Data.Csv.csproj", "{87E46C9F-1269-4BA1-9CA1-C688A0A61818}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{03DEC5C5-4624-4078-829F-6601AB11E705}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03DEC5C5-4624-4078-829F-6601AB11E705}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03DEC5C5-4624-4078-829F-6601AB11E705}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87E46C9F-1269-4BA1-9CA1-C688A0A61818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E46C9F-1269-4BA1-9CA1-C688A0A61818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E46C9F-1269-4BA1-9CA1-C688A0A61818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E46C9F-1269-4BA1-9CA1-C688A0A61818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

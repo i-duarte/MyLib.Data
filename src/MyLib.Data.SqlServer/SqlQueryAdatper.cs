@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework;
-using MyLib.Extensions.Data;
 using MyLib.Extensions.Linq;
 
 namespace MyLib.Data.SqlServer
@@ -132,9 +131,10 @@ namespace MyLib.Data.SqlServer
 			QueryBase query
 		)
 	    {
-		    return
-			    GetSqlCommand(query)
-				.ExecuteNonQuery();
+			using (var cmd = GetSqlCommand(query))
+			{
+				return cmd.ExecuteNonQuery();
+			}
 	    }
 
 	    private SqlBulkCopy GetBulkCopy(
@@ -177,8 +177,6 @@ namespace MyLib.Data.SqlServer
 			    Execute(new SqlQuery("DELETE FROM " + table));
 		    }
 
-			var x = reader as SqlDataReader;
-
 			using (
 				var bc = GetBulkCopy(table)
 			)
@@ -203,7 +201,11 @@ namespace MyLib.Data.SqlServer
 
 			using
 		    (
-			    var bc = GetBulkCopy(table, trans as SqlTransaction)
+			    var bc = 
+					GetBulkCopy(
+						table
+						, trans as SqlTransaction
+					)
 		    )
 			{
 				bc.MapColumns(numFields);
