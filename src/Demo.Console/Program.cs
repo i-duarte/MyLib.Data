@@ -50,7 +50,13 @@ namespace Demo.DosConsole
 			var db =
 				new StockData(
 					new PostDataBaseAdapter(
-						""
+						"127.0.0.1;" +
+						"Port=5432;" +
+						"Database=myDataBase;" +
+						"User Id=myUsername;" +
+						"Password=myPassword;" +
+						"CommandTimeout=20;" +
+						"Timeout=15;"
 					)
 				);
 		}

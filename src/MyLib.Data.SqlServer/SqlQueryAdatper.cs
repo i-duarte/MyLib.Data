@@ -196,7 +196,12 @@ namespace MyLib.Data.SqlServer
 	    {
 			if(deleteRecords)
 		    {
-			    Execute(new SqlQuery("DELETE FROM " + table, trans));
+			    Execute(
+					new SqlQuery(
+						"DELETE FROM " + table
+						, trans
+					)
+				);
 		    }
 
 			using

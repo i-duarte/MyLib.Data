@@ -8,7 +8,7 @@ namespace MyLib.Data.SqlServer
 {
 	public class SqlDataBaseAdapter : IDataBaseAdapter
 	{
-		private const byte TimeOutDefault = 30;
+		private const byte DefaultTimeOut = 30;
 
 		private string DataSource { get; set; }
 		private string DbName { get; set; }
@@ -75,7 +75,7 @@ namespace MyLib.Data.SqlServer
 		}
 
 		public IDbConnection GetConnection() 
-			=> GetConnection(TimeOutDefault);
+			=> GetConnection(DefaultTimeOut);
 
 		private IDbConnection GetConnection(string strCnn) 
 			=> new SqlConnection(strCnn);
@@ -91,20 +91,21 @@ namespace MyLib.Data.SqlServer
 			.Pipe(Open);
 
 		public string GetStrConexion(
-			int timeOut = TimeOutDefault
+			int timeOut = DefaultTimeOut
 		) => 
-			"Server=" + DataSource + ";" +
-			"Database=" + DbName + ";" +
-			GetLoginCnnStr() +
-			"Pooling=false;" +
-			"connection timeout=" + timeOut + ";";
+			$"Server={DataSource};" 
+				+ $"Database={DbName};" 
+				+ GetLoginCnnStr() 
+				+ "Pooling=false;" 
+				+ $"connection timeout={timeOut};"
+				;
 
 		private string GetLoginCnnStr(
 		) => 
 			WindowsAuthentication
 			? "Trusted_Connection=True;"
-			: "User ID=" + User + ";"
-				+ "Password=" + Password + ";";
+			: $"User ID={User};"
+				+ $"Password={Password};";
 
 		public QueryAdapterBase CreateQueryAdapter()
 		{
