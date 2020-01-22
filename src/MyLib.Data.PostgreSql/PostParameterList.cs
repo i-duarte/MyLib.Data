@@ -3,19 +3,16 @@ using MyLib.Data.Common;
 
 namespace MyLib.Data.PostgreSql
 {
-	internal class PostParameterList : ParameterListBase
+	internal class PostParameterList
+		: ParameterListBase
 	{
-		private string name;
-		private object t;
-
 		public PostParameterList()
 		{
 		}
 
-		public PostParameterList(string name, object t)
+		public PostParameterList(string name, object value)
 		{
-			this.name = name;
-			this.t = t;
+			Add(name, value);
 		}
 
 		public override void Add(string name, bool value)

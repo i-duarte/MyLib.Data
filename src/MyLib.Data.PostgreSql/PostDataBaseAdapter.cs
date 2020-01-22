@@ -77,6 +77,19 @@ namespace MyLib.Data.PostgreSql
 		public PostDataBaseAdapter(
 			string dataSource
 			, string dbName
+			, int port = DefaultPort
+		)
+		{
+			SetCnnStr(
+				dataSource
+				, dbName
+				, port
+			);
+		}
+
+		public PostDataBaseAdapter(
+			string dataSource
+			, string dbName
 			, string user
 			, string password
 		)
@@ -121,19 +134,18 @@ namespace MyLib.Data.PostgreSql
 			return cnn;
 		}
 
-		//public IDbTransaction GetTransaction()
-		//{
-		//	var cnn = GetConnection();
-		//	return cnn.BeginTransaction();
-		//}
-
-		//public IDbTransaction GetTransaction(
-		//	int timeOut
-		//)
-		//{
-		//	var cnn = GetConnection(timeOut);
-		//	return cnn.BeginTransaction();
-		//}
+		public IDbConnection GetConnection(
+			int timeOut
+			, int commandTimeOut
+		)
+		{
+			var cnn =
+				new NpgsqlConnection(
+					GetStrConexion(timeOut, commandTimeOut)
+				);
+			cnn.Open();
+			return cnn;
+		}
 
 		public string GetStrConexion(
 			int timeOut = DefaultTimeOut

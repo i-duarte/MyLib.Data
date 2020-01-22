@@ -9,7 +9,6 @@ namespace MyLib.Data.SqlServer
 	public class SqlDataBaseAdapter : IDataBaseAdapter
 	{
 		private const byte DefaultTimeOut = 30;
-
 		private string DataSource { get; set; }
 		private string DbName { get; set; }
 		private string User { get; set; }
@@ -89,6 +88,15 @@ namespace MyLib.Data.SqlServer
 			GetStrConexion(timeOut)
 			.Pipe(GetConnection)
 			.Pipe(Open);
+
+		public IDbConnection GetConnection(
+			int timeOut
+			, int commandTimeOut
+		) =>
+			throw 
+				new NotImplementedException(
+					"Metodo no soportado"
+				);
 
 		public string GetStrConexion(
 			int timeOut = DefaultTimeOut

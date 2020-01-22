@@ -6,7 +6,7 @@ namespace MyLib.Data.Common
 	{
 		IDbConnection GetConnection();
 		IDbConnection GetConnection(int timeOut);
-
+		IDbConnection GetConnection(int timeOut, int commandTimeOut);
 		QueryAdapterBase CreateQueryAdapter();
 		
 	}
