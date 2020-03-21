@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data;
+using Npgsql;
+using NpgsqlTypes;
 using MyLib.Data.Common;
 
 namespace MyLib.Data.PostgreSql
@@ -15,84 +18,242 @@ namespace MyLib.Data.PostgreSql
 			Add(name, value);
 		}
 
-		public override void Add(string name, bool value)
+		public override void AddChar(
+			string name
+			, string value
+		)
+			=> AddChar(
+				name
+				, value
+				, value.Length
+			);
+
+		public override void AddChar(
+			string name
+			, string value
+			, int size
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Char
+				, value
+				, size
+			);
+
+		public override void Add(
+			string name
+			, byte value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Smallint
+				, value
+			);
+
+		public override void Add(
+			string name
+			, short value
+			)
 		{
-			throw new NotImplementedException();
+			AddParameter(
+				name
+				, NpgsqlDbType.Smallint
+				, value
+			);
 		}
 
-		public override void Add(string name, byte value)
+		public override void Add(
+			string name
+			, int value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Integer
+				, value
+			);
+
+		public override void AddInt(
+			string name
+			, int? value
+		)
 		{
-			throw new NotImplementedException();
+			if (value == null)
+			{
+				AddParameter(
+					name
+					, NpgsqlDbType.Integer
+				);
+			}
+			else
+			{
+				Add(name, value.Value);
+			}
 		}
 
-		public override void Add(string name, short value)
+		public override void Add(
+			string name
+			, long value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Bigint
+				, value
+			);
+
+		public override void Add(
+			string name
+			, float value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Real
+				, value
+			);
+
+		public override void Add(
+			string name
+			, double value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Real
+				, value
+			);
+
+		public override void Add(
+			string name
+			, bool value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Bit
+				, value
+			);
+
+		public override void Add(
+			string name
+			, decimal value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Numeric
+				, value
+			);
+
+		public override void Add(
+			string name
+			, decimal value
+			, byte precision
+			, byte scale
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Numeric
+				, value
+				, precision
+				, scale
+			);
+
+		public override void Add(
+			string name
+			, string value
+		)
+			=> Add(name, value, value.Length);
+
+		public override void Add(
+			string name
+			, string value
+			, int size
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Varchar
+				, value
+				, size
+			);
+
+		public override void Add(
+			string name
+			, DateTime value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Date
+				, value
+			);
+
+		public override void Add(
+			string name
+			, TimeSpan value
+		)
+			=> AddParameter(
+				name
+				, NpgsqlDbType.Time
+				, value
+			);
+
+		private void AddParameter(
+			string name,
+			NpgsqlDbType type,
+			object value
+		)
 		{
-			throw new NotImplementedException();
+			var param =
+				new NpgsqlParameter(name, type)
+				{
+					Direction = ParameterDirection.Input,
+					Value = value
+				};
+			Add(param);
 		}
 
-		public override void Add(string name, int value)
+		private void AddParameter(
+			string name
+			, NpgsqlDbType type
+			, object value
+			, byte presicion
+			, byte scale
+		)
 		{
-			throw new NotImplementedException();
+			var param =
+				new NpgsqlParameter(name, type)
+				{
+					Direction = ParameterDirection.Input,
+					Precision = presicion,
+					Scale = scale,
+					Value = value
+				};
+			Add(param);
 		}
 
-		public override void Add(string name, long value)
+		private void AddParameter(
+			string name
+			, NpgsqlDbType type
+			, object value
+			, int size
+		)
 		{
-			throw new NotImplementedException();
+			var param =
+				new NpgsqlParameter(name, type)
+				{
+					Direction = ParameterDirection.Input,
+					Size = size,
+					Value = value
+				};
+			Add(param);
 		}
 
-		public override void Add(string name, float value)
+		private void AddParameter(
+			string name
+			, NpgsqlDbType type
+		)
 		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, double value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, decimal value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, decimal value, byte precision, byte scale)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, string value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, string value, int size)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, DateTime value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Add(string name, TimeSpan value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void AddChar(string name, string value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void AddChar(string name, string value, int size)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void AddInt(string name, int? idPadre)
-		{
-			throw new NotImplementedException();
+			var param =
+				new NpgsqlParameter(name, type)
+				{
+					Direction = ParameterDirection.Input
+				};
+			Add(param);
 		}
 	}
 }

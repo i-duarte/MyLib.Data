@@ -44,6 +44,7 @@
     <Compile Include="IField.cs" />
     <Compile Include="IDataBaseAdapter.cs" />
     <Compile Include="ListFilter.cs" />
+    <Compile Include="MyExtensions.cs" />
     <Compile Include="OrderList.cs" />
     <Compile Include="ParameterListBase.cs" />
     <Compile Include="QueryBase.cs" />

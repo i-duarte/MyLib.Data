@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataItem.cs" />
+    <Compile Include="MyLibWebException.cs" />
     <Compile Include="WebConfig.cs" />
     <Compile Include="WebPage.cs">
       <SubType>ASPXCodeBehind</SubType>

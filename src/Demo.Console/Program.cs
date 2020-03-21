@@ -15,7 +15,8 @@ namespace Demo.DosConsole
 			string[] args
 		)
 		{
-			TestEnumToDataReader();
+			TestPost();
+			//TestEnumToDataReader();
 			//TestSql3();
 		}
 
@@ -54,6 +55,13 @@ namespace Demo.DosConsole
 						, "myDataBase"
 					)
 				);
+			
+			Console.WriteLine(
+				"Demo master deatil"
+			);
+
+			var clientes = db.Clientes.Select(7, 201901, 201909);
+			db.Clientes.SelectAll();
 		}
 
 		private static void TestSql2()

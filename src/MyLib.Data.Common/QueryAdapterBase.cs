@@ -20,6 +20,21 @@ namespace MyLib.Data.Common
 			QueryBase query
 		);
 
+		//public abstract void BulkCopy(
+		//	DataRow[] rows
+		//	, string table
+		//	, int numFields
+		//	, bool deleteRecords = true
+		//);
+
+		//public abstract void BulkCopy(
+		//	DataRow[] rows
+		//	, string table
+		//	, int numFields
+		//	, IDbTransaction trans
+		//	, bool deleteRecords = true
+		//);
+
 		public abstract void BulkCopy(
 			IDataReader reader
 			, string table

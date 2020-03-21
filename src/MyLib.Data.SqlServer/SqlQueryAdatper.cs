@@ -137,33 +137,29 @@ namespace MyLib.Data.SqlServer
 			}
 	    }
 
-	    private SqlBulkCopy GetBulkCopy(
+		private SqlBulkCopy GetBulkCopy(
 			string tableName
-			, SqlTransaction trans
+			, int numColumns
+			, SqlTransaction trans = null
+		) => 
+			(
+				(trans == null)
+				? new SqlBulkCopy
+					(
+						trans.Connection,
+						SqlBulkCopyOptions.Default,
+						trans
+					)
+					{
+						DestinationTableName = tableName
+					}
+				: new SqlBulkCopy(GetConnection())
+					{
+						DestinationTableName = tableName
+					}
 			)
-	    {
-		    return 
-				new SqlBulkCopy
-				(
-					trans.Connection,
-					SqlBulkCopyOptions.Default,
-					trans
-				)
-				{
-					DestinationTableName = tableName
-				}
-				.SetTimeOut(3600);
-	    }
-
-	    private SqlBulkCopy GetBulkCopy(string tableName)
-	    {
-		    return 
-				new SqlBulkCopy(GetConnection())
-				{
-					DestinationTableName = tableName
-				}
-				.SetTimeOut(3600);
-	    }
+			.SetTimeOut(3600)
+			.MapColumns(numColumns);
 
 	    public override void BulkCopy(
 			IDataReader reader
@@ -178,10 +174,13 @@ namespace MyLib.Data.SqlServer
 		    }
 
 			using (
-				var bc = GetBulkCopy(table)
+				var bc = 
+					GetBulkCopy(
+						table
+						, numFields
+					)
 			)
 			{
-				bc.MapColumns(numFields);
 				bc.WriteToServer(reader);
 			}
 		}
@@ -209,12 +208,12 @@ namespace MyLib.Data.SqlServer
 			    var bc = 
 					GetBulkCopy(
 						table
+						, numFields
 						, trans as SqlTransaction
 					)
 		    )
 			{
-				bc.MapColumns(numFields);
-			    bc.WriteToServer(reader);
+				bc.WriteToServer(reader);
 			    reader.Close();
 		    }
 		}
@@ -232,13 +231,11 @@ namespace MyLib.Data.SqlServer
 		    }
 
 		    using(
-				var bc = GetBulkCopy(table)
+				var bc = GetBulkCopy(table, numFields)
 			)
 			{
-				bc.MapColumns(numFields);
 				bc.WriteToServer(dt);
-			}
-			
+			}			
 		}
 
 		public override void BulkCopy(
@@ -255,10 +252,14 @@ namespace MyLib.Data.SqlServer
 			}
 
 			using (
-				var bc = GetBulkCopy(table, trans as SqlTransaction)
+				var bc = 
+					GetBulkCopy(
+						table
+						, numFields
+						, trans as SqlTransaction
+					)
 			)
 			{
-				bc.MapColumns(numFields);
 				bc.WriteToServer(dt);
 			}
 		}
@@ -290,7 +291,7 @@ namespace MyLib.Data.SqlServer
 		{
 			if (string.IsNullOrEmpty(query.Sql))
 			{
-				throw new ArgumentException(nameof(query));
+				throw new ArgumentNullException(nameof(query));
 			}
 
 			if(query.Transaction == null)

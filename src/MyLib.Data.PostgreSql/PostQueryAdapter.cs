@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using MyLib.Data.Common;
+using MyLib.Extensions.Linq;
 using Npgsql;
 
 namespace MyLib.Data.PostgreSql
@@ -19,44 +21,235 @@ namespace MyLib.Data.PostgreSql
 			DataBase = dataBase;
 		}
 
-		public override void BulkCopy(IDataReader reader, string table, int numFields, bool deleteRecords = true)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void BulkCopy(IDataReader reader, string table, int numFields, IDbTransaction trans, bool deleteRecords = true)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void BulkCopy(DataTable dt, string table, int numFields, bool deleteRecords = true)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void BulkCopy(DataTable dt, string table, int numFields, IDbTransaction trans, bool deleteRecords = true)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override ParameterListBase CreateParameterList()
-		{
-			return new PostParameterList();
-		}
-
-		public override ParameterListBase CreateParameterList<T>(string name, T t)
-		{
-			return new PostParameterList(name, t);
-		}
-
-		public override int Execute(QueryBase query)
+		private NpgsqlConnection GetConnection()
 		{
 			return
-			   GetPostCommand(query)
-			   .ExecuteNonQuery();
+				DataBase
+				.GetConnection() as NpgsqlConnection;
 		}
 
-		private NpgsqlCommand GetPostCommand(
+		private NpgsqlConnection GetConnection(int timeOut)
+		{
+			return
+				DataBase
+				.GetConnection(timeOut) as NpgsqlConnection;
+		}
+
+		private NpgsqlCommand GetNpgsqlCommand(
+			string sql
+			, int timeOut = DefaultTimeOut
+		)
+		{
+			return
+				new NpgsqlCommand(
+						sql
+						, GetConnection(timeOut)
+					)
+					;
+		}
+
+		private NpgsqlCommand GetNpgsqlCommand(
+			string sql
+			, ParameterListBase parameterlist
+		)
+		{
+			return
+				GetNpgsqlCommand(sql)
+				.AddParameters(parameterlist);
+		}
+
+		private static NpgsqlCommand GetNpgsqlCommand(
+			string sql
+			, IDbConnection connection
+		)
+		{
+			return
+				new NpgsqlCommand(
+						sql
+						, connection as NpgsqlConnection
+					);
+		}
+
+		private static NpgsqlCommand GetNpgsqlCommand(
+			string sql
+			, ParameterListBase parameterlist
+			, IDbConnection connection
+		)
+		{
+			return
+				GetNpgsqlCommand(
+					sql
+					, connection
+				)
+				.AddParameters(parameterlist);
+		}
+
+		private static NpgsqlCommand GetNpgsqlCommand(
+			string sql
+			, ParameterListBase parameterlist
+			, IDbTransaction transaction
+		)
+		{
+			return
+				GetNpgsqlCommand(
+					sql
+					, transaction
+				)
+				.AddParameters(parameterlist);
+		}
+
+		private static NpgsqlCommand GetNpgsqlCommand(
+			string sql
+			, IDbTransaction transaction
+		)
+		{
+			return
+				new NpgsqlCommand(
+					sql
+					, (NpgsqlConnection)
+						transaction.Connection
+					, (NpgsqlTransaction)
+						transaction
+				);
+		}
+
+		//private static NpgsqlCommand GetNpgsqlCommand(
+		//	string sql
+		//	, ParameterListBase parameterList
+		//	, IDbTransaction transaction
+		//	, int timeOut = DefaultTimeOut
+		//)
+		//{
+		//	return
+		//		GetNpgsqlCommand(
+		//			sql
+		//			, transaction
+		//		)
+		//		.AddParameters(parameterList)
+		//		.SetTimeOut(timeOut);
+		//}
+
+		private static NpgsqlDataReader GetDataReader(
+			NpgsqlCommand cmd
+		)
+		{
+			return
+				cmd.ExecuteReader(
+					CommandBehavior.CloseConnection
+				);
+		}
+
+		public override IDataReader GetDataReader(
+			QueryBase query
+			)
+		{
+			return
+				GetDataReader(
+					GetNpgsqlCommand(query)
+				);
+		}
+
+		public override int Execute(
+			QueryBase query
+		)
+		{
+			using (var cmd = GetNpgsqlCommand(query))
+			{
+				return cmd.ExecuteNonQuery();
+			}
+		}
+
+		//private SqlBulkCopy GetBulkCopy(
+		//	string tableName
+		//	, NpgsqlTransaction trans
+		//	)
+		//{
+		//	return
+		//		new SqlBulkCopy
+		//		(
+		//			trans.Connection,
+		//			SqlBulkCopyOptions.Default,
+		//			trans
+		//		)
+		//		{
+		//			DestinationTableName = tableName
+		//		}
+		//		.SetTimeOut(3600);
+		//}
+
+		//private SqlBulkCopy GetBulkCopy(string tableName)
+		//{
+		//	return
+		//		new SqlBulkCopy(GetConnection())
+		//		{
+		//			DestinationTableName = tableName
+		//		}
+		//		.SetTimeOut(3600);
+		//}
+
+		public override void BulkCopy(
+			IDataReader reader
+			, string table
+			, int numFields
+			, bool deleteRecords = true
+		)
+			=> throw new NotImplementedException();
+
+		private Npgsql.NpgsqlCopyTextWriter GetBulkCopy(
+			string table
+		)
+			=> throw new NotImplementedException();
+
+		public override void BulkCopy(
+			IDataReader reader
+			, string table
+			, int numFields
+			, IDbTransaction trans
+			, bool deleteRecords = true
+		)
+			=> throw new NotImplementedException();
+
+		public override void BulkCopy(
+			DataTable dt
+			, string table
+			, int numFields
+			, bool deleteRecords = true
+		)
+			=> throw new NotImplementedException();
+
+		public override void BulkCopy(
+			DataTable dt
+			, string table
+			, int numFields
+			, IDbTransaction trans
+			, bool deleteRecords = true
+		)
+			=> throw new NotImplementedException();
+
+		private static T Get<T>(IDataReader dr)
+		{
+			var t = default(T);
+			if (dr.Read())
+			{
+				t = (T)dr[0];
+			}
+			dr.Close();
+			return t;
+		}
+
+		public override T Get<T>(
+			QueryBase query
+			)
+		{
+			return
+				Get<T>(
+					GetDataReader(
+						query
+					)
+				);
+		}
+
+		private NpgsqlCommand GetNpgsqlCommand(
 			QueryBase query
 		)
 		{
@@ -72,14 +265,14 @@ namespace MyLib.Data.PostgreSql
 					if (query.Parameters.Count == 0)
 					{
 						return
-							GetPostCommand(
+							GetNpgsqlCommand(
 								query.Sql
 							);
 					}
 					else
 					{
 						return
-							GetPostCommand(
+							GetNpgsqlCommand(
 								query.Sql
 								, query.Parameters
 							);
@@ -90,7 +283,7 @@ namespace MyLib.Data.PostgreSql
 					if (query.Parameters.Count == 0)
 					{
 						return
-							GetPostCommand(
+							GetNpgsqlCommand(
 								query.Sql
 								, query.Connection
 							);
@@ -98,7 +291,7 @@ namespace MyLib.Data.PostgreSql
 					else
 					{
 						return
-							GetPostCommand(
+							GetNpgsqlCommand(
 								query.Sql
 								, query.Parameters
 								, query.Connection
@@ -111,7 +304,7 @@ namespace MyLib.Data.PostgreSql
 				if (query.Parameters.Count == 0)
 				{
 					return
-						GetPostCommand(
+						GetNpgsqlCommand(
 							query.Sql
 							, query.Transaction
 						);
@@ -119,7 +312,7 @@ namespace MyLib.Data.PostgreSql
 				else
 				{
 					return
-						GetPostCommand(
+						GetNpgsqlCommand(
 							query.Sql
 							, query.Parameters
 							, query.Transaction
@@ -128,107 +321,145 @@ namespace MyLib.Data.PostgreSql
 			}
 		}
 
-		private NpgsqlCommand GetPostCommand(
-			string sql
-			, IDbConnection connection
-		)
+		public override ParameterListBase CreateParameterList()
 		{
-			throw new NotImplementedException();
+			return new PostParameterList();
 		}
 
-		private NpgsqlCommand GetPostCommand(
-			string sql
+		public override ParameterListBase CreateParameterList<T>(string name, T t)
+		{
+			return new PostParameterList(name, t);
+		}
+
+
+		public override QueryBase CreateQueryGet(
+			string tableName
+			, string keyName
+			, object keyValue
+		)
+		{
+			return
+				new PostQuery(
+				$@"
+					SELECT * 
+					FROM {tableName}
+					WHERE {keyName} = @{keyName}					
+				"
+				, keyName
+				, keyValue
+			);
+		}
+
+		public override QueryBase CreateQuerySelect(
+			string tableName
+		) =>
+			new PostQuery(
+				$@"
+					SELECT * 
+					FROM {tableName}
+				"
+			);
+
+		public override QueryBase CreateQueryUpdate(
+			string tableName
+			, List<IField> fields
 			, IDbTransaction transaction
+		) =>
+			new PostQuery(
+				$@"
+					UPDATE {tableName}
+					SET 
+						{
+							fields
+							.Where(p => !p.IsPrimaryKey)
+							.SelectUpdate()
+						}
+					WHERE 
+						{
+							fields
+							.Where(p => p.IsPrimaryKey)
+							.JoinWithAnd()
+						}
+				"
+				, GetParameters(fields)
+				, transaction
+			);
+
+		private ParameterListBase GetParameters(
+			IEnumerable<IField> fields
+		) =>
+			CreateParameterList()
+			.AddRange(fields);
+
+		public override QueryBase CreateQuerySelect(
+			string tableName
+			, ListFilter listFilter
+			, OrderList orderList = null
 		)
 		{
-			throw new NotImplementedException();
+			return
+				new PostQuery(
+					$@"
+						SELECT * 
+						FROM {tableName}
+						WHERE {GetWhereFilter(listFilter)}
+						{GetOrder(orderList)}
+					"
+					, listFilter
+				)
+				;
 		}
 
-		private NpgsqlCommand GetPostCommand(
-			string sql
-			, ParameterListBase parameters
-			, IDbTransaction transaction
+		private string GetWhereFilter(
+			IEnumerable<Filter> iEnum
 		)
 		{
-			throw new NotImplementedException();
+			return
+				iEnum
+				.Select(p => $"{p.Name} = @{p.Name}")
+				.JoinWithAnd();
 		}
 
-		private NpgsqlCommand GetPostCommand(
-			string sql
-			, ParameterListBase parameters
-			, IDbConnection connection
-		)
-		{
-			throw new NotImplementedException();
-		}
+		private string GetOrder(
+			OrderList orderList
+		) =>
+			orderList == null
+			? ""
+			: orderList.Count == 0
+				? ""
+				: " ORDER BY "
+					+ orderList
+					.Select(o => $" {o.Name} {(o.Ascending ? "ASC" : "DESC")} ")
+					.JoinWith(", ");
 
-		private NpgsqlCommand GetPostCommand(
-			string sql
-			, ParameterListBase parameters
-		)
-		{
-			throw new NotImplementedException();
-		}
-
-		private NpgsqlCommand GetPostCommand(
-			string sql
-			, int timeOut = DefaultTimeOut
-		)
-		{
-			var cmd =
-				new NpgsqlCommand(
-						sql
-						, GetConnection()
+		public override QueryBase CreateQueryInsert(
+			string tableName
+			, List<IField> fields
+		) =>
+			new PostQuery(
+				$@"
+					INSERT INTO {tableName}(
+						{fields.SelectInsertField()}
+					) VALUES (
+						{fields.SelectInsertParam()}
 					)
-				{
-					CommandTimeout = timeOut
-				};
-			return cmd;
-		}
+				"
+				, GetParameters(fields)
+			);
 
-		private NpgsqlConnection GetConnection()
+		public override QueryBase CreateQueryDelete(
+			string tableName
+			, string keyName
+		)
 		{
-			throw new NotImplementedException();
-		}
-
-		public override T Get<T>(QueryBase query)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override IDataReader GetDataReader(QueryBase query)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override QueryBase CreateQueryGet(string tableName, string keyName, object keyValue)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override QueryBase CreateQuerySelect(string tableName, ListFilter listFilter, OrderList orderList = null)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override QueryBase CreateQuerySelect(string tableName)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override QueryBase CreateQueryUpdate(string tableName, List<IField> fields, IDbTransaction transaction)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override QueryBase CreateQueryInsert(string tableName, List<IField> fields)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override QueryBase CreateQueryDelete(string tableName, string keyName)
-		{
-			throw new NotImplementedException();
+			return
+				new PostQuery(
+				$@"
+					DELETE 
+					FROM {tableName}
+					WHERE {keyName} = @{keyName}
+				"
+				);
 		}
 	}
 }

@@ -1,13 +1,13 @@
-﻿using MyLib.Data.Common;
+﻿using Demo.Data.Model.Entities;
+using MyLib.Data.Common;
 using MyLib.Data.EntityFramework;
 using MyLib.Data.EntityFramework.Attributes;
 using System;
 
 namespace Demo.Data.Tables.Rows
 {
-	public class Consumo : Entity
+	public class Consumo : Entity, IConsumo
 	{
-
 		[Field]
 		public int IdCliente { get; set; }
 

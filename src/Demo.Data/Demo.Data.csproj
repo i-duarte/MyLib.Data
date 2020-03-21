@@ -52,6 +52,10 @@
     <Compile Include="Tables\Rows\Product.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Demo.Data.Interfaces\Demo.Data.Model.csproj">
+      <Project>{f41d6fa1-4e29-4604-8c61-68c8ad0c8ccf}</Project>
+      <Name>Demo.Data.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyLib.Data.Common\MyLib.Data.Common.csproj">
       <Project>{b687b713-2732-445c-99a9-1b14e67bcb60}</Project>
       <Name>MyLib.Data.Common</Name>

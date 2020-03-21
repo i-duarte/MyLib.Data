@@ -1,11 +1,12 @@
-﻿using MyLib.Data.Common;
+﻿using Demo.Data.Model.Entities;
+using MyLib.Data.Common;
 using MyLib.Data.EntityFramework;
 using MyLib.Data.EntityFramework.Attributes;
 using System.Collections.Generic;
 
 namespace Demo.Data.Tables.Rows
 {
-	public class Cliente : Entity
+	public class Cliente : Entity, ICliente
 	{
 
 		[Field(IsPrimaryKey = true)]
@@ -14,7 +15,10 @@ namespace Demo.Data.Tables.Rows
 		[Field]
 		public string NumCuenta { get; set; }
 
-		public List<Consumo> Consumos { get; set; }
+		private List<IConsumo> _consumos;
+		public List<IConsumo> Consumos 
+			=> _consumos 
+			?? (_consumos = new List<IConsumo>());
 
 		public Cliente() { }
 		public Cliente(IDataBaseAdapter dataBase) 

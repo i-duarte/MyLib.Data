@@ -1,4 +1,6 @@
-﻿using Demo.Data.Tables.Rows;
+﻿using Demo.Data.Model.Entities;
+using Demo.Data.Model.Interfaces;
+using Demo.Data.Tables.Rows;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework;
 using MyLib.Data.SqlServer;
@@ -9,7 +11,7 @@ using System.Linq;
 
 namespace Demo.Data.Tables
 {
-	public class Clientes : EntityDataSource<Cliente>
+	public class Clientes : EntityDataSource<Cliente>, IClientes<ICliente>
 	{
 		public Clientes(IDataBaseAdapter dataBase) 
 			: base(dataBase)
@@ -57,18 +59,35 @@ namespace Demo.Data.Tables
 
 			var sublista = GetEnumerable<Consumo>(dr).ToList();
 
-			foreach (var i in lista)
-			{
-				i.Consumos = 
-					sublista
-					.Where(c => c.IdCliente == i.IdCliente)
-					.ToList();
-			}
+			//foreach (var i in lista)
+			//{
+			//	i.Consumos = 
+			//		sublista
+			//		.Where(c => c.IdCliente == i.IdCliente)
+			//		.ToList();
+			//}
 
 			sublista = null;
 
 			return lista;
 
+		}
+
+		public IEnumerable<ICliente> SelectAllx()
+		{
+			return GetEnumerable(
+				"SELECT * FROM Clientes"
+			);
+		}
+
+		private IEnumerable<ICliente> GetEnumerable(string sql)
+		{
+			return GetEnumerable(new SqlQuery(sql));
+		}
+
+		IEnumerable<ICliente> IClientes<ICliente>.SelectAll()
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

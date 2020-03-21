@@ -16,6 +16,13 @@ namespace MyLib.Web.Common
 
 		protected string GetPhysicalDir(string nombre)
 		{
+			if(Request.PhysicalApplicationPath == null)
+			{
+				throw new MyLibWebRequestException(
+					"No se encontrol el path de la aplicacion en el servidor"
+				);
+			}
+
 			var dir =
 				Path.Combine(
 					Request.PhysicalApplicationPath
@@ -131,6 +138,4 @@ namespace MyLib.Web.Common
 			?? ""
 			;
 	}
-
-	
 }
