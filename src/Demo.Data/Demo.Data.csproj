@@ -60,8 +60,8 @@
       <Project>{b687b713-2732-445c-99a9-1b14e67bcb60}</Project>
       <Name>MyLib.Data.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyLib.Data.Entity\MyLib.Data.EntityFrameWork.csproj">
-      <Project>{2E1E1A91-D9EE-4B2B-AF58-23058F600222}</Project>
+    <ProjectReference Include="..\MyLib.Data.EntityFramework\MyLib.Data.EntityFrameWork.csproj">
+      <Project>{2e1e1a91-d9ee-4b2b-af58-23058f600222}</Project>
       <Name>MyLib.Data.EntityFrameWork</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyLib.Data.SqlServer\MyLib.Data.SqlServer.csproj">

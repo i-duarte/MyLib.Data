@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.Common", "MyLib.Data.Common\MyLib.Data.Common.csproj", "{B687B713-2732-445C-99A9-1B14E67BCB60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.EntityFrameWork", "MyLib.Data.Entity\MyLib.Data.EntityFrameWork.csproj", "{2E1E1A91-D9EE-4B2B-AF58-23058F600222}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.EntityFrameWork", "MyLib.Data.EntityFramework\MyLib.Data.EntityFrameWork.csproj", "{2E1E1A91-D9EE-4B2B-AF58-23058F600222}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyLib.Data.PostgreSql", "MyLib.Data.PostgreSql\MyLib.Data.PostgreSql.csproj", "{A3562764-DCEC-443B-9A5D-FF2C7B27EF89}"
 EndProject
