@@ -3,10 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyLib.Extensions.Linq
+namespace MyLib.Extensions.XLinq
 {
-	public static class Enumerable
-    {
+	public static class XEnumerable
+	{
+
+		public static IEnumerable<T> Join<T>(
+			this IEnumerable<IEnumerable<T>> source
+		)
+		{
+			return source.SelectMany(x => x);
+		}
+
+		public static IEnumerable<T> Prepend<T>(
+			this IEnumerable<T> source 
+			, T t
+		)
+		{
+			yield return t;
+			foreach (var i in source)
+			{
+				yield return i;
+			}
+		}
+
+		public static IEnumerable<T> Append<T>(
+			this IEnumerable<T> source
+			, T t
+		)
+		{
+			foreach(var i in source)
+			{
+				yield return i;
+			}
+			yield return t;
+		}	
+
+
 		public static IEnumerable<T> ToEnumerable<T>(
 			this ICollection source
 		)
@@ -174,17 +207,7 @@ namespace MyLib.Extensions.Linq
 			}
 		}
 
-		public static IEnumerable<T> Prepend<T>(
-			this IEnumerable<T> source
-			, T item
-		)
-		{
-			yield return item;
-			foreach(var i in source)
-			{
-				yield return i;
-			}
-		}
+		
 
 		public static string JoinWith<T>(
 			this IEnumerable<T> source

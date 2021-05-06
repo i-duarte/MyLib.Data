@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E1E1A91-D9EE-4B2B-AF58-23058F600222}</ProjectGuid>
+    <ProjectGuid>{6D5AAF9C-8CCD-49C0-AEBF-8A3FFECD46D0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyLib.Data.EntityFramework</RootNamespace>
@@ -30,11 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -57,7 +57,7 @@
       <Name>MyLib.Data.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyLib.Extensions\MyLib.Extensions.csproj">
-      <Project>{abd1f12a-210d-4740-afa4-1a4df837a1ff}</Project>
+      <Project>{507420aa-11cc-48a3-9430-064804402e14}</Project>
       <Name>MyLib.Extensions</Name>
     </ProjectReference>
   </ItemGroup>

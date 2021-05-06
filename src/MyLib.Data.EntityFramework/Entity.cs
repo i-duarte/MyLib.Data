@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using MyLib.Data.Common;
 using MyLib.Data.EntityFramework.Attributes;
-using MyLib.Extensions.Linq;
+using MyLib.Extensions.XLinq;
 
 namespace MyLib.Data.EntityFramework
 {

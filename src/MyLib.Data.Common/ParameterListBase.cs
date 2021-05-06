@@ -1,4 +1,4 @@
-﻿using MyLib.Extensions.Linq;
+﻿using MyLib.Extensions.XLinq;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -2,14 +2,14 @@
 using System.Data;
 using System.Data.SqlClient;
 using MyLib.Data.Common;
-using MyLib.Extensions.Linq;
+using MyLib.Extensions.XLinq;
 
 namespace MyLib.Data.SqlServer
 {
 	public class SqlDataBaseAdapter : IDataBaseAdapter
 	{
 		private const byte DefaultTimeOut = 30;
-		private string DataSource { get; set; }
+		private string DataSource {  get; set; }
 		private string DbName { get; set; }
 		private string User { get; set; }
 		private string Password { get; set; }

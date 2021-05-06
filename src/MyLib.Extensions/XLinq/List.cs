@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyLib.Extensions.Linq
+namespace MyLib.Extensions.XLinq
 {
 	public static class List
 	{

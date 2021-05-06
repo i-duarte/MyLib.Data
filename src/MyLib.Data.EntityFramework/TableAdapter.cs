@@ -53,6 +53,8 @@ namespace MyLib.Data.EntityFramework
 					.Where(p=> !p.IsIdentity)
 					.ToList();
 
+			//TODO: CARGAR EL IDENTITY
+
 			return
 				QueryAdapter
 				.Execute(

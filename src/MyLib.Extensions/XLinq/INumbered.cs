@@ -1,4 +1,4 @@
-﻿namespace MyLib.Extensions.Linq
+﻿namespace MyLib.Extensions.XLinq
 {
 	public interface INumbered
 	{

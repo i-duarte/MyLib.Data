@@ -1,14 +1,63 @@
-﻿using MyLib.Extensions.Linq;
+﻿using MyLib.Extensions.XLinq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace MyLib.Extensions.Data
 {
 	public static class Sql
 	{
+		public static object GetFirstValue(
+			this SqlDataReader dr
+		)
+		{
+			object v = null;
+			if (dr.Read())
+			{
+				v = dr[0];
+			}
+			dr.Close();
+			return v;
+		}
+
+		public static SqlDataReader ExecuteReader(
+			this SqlCommand cmd
+			, CommandBehavior commandBehavior
+			, int timeOut
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			return cmd.ExecuteReader(commandBehavior);
+		}
+
+		public static int ExecuteNonQuery(
+			this SqlCommand cmd
+			, int timeOut
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			return cmd.ExecuteNonQuery();
+		}
+
+		public static int ExecuteNonQueryAndClose(
+			this SqlCommand cmd
+			, int timeOut = 30
+		)
+		{
+			cmd.CommandTimeout = timeOut;
+			var res = cmd.ExecuteNonQuery();
+			if (cmd.Connection != null)
+			{
+				cmd.Connection.Close();
+			}
+			return res;
+		}
+
+		
+
 		public static DataTable ToDataTable<T>(
 			this IEnumerable<T> source
 		)

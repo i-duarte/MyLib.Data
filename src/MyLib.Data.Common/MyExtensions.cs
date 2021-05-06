@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MyLib.Extensions.Linq;
+using MyLib.Extensions.XLinq;
 using System.Linq;
 using System.Text;
 

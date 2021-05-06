@@ -4,8 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using MyLib.Data.Common;
-using MyLib.Data.EntityFramework;
-using MyLib.Extensions.Linq;
+using MyLib.Extensions.XLinq;
 
 namespace MyLib.Data.SqlServer
 {
