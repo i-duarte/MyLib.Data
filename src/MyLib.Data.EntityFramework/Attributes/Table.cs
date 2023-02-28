@@ -1,8 +1,8 @@
 ﻿namespace MyLib.Data.EntityFramework.Attributes
 {
-	public class Table 
-		: NamedAttribute
-	{
+    public class Table
+        : NamedAttribute
+    {
 
-	}
+    }
 }

@@ -1,500 +1,500 @@
-﻿using System;
+﻿using MyLib.Data.Common;
+using MyLib.Extensions.XLinq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using MyLib.Data.Common;
-using MyLib.Extensions.XLinq;
 
 namespace MyLib.Data.SqlServer
 {
-	public class SqlQueryAdatper : QueryAdapterBase
+    public class SqlQueryAdatper : QueryAdapterBase
     {
-		private const int DefaultTimeOut = 30;
+        private const int DefaultTimeOut = 30;
 
-		protected SqlDataBaseAdapter DataBase { get; set; }
+        protected SqlDataBaseAdapter DataBase { get; set; }
 
-	    public SqlQueryAdatper(
-			SqlDataBaseAdapter dataBase
-		)
-	    {
-		    DataBase = dataBase;
-	    }
+        public SqlQueryAdatper(
+            SqlDataBaseAdapter dataBase
+        )
+        {
+            DataBase = dataBase;
+        }
 
-		private SqlConnection GetConnection()
-	    {
-		    return 
-				DataBase
-				.GetConnection() as SqlConnection;
-	    }
+        private SqlConnection GetConnection()
+        {
+            return
+                DataBase
+                .GetConnection() as SqlConnection;
+        }
 
-	    private SqlCommand GetSqlCommand(
-			string sql
-			, int timeOut = DefaultTimeOut
-		)
-	    {
-		    return 
-				new SqlCommand(
-						sql
-						, GetConnection()
-					)
-					.SetTimeOut(timeOut);
-	    }
+        private SqlCommand GetSqlCommand(
+            string sql
+            , int timeOut = DefaultTimeOut
+        )
+        {
+            return
+                new SqlCommand(
+                        sql
+                        , GetConnection()
+                    )
+                    .SetTimeOut(timeOut);
+        }
 
-	    private SqlCommand GetSqlCommand(
-			string sql
-			, ParameterListBase parameterlist
-		)
-	    {
-		    return 
-			    GetSqlCommand(sql)
-				.AddParameters(parameterlist);
-	    }
+        private SqlCommand GetSqlCommand(
+            string sql
+            , ParameterListBase parameterlist
+        )
+        {
+            return
+                GetSqlCommand(sql)
+                .AddParameters(parameterlist);
+        }
 
-	    private static SqlCommand GetSqlCommand(
-			string sql
-			, IDbConnection connection
-		)
-	    {
-		    return 
-				new SqlCommand(
-						sql
-						, connection as SqlConnection
-					);
-	    }
+        private static SqlCommand GetSqlCommand(
+            string sql
+            , IDbConnection connection
+        )
+        {
+            return
+                new SqlCommand(
+                        sql
+                        , connection as SqlConnection
+                    );
+        }
 
-	    private static SqlCommand GetSqlCommand(
-		    string sql
-		    , ParameterListBase parameterlist
-		    , IDbConnection connection
-	    )
-	    {
-		    return
-			    GetSqlCommand(
-				    sql
-				    , connection
-			    )
-				.AddParameters(parameterlist);
-	    }
+        private static SqlCommand GetSqlCommand(
+            string sql
+            , ParameterListBase parameterlist
+            , IDbConnection connection
+        )
+        {
+            return
+                GetSqlCommand(
+                    sql
+                    , connection
+                )
+                .AddParameters(parameterlist);
+        }
 
-	    private static SqlCommand GetSqlCommand(
-		    string sql
-		    , IDbTransaction transaction
-	    )
-	    {
-			return 
-				new SqlCommand(
-					sql
-					, (SqlConnection)transaction.Connection
-					, (SqlTransaction)transaction
-				);
-	    }
+        private static SqlCommand GetSqlCommand(
+            string sql
+            , IDbTransaction transaction
+        )
+        {
+            return
+                new SqlCommand(
+                    sql
+                    , (SqlConnection)transaction.Connection
+                    , (SqlTransaction)transaction
+                );
+        }
 
-	    private static SqlCommand GetSqlCommand(
-		    string sql
-			, ParameterListBase parameterList
-		    , IDbTransaction transaction
-			, int timeOut = DefaultTimeOut
-	    )
-	    {
-		    return
-			    GetSqlCommand(
-					sql
-					, transaction
-				)
-				.AddParameters(parameterList)
-				.SetTimeOut(timeOut);
-	    }
+        private static SqlCommand GetSqlCommand(
+            string sql
+            , ParameterListBase parameterList
+            , IDbTransaction transaction
+            , int timeOut = DefaultTimeOut
+        )
+        {
+            return
+                GetSqlCommand(
+                    sql
+                    , transaction
+                )
+                .AddParameters(parameterList)
+                .SetTimeOut(timeOut);
+        }
 
-		private static SqlDataReader GetDataReader(
-			SqlCommand cmd
-		)
-	    {
-		    return 
-				cmd.ExecuteReader(
-					CommandBehavior.CloseConnection
-				);
-	    }
+        private static SqlDataReader GetDataReader(
+            SqlCommand cmd
+        )
+        {
+            return
+                cmd.ExecuteReader(
+                    CommandBehavior.CloseConnection
+                );
+        }
 
-		public override IDataReader GetDataReader(
-			QueryBase query
-			)
-	    {
-			return 
-				GetDataReader(
-					GetSqlCommand(query)
-				);
-		}
+        public override IDataReader GetDataReader(
+            QueryBase query
+            )
+        {
+            return
+                GetDataReader(
+                    GetSqlCommand(query)
+                );
+        }
 
-	    public override int Execute(
-			QueryBase query
-		)
-	    {
-			using (var cmd = GetSqlCommand(query))
-			{
-				return cmd.ExecuteNonQuery();
-			}
-	    }
+        public override int Execute(
+            QueryBase query
+        )
+        {
+            using (var cmd = GetSqlCommand(query))
+            {
+                return cmd.ExecuteNonQuery();
+            }
+        }
 
-		private SqlBulkCopy GetBulkCopy(
-			string tableName
-			, int numColumns
-			, SqlTransaction trans = null
-		) => 
-			(
-				(trans == null)
-				? new SqlBulkCopy
-					(
-						trans.Connection,
-						SqlBulkCopyOptions.Default,
-						trans
-					)
-					{
-						DestinationTableName = tableName
-					}
-				: new SqlBulkCopy(GetConnection())
-					{
-						DestinationTableName = tableName
-					}
-			)
-			.SetTimeOut(3600)
-			.MapColumns(numColumns);
+        private SqlBulkCopy GetBulkCopy(
+            string tableName
+            , int numColumns
+            , SqlTransaction trans = null
+        ) =>
+            (
+                (trans != null)
+                ? new SqlBulkCopy
+                    (
+                        trans.Connection,
+                        SqlBulkCopyOptions.Default,
+                        trans
+                    )
+                {
+                    DestinationTableName = tableName
+                }
+                : new SqlBulkCopy(GetConnection())
+                {
+                    DestinationTableName = tableName
+                }
+            )
+            .SetTimeOut(3600)
+            .MapColumns(numColumns);
 
-	    public override void BulkCopy(
-			IDataReader reader
-			, string table
-			, int numFields
-			, bool deleteRecords = true
-		)
-	    {
-			if(deleteRecords)
-		    {
-			    Execute(new SqlQuery("DELETE FROM " + table));
-		    }
+        public override void BulkCopy(
+            IDataReader reader
+            , string table
+            , int numFields
+            , bool deleteRecords = true
+        )
+        {
+            if (deleteRecords)
+            {
+                Execute(new SqlQuery("DELETE FROM " + table));
+            }
 
-			using (
-				var bc = 
-					GetBulkCopy(
-						table
-						, numFields
-					)
-			)
-			{
-				bc.WriteToServer(reader);
-			}
-		}
+            using (
+                var bc =
+                    GetBulkCopy(
+                        table
+                        , numFields
+                    )
+            )
+            {
+                bc.WriteToServer(reader);
+            }
+        }
 
-	    public override void BulkCopy(
-			IDataReader reader
-			, string table
-			, int numFields
-			, IDbTransaction trans
-			, bool deleteRecords = true
-		)
-	    {
-			if(deleteRecords)
-		    {
-			    Execute(
-					new SqlQuery(
-						"DELETE FROM " + table
-						, trans
-					)
-				);
-		    }
+        public override void BulkCopy(
+            IDataReader reader
+            , string table
+            , int numFields
+            , IDbTransaction trans
+            , bool deleteRecords = true
+        )
+        {
+            if (deleteRecords)
+            {
+                Execute(
+                    new SqlQuery(
+                        "DELETE FROM " + table
+                        , trans
+                    )
+                );
+            }
 
-			using
-		    (
-			    var bc = 
-					GetBulkCopy(
-						table
-						, numFields
-						, trans as SqlTransaction
-					)
-		    )
-			{
-				bc.WriteToServer(reader);
-			    reader.Close();
-		    }
-		}
+            using
+            (
+                var bc =
+                    GetBulkCopy(
+                        table
+                        , numFields
+                        , trans as SqlTransaction
+                    )
+            )
+            {
+                bc.WriteToServer(reader);
+                reader.Close();
+            }
+        }
 
-	    public override void BulkCopy(
-			DataTable dt
-			, string table
-			, int numFields
-			, bool deleteRecords = true
-		)
-	    {
-		    if (deleteRecords)
-		    {
-			    Execute(new SqlQuery("DELETE FROM " + table));
-		    }
+        public override void BulkCopy(
+            DataTable dt
+            , string table
+            , int numFields
+            , bool deleteRecords = true
+        )
+        {
+            if (deleteRecords)
+            {
+                Execute(new SqlQuery("DELETE FROM " + table));
+            }
 
-		    using(
-				var bc = GetBulkCopy(table, numFields)
-			)
-			{
-				bc.WriteToServer(dt);
-			}			
-		}
+            using (
+                var bc = GetBulkCopy(table, numFields)
+            )
+            {
+                bc.WriteToServer(dt);
+            }
+        }
 
-		public override void BulkCopy(
-			DataTable dt
-			, string table
-			, int numFields
-			, IDbTransaction trans
-			, bool deleteRecords = true
-		)
-		{
-			if (deleteRecords)
-			{
-				Execute(new SqlQuery("DELETE FROM " + table, trans));
-			}
+        public override void BulkCopy(
+            DataTable dt
+            , string table
+            , int numFields
+            , IDbTransaction trans
+            , bool deleteRecords = true
+        )
+        {
+            if (deleteRecords)
+            {
+                Execute(new SqlQuery("DELETE FROM " + table, trans));
+            }
 
-			using (
-				var bc = 
-					GetBulkCopy(
-						table
-						, numFields
-						, trans as SqlTransaction
-					)
-			)
-			{
-				bc.WriteToServer(dt);
-			}
-		}
+            using (
+                var bc =
+                    GetBulkCopy(
+                        table
+                        , numFields
+                        , trans as SqlTransaction
+                    )
+            )
+            {
+                bc.WriteToServer(dt);
+            }
+        }
 
-		private static T Get<T>(IDataReader dr)
-	    {
-			var t = default(T);
-		    if(dr.Read())
-		    {
-			    t = (T)dr[0];
-		    }
-		    dr.Close();
-		    return t;
-		}
+        private static T Get<T>(IDataReader dr)
+        {
+            var t = default(T);
+            if (dr.Read())
+            {
+                t = (T)dr[0];
+            }
+            dr.Close();
+            return t;
+        }
 
-		public override T Get<T>(
-			QueryBase query
-			)
-	    {
-			return 
-				Get<T>(
-					GetDataReader(
-						query
-					)
-				);
-		}
+        public override T Get<T>(
+            QueryBase query
+            )
+        {
+            return
+                Get<T>(
+                    GetDataReader(
+                        query
+                    )
+                );
+        }
 
-		private SqlCommand GetSqlCommand(QueryBase query)
-		{
-			if (string.IsNullOrEmpty(query.Sql))
-			{
-				throw new ArgumentNullException(nameof(query));
-			}
+        private SqlCommand GetSqlCommand(QueryBase query)
+        {
+            if (string.IsNullOrEmpty(query.Sql))
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
 
-			if(query.Transaction == null)
-			{
-				if(query.Connection == null)
-				{
-					if(query.Parameters.Count == 0)
-					{
-						return 
-							GetSqlCommand(
-								query.Sql
-							);
-					}
-					else
-					{
-						return 
-							GetSqlCommand(
-								query.Sql
-								, query.Parameters
-							);
-					}
-				}
-				else
-				{
-					if (query.Parameters.Count == 0)
-					{
-						return 
-							GetSqlCommand(
-								query.Sql
-								, query.Connection
-							);
-					}
-					else
-					{
-						return
-							GetSqlCommand(
-								query.Sql
-								, query.Parameters
-								, query.Connection
-							);
-					}
-				}
-			}		
-			else
-			{
-				if (query.Parameters.Count == 0)
-				{
-					return 
-						GetSqlCommand(
-							query.Sql
-							, query.Transaction
-						);
-				}
-				else
-				{
-					return 
-						GetSqlCommand(
-							query.Sql
-							, query.Parameters
-							, query.Transaction
-						);
-				}
-			}			
-		}
+            if (query.Transaction == null)
+            {
+                if (query.Connection == null)
+                {
+                    if (query.Parameters.Count == 0)
+                    {
+                        return
+                            GetSqlCommand(
+                                query.Sql
+                            );
+                    }
+                    else
+                    {
+                        return
+                            GetSqlCommand(
+                                query.Sql
+                                , query.Parameters
+                            );
+                    }
+                }
+                else
+                {
+                    if (query.Parameters.Count == 0)
+                    {
+                        return
+                            GetSqlCommand(
+                                query.Sql
+                                , query.Connection
+                            );
+                    }
+                    else
+                    {
+                        return
+                            GetSqlCommand(
+                                query.Sql
+                                , query.Parameters
+                                , query.Connection
+                            );
+                    }
+                }
+            }
+            else
+            {
+                if (query.Parameters.Count == 0)
+                {
+                    return
+                        GetSqlCommand(
+                            query.Sql
+                            , query.Transaction
+                        );
+                }
+                else
+                {
+                    return
+                        GetSqlCommand(
+                            query.Sql
+                            , query.Parameters
+                            , query.Transaction
+                        );
+                }
+            }
+        }
 
-		public override ParameterListBase CreateParameterList()
-		{
-			return new SqlParameterList();
-		}
+        public override ParameterListBase CreateParameterList()
+        {
+            return new SqlParameterList();
+        }
 
-		public override ParameterListBase CreateParameterList<T>(string name, T t)
-		{
-			return new SqlParameterList(name, t);
-		}
+        public override ParameterListBase CreateParameterList<T>(string name, T t)
+        {
+            return new SqlParameterList(name, t);
+        }
 
 
-		public override QueryBase CreateQueryGet(
-			string tableName
-			, string keyName
-			, object keyValue
-		)
-		{
-			return 
-				new SqlQuery(
-				$@"
+        public override QueryBase CreateQueryGet(
+            string tableName
+            , string keyName
+            , object keyValue
+        )
+        {
+            return
+                new SqlQuery(
+                $@"
 					SELECT * 
 					FROM {tableName}
 					WHERE {keyName} = @{keyName}					
 				"
-				, keyName
-				, keyValue
-			);
-		}
+                , keyName
+                , keyValue
+            );
+        }
 
-		public override QueryBase CreateQuerySelect(
-			string tableName
-		) => 
-			new SqlQuery(
-				$@"
+        public override QueryBase CreateQuerySelect(
+            string tableName
+        ) =>
+            new SqlQuery(
+                $@"
 					SELECT * 
 					FROM {tableName}
 				"
-			);
+            );
 
-		public override QueryBase CreateQueryUpdate(
-			string tableName
-			, List<IField> fields
-			, IDbTransaction transaction
-		) => 
-			new SqlQuery(
-				$@"
+        public override QueryBase CreateQueryUpdate(
+            string tableName
+            , List<IField> fields
+            , IDbTransaction transaction
+        ) =>
+            new SqlQuery(
+                $@"
 					UPDATE {tableName}
 					SET 
 						{
-							fields
-							.Where(p => !p.IsPrimaryKey)
-							.SelectUpdate()
-						}
+                            fields
+                            .Where(p => !p.IsPrimaryKey)
+                            .SelectUpdate()
+                        }
 					WHERE 
 						{
-							fields
-							.Where(p => p.IsPrimaryKey)
-							.JoinWithAnd()
-						}
+                            fields
+                            .Where(p => p.IsPrimaryKey)
+                            .JoinWithAnd()
+                        }
 				"
-				, GetParameters(fields)
-				, transaction
-			);
+                , GetParameters(fields)
+                , transaction
+            );
 
-		private ParameterListBase GetParameters(
-			IEnumerable<IField> fields
-		) =>
-			CreateParameterList()
-			.AddRange(fields);
+        private ParameterListBase GetParameters(
+            IEnumerable<IField> fields
+        ) =>
+            CreateParameterList()
+            .AddRange(fields);
 
-		public override QueryBase CreateQuerySelect(
-			string tableName
-			, ListFilter listFilter
-			, OrderList orderList = null
-		)
-		{
-			return
-				new SqlQuery(
-					$@"
+        public override QueryBase CreateQuerySelect(
+            string tableName
+            , ListFilter listFilter
+            , OrderList orderList = null
+        )
+        {
+            return
+                new SqlQuery(
+                    $@"
 						SELECT * 
 						FROM {tableName}
 						WHERE {GetWhereFilter(listFilter)}
 						{GetOrder(orderList)}
 					"
-					, listFilter
-				)
-				;
-		}
+                    , listFilter
+                )
+                ;
+        }
 
-		private string GetWhereFilter(
-			IEnumerable<Filter> iEnum
-		)
-		{
-			return
-				iEnum
-				.Select(p => $"{p.Name} = @{p.Name}")
-				.JoinWithAnd();
-		}
+        private string GetWhereFilter(
+            IEnumerable<Filter> iEnum
+        )
+        {
+            return
+                iEnum
+                .Select(p => $"{p.Name} = @{p.Name}")
+                .JoinWithAnd();
+        }
 
-		private string GetOrder(
-			OrderList orderList
-		) =>
-			orderList == null
-			? ""
-			: orderList.Count == 0
-				? ""
-				: " ORDER BY "
-					+ orderList
-					.Select(o => $" {o.Name} {(o.Ascending ? "ASC" : "DESC")} ")
-					.JoinWith(", ");
+        private string GetOrder(
+            OrderList orderList
+        ) =>
+            orderList == null
+            ? ""
+            : orderList.Count == 0
+                ? ""
+                : " ORDER BY "
+                    + orderList
+                    .Select(o => $" {o.Name} {(o.Ascending ? "ASC" : "DESC")} ")
+                    .JoinWith(", ");
 
-		public override QueryBase CreateQueryInsert(
-			string tableName
-			, List<IField> fields
-		) => 
-			new SqlQuery(
-				$@"
+        public override QueryBase CreateQueryInsert(
+            string tableName
+            , List<IField> fields
+        ) =>
+            new SqlQuery(
+                $@"
 					INSERT INTO {tableName}(
 						{fields.SelectInsertField()}
 					) VALUES (
 						{fields.SelectInsertParam()}
 					)
 				"
-				, GetParameters(fields)
-			);
+                , GetParameters(fields)
+            );
 
-		public override QueryBase CreateQueryDelete(
-			string tableName
-			, string keyName
-		)
-		{
-			return
-				new SqlQuery(
-				$@"
+        public override QueryBase CreateQueryDelete(
+            string tableName
+            , string keyName
+        )
+        {
+            return
+                new SqlQuery(
+                $@"
 					DELETE 
 					FROM {tableName}
 					WHERE {keyName} = @{keyName}
 				"
-				);
-		}
-	}
+                );
+        }
+    }
 }

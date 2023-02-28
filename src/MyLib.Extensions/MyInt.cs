@@ -1,6 +1,6 @@
 ﻿namespace MyLib.Extensions
 {
-	public static class MyInt
-	{
-	}
+    public static class MyInt
+    {
+    }
 }

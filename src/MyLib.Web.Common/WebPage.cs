@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.UI;
@@ -6,136 +8,183 @@ using System.Web.UI.WebControls;
 
 namespace MyLib.Web.Common
 {
-	public class WebPage : Page
-	{
-		protected string AppPath 
-			=> Server.MapPath("/");
+    public class WebPage : Page
+    {
+        protected CultureInfo CurrentCulture { get; set; }
 
-		protected bool IsEmpty(TextBox txt)
-			=> string.IsNullOrEmpty(txt.Text);
+        protected string AppPath
+            => Server.MapPath("/");
 
-		protected string GetPhysicalDir(string nombre)
-		{
-			if(Request.PhysicalApplicationPath == null)
-			{
-				throw new MyLibWebRequestException(
-					"No se encontrol el path de la aplicacion en el servidor"
-				);
-			}
+        protected bool IsEmpty(TextBox txt)
+            => string.IsNullOrEmpty(txt.Text);
 
-			var dir =
-				Path.Combine(
-					Request.PhysicalApplicationPath
-					, nombre
-				);
-			ForceExistsDir(dir);
-			return dir;
-		}
+        protected bool IsEmpty(
+            HiddenField hf
+        ) =>
+            string.IsNullOrEmpty(hf.Value);
 
-		private void ForceExistsDir(string dir)
-		{
-			if (!Directory.Exists(dir))
-			{
-				Directory.CreateDirectory(dir);
-			}
-		}
+        public WebPage(CultureInfo ci)
+        {
+            CurrentCulture = ci;
+        }
 
-		protected IEnumerable<DataItem> GetDataItemEnumerable(
-			string[] lista
-		) =>
-			lista
-				.Select(
-					(tl, i) =>
-						new DataItem()
-						{
-							Id = i + 1,
-							Description = tl
-						}
-				);
-		
-		protected IEnumerable<DataItem> GetDataItemEnumerable(
-			(bool, string)[] lista
-		) =>
-			lista
-				.Select(
-					(tl, i) =>
-						new DataItem()
-						{
-							Id = tl.Item1,
-							Description = tl.Item2
-						}
-				);
+        protected string GetPhysicalDir(string nombre)
+        {
+            if (Request.PhysicalApplicationPath == null)
+            {
+                throw new MyLibWebRequestException(
+                    "No se encontrol el path de la aplicacion en el servidor"
+                );
+            }
 
-		protected IEnumerable<DataItem> GetDataItemEnumerable(
-			(string, string)[] lista
-		) => 
-			lista
-			.Select(
-				(tl, i) =>
-				new DataItem() {
-					Id = tl.Item1
-					, Description = tl.Item2
-				}
-			);
+            var dir =
+                Path.Combine(
+                    Request.PhysicalApplicationPath
+                    , nombre
+                );
+            ForceExistsDir(dir);
+            return dir;
+        }
 
-		protected void DescargarCsv(
-			string fileName
-			, string csvData
-		)
-		{
-			Response.Clear();
-			Response.ContentType = "text/csv";
-			Response.AppendHeader(
-				"Content-Disposition"
-				, $"attachment; filename={fileName}"
-			);
-			Response.Write(csvData);
-			Response.Flush();
-			Response.End();
-		}
+        private void ForceExistsDir(string dir)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+        }
 
-		protected void RegisterPostBack(
-			Control control
-		) 
-			=> 
-			ScriptManager
-			.GetCurrent(Page)
-			.RegisterPostBackControl(control);
+        protected IEnumerable<DataItem> GetDataItemEnumerable(
+            string[] lista
+        ) =>
+            lista
+                .Select(
+                    (tl, i) =>
+                        new DataItem()
+                        {
+                            Id = i + 1,
+                            Description = tl
+                        }
+                );
 
-		public void AddAjaxScript(
-			string key
-			, string script
-			, bool addScriptTags = true
-		) => 
-			ScriptManager
-				.RegisterClientScriptBlock(
-					this
-					, GetType()
-					, key
-					, script
-					, addScriptTags
-				);
+        protected IEnumerable<DataItem> GetDataItemEnumerable(
+            (bool, string)[] lista
+        ) =>
+            lista
+                .Select(
+                    (tl, i) =>
+                        new DataItem()
+                        {
+                            Id = tl.Item1,
+                            Description = tl.Item2
+                        }
+                );
 
-		public void SetCookie(
-			string name,
-			string value
-		)
-		{
-			var cookie = Page.Response.Cookies[name];
-			if (cookie != null)
-			{
-				cookie.Value = value;
-			}
-		}
+        protected IEnumerable<DataItem> GetDataItemEnumerable(
+            (string, string)[] lista
+        ) =>
+            lista
+            .Select(
+                (tl, i) =>
+                new DataItem()
+                {
+                    Id = tl.Item1
+                    ,
+                    Description = tl.Item2
+                }
+            );
 
-		public string GetCookie(
-			string name
-		) => 
-			Page
-			.Request
-			.Cookies[name]
-			?.Value 
-			?? ""
-			;
-	}
+        protected void DescargarCsv(
+            string fileName
+            , string csvData
+        )
+        {
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Response.ContentType = 
+                "applicatiion/octet-stream";
+
+            Response.AppendHeader(
+                "Content-Disposition"
+                , $"attachment; filename={fileName};"
+            );
+
+            Response.Write(csvData);
+            Response.Flush();
+            Response.End();
+        }
+
+        protected void RegisterPostBack(
+            Control control
+        )
+            =>
+            ScriptManager
+            .GetCurrent(Page)
+            .RegisterPostBackControl(control);
+
+        public void AddAjaxScript(
+            string key
+            , string script
+            , bool addScriptTags = true
+        ) =>
+            ScriptManager
+                .RegisterClientScriptBlock(
+                    this
+                    , GetType()
+                    , key
+                    , script
+                    , addScriptTags
+                );
+
+        public void SetCookie(
+            string name,
+            string value
+        )
+        {
+            var cookie = Page.Response.Cookies[name];
+            if (cookie != null)
+            {
+                cookie.Value = value;
+            }
+        }
+
+        public string GetCookie(
+            string name
+        ) =>
+            Page
+            .Request
+            .Cookies[name]
+            ?.Value
+            ?? ""
+            ;
+
+
+        protected DateTime ToDateTime(
+            string f
+        ) =>
+            Convert.ToDateTime(f, CurrentCulture);
+        protected byte ToByte(
+            string b
+        ) =>
+            Convert.ToByte(b, CurrentCulture);
+        protected short ToInt16(
+            string n
+        ) =>
+            Convert.ToInt16(n, CurrentCulture);
+        protected int ToInt32(
+            string n
+        ) =>
+            Convert.ToInt32(n, CurrentCulture);
+        protected long ToInt64(
+            string n
+        ) =>
+            Convert.ToInt64(n, CurrentCulture);
+
+        protected string ToString(
+            object s
+        ) => 
+            Convert.ToString(s, CurrentCulture);
+    }
 }

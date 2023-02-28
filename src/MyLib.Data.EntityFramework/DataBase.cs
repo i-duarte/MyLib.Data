@@ -2,13 +2,13 @@
 
 namespace MyLib.Data.EntityFramework
 {
-	public class DataBase
-	{
-		protected IDataBaseAdapter DataBaseAdapter { get; set; }
+    public class DataBase
+    {
+        protected IDataBaseAdapter DataBaseAdapter { get; set; }
 
-		public DataBase(IDataBaseAdapter dataBaseAdapter)
-		{
-			DataBaseAdapter = dataBaseAdapter;
-		}
-	}
+        public DataBase(IDataBaseAdapter dataBaseAdapter)
+        {
+            DataBaseAdapter = dataBaseAdapter;
+        }
+    }
 }
