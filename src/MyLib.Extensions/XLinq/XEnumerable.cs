@@ -57,6 +57,11 @@ namespace MyLib.Extensions.XLinq
             yield return source;
         }
 
+        public static string ToCsvStr(this string source)
+        {
+            return $"\"{source}\"";
+        }
+
         public static IEnumerable<T> AddRowNumbers<T>(
             this IEnumerable<T> source
         ) where T : INumbered =>
