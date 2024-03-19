@@ -259,5 +259,16 @@ namespace MyLib.Extensions.XLinq
             $"{quotation}" +
             $"{iEnum.JoinWith(separator)}" +
             $"{quotation}";
+
+        public static IEnumerable<int> RangeTo(
+            this int source
+            , int to
+        )
+        {
+            for (var i = source; i <= to; i++)
+            {
+                yield return i;
+            }
+        }   
     }
 }
