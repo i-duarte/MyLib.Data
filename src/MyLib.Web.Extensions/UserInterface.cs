@@ -119,6 +119,10 @@ namespace MyLib.Web.Extensions
             , string todos = ""
         )
         {
+            cmb.Items.Clear();
+            cmb.SelectedIndex = -1;
+            cmb.SelectedValue = null;
+            cmb.ClearSelection();
             cmb.DataSource = dataSource;
             cmb.DataTextField = dataTextField;
             cmb.DataValueField = dataValueField;
@@ -152,6 +156,23 @@ namespace MyLib.Web.Extensions
             catch { }
 
             return source;
+        }
+
+        public static void ConfiguraPaginador(
+            GridView gv
+            , int itemsXPagina
+        )
+        {
+            if (itemsXPagina == 0)
+            {
+                gv.AllowPaging = false;
+            }
+            else
+            {
+                gv.AllowPaging = true;
+                gv.PageIndex = 0;
+                gv.PageSize = itemsXPagina;
+            }
         }
 
         public static T SelectedValue<T>(
