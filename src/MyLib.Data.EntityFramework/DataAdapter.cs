@@ -26,6 +26,16 @@ namespace MyLib.Data.EntityFramework
             DataBase = database;
         }
 
+        public T Get<T>(QueryBase sqlQuery)
+        {
+            return QueryAdapter.Get<T>(sqlQuery);
+        }
+
+        public int Execute(QueryBase query)
+        {
+            return QueryAdapter.Execute(query);
+        }
+
         protected ParameterListBase CreateParameterList()
         {
             return QueryAdapter.CreateParameterList();
