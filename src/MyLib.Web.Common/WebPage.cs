@@ -55,41 +55,61 @@ namespace MyLib.Web.Common
         }
 
         protected IEnumerable<DataItem> GetDataItemEnumerable(
-            string[] lista
+            IEnumerable<int> lista
         ) =>
-            lista
-                .Select(
-                    (tl, i) =>
-                        new DataItem()
-                        {
-                            Id = i + 1,
-                            Description = tl
-                        }
-                );
+            lista.Select(
+                (tl) =>
+                new DataItem()
+                {
+                    Id = tl, 
+                    Description = ToString(tl)
+                }
+            );
+
+        protected IEnumerable<DataItem> GetDataItemEnumerable(
+            IEnumerable<(int, string)> lista
+        ) =>
+            lista.Select(
+                (tupla) =>
+                new DataItem()
+                {
+                    Id = tupla.Item1,
+                    Description = tupla.Item2
+                }
+            );
+
+        protected IEnumerable<DataItem> GetDataItemEnumerable(
+            IEnumerable<string> lista
+        ) =>
+            lista.Select(
+                (tl, i) =>
+                    new DataItem()
+                    {
+                        Id = i + 1,
+                        Description = tl
+                    }
+            );
 
         protected IEnumerable<DataItem> GetDataItemEnumerable(
             (bool, string)[] lista
         ) =>
-            lista
-                .Select(
-                    (tl, i) =>
-                        new DataItem()
-                        {
-                            Id = tl.Item1,
-                            Description = tl.Item2
-                        }
-                );
+            lista.Select(
+                (tl, i) =>
+                    new DataItem()
+                    {
+                        Id = tl.Item1,
+                        Description = tl.Item2
+                    }
+            );
 
         protected IEnumerable<DataItem> GetDataItemEnumerable(
             (string, string)[] lista
         ) =>
-            lista
-            .Select(
+            lista.Select(
                 (tl, i) =>
                 new DataItem()
                 {
-                    Id = tl.Item1
-                    ,
+                    Id = tl.Item1,
                     Description = tl.Item2
                 }
             );
@@ -116,6 +136,20 @@ namespace MyLib.Web.Common
             Response.End();
         }
 
+        protected void RegisterStartupScript(
+            string key
+            , string script
+            , bool addScriptTags = true
+        ) =>
+            ScriptManager
+                .RegisterStartupScript(
+                    this
+                    , GetType()
+                    , key
+                    , script
+                    , addScriptTags
+                );
+
         protected void RegisterPostBack(
             Control control
         )
@@ -136,6 +170,21 @@ namespace MyLib.Web.Common
                     , key
                     , script
                     , addScriptTags
+                );
+
+        public void AddAjaxScript(
+            string key
+            , string script
+            , Control control
+            , bool addScriptTags = true
+        ) =>
+            ScriptManager
+                .RegisterClientScriptBlock( 
+                    control
+                    , control.GetType()
+                    , key
+                    , script
+                    , addScriptTags 
                 );
 
         public void SetCookie(
@@ -185,6 +234,11 @@ namespace MyLib.Web.Common
         protected string ToString(
             object s
         ) => 
+            Convert.ToString(s, CurrentCulture);
+
+        protected string ToString(
+            int s
+        ) =>
             Convert.ToString(s, CurrentCulture);
     }
 }
