@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DataReaderExtensions.cs" />
     <Compile Include="XLinq\XEnumerable.cs" />
     <Compile Include="XLinq\INumbered.cs" />
     <Compile Include="XLinq\List.cs" />

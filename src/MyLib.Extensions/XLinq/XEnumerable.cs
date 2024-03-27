@@ -260,6 +260,7 @@ namespace MyLib.Extensions.XLinq
             $"{iEnum.JoinWith(separator)}" +
             $"{quotation}";
 
+        [Obsolete("Usar To en su lugar")]
         public static IEnumerable<int> RangeTo(
             this int source
             , int to
@@ -269,6 +270,16 @@ namespace MyLib.Extensions.XLinq
             {
                 yield return i;
             }
-        }   
+        }
+        public static IEnumerable<int> To(
+            this int source
+            , int to
+        )
+        {
+            for (var i = source; i <= to; i++)
+            {
+                yield return i;
+            }
+        }
     }
 }
