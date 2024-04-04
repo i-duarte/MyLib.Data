@@ -236,6 +236,9 @@ namespace MyLib.Web.Common
         ) => 
             Convert.ToString(s, CurrentCulture);
 
+        protected string ToString(bool s) =>
+            s ? "SI" : "NO";
+
         protected string ToString(
             int s
         ) =>

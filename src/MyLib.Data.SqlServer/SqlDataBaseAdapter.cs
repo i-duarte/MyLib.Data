@@ -87,7 +87,7 @@ namespace MyLib.Data.SqlServer
         ) =>
             GetStrConexion(timeOut)
             .Pipe(GetConnection)
-            .Pipe(Open);
+            .PipeOver(Open);
 
         public IDbConnection GetConnection(
             int timeOut

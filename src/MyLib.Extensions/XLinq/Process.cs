@@ -5,7 +5,7 @@ namespace MyLib.Extensions.XLinq
 {
     public static class Process
     {
-        public static T Pipe<T>(
+        public static T PipeOver<T>(
             this T source
             , Action<T> a
         )
@@ -13,6 +13,13 @@ namespace MyLib.Extensions.XLinq
             a(source);
             return source;
         }
+
+        public static TR Pipe<T, TP, TR>(
+            this T x
+            , Func<TP, T, TR> f
+            , TP p
+        )
+            => f(p, x);
 
         public static TR Pipe<T, TR>(
             this T x
