@@ -5,6 +5,18 @@ namespace MyLib.Extensions.XLinq
 {
     public static class Process
     {
+        public static IEnumerable<TR> Select<T, T2, TR>(
+            this IEnumerable<T2> source
+            , Func<T, T2, TR> f
+            , T p
+        )
+        {
+            foreach (var x in source)
+            {
+                yield return f(p, x);
+            }
+        }
+
         public static T PipeOver<T>(
             this T source
             , Action<T> a
