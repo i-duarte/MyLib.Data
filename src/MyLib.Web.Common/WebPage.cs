@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -226,6 +227,17 @@ namespace MyLib.Web.Common
             string n
         ) =>
             Convert.ToInt32(n, CurrentCulture);
+
+        protected int ToInt32(
+            double n
+        ) =>
+            Convert.ToInt32(n, CurrentCulture);
+
+        protected int ToInt32(
+            decimal n
+        ) =>
+            Convert.ToInt32(n, CurrentCulture);
+
         protected long ToInt64(
             string n
         ) =>

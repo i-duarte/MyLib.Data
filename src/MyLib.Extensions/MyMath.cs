@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace MyLib.Extensions
 {
@@ -21,6 +22,13 @@ namespace MyLib.Extensions
 
     public static class MyMath
     {
+        public static decimal Max(
+            params decimal[] values
+        )
+        {
+            return values.Max();
+        }
+
         public static decimal Round(this decimal v, int n)
             => Math.Round(v, n);
     }
