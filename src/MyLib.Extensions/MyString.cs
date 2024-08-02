@@ -1,4 +1,6 @@
-﻿namespace MyLib.Extensions
+﻿using System.Collections.Generic;
+
+namespace MyLib.Extensions
 {
     public static class MyString
     {
@@ -11,5 +13,7 @@
             ? item
             : source + separador + item
             ;
+
+        
     }
 }

@@ -7,6 +7,11 @@ namespace MyLib.Extensions.XLinq
 {
     public static class XEnumerable
     {
+        public static string JoinWith(
+            this IEnumerable<string> source
+            , string separator
+        ) =>
+            string.Join(separator, source);
 
         public static IEnumerable<T> Join<T>(
             this IEnumerable<IEnumerable<T>> source
