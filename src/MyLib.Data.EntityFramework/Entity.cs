@@ -25,6 +25,7 @@ namespace MyLib.Data.EntityFramework
             .ForEach(
                 field =>
                 {
+                    //System.Diagnostics.Debug.WriteLine($"cargando datos en {field.Name}");
                     try
                     {
                         if (DBNull.Value == dr[field.Name])
