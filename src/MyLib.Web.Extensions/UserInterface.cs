@@ -134,7 +134,11 @@ namespace MyLib.Web.Extensions
 
         public static void SelectByText(this DropDownList source, string text)
         {
-            (source.Items.FindByText(text)).Selected = true;            
+            var item = source.Items.FindByText(text);
+            if(item != null)
+            {
+                item.Selected = true;
+            }
         }
 
         public static string SelectedText(
