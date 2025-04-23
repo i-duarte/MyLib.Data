@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
-
-namespace MyLib.Extensions
+﻿namespace MyLib.Extensions
 {
     public static class MyString
     {
+        public static string AddCerosIzq(
+            this string source
+            , int longitud
+        ) => source.PadLeft(longitud, '0')
+            ;   
+
         public static string JoinWith(
             this string source
             , string item
