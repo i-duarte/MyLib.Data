@@ -210,6 +210,9 @@ namespace MyLib.Web.Common
             ?? ""
             ;
 
+        protected Decimal ToDecimal(
+            string d
+        ) => Convert.ToDecimal(d, CurrentCulture);
 
         protected DateTime ToDateTime(
             string f
