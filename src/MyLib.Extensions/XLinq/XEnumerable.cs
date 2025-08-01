@@ -67,6 +67,11 @@ namespace MyLib.Extensions.XLinq
             return $"\"{source}\"";
         }
 
+        public static string ToCsvStrTrim(this string source)
+        {
+            return $"\"{source.Trim()}\"";
+        }
+
         public static IEnumerable<T> AddRowNumbers<T>(
             this IEnumerable<T> source
         ) where T : INumbered =>
