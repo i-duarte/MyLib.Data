@@ -123,11 +123,17 @@ namespace MyLib.Data.EntityFramework
             , int column = 0
         )
         {
+            if(dr.IsClosed)
+            {
+                yield break;
+            }
+
             while (dr.Read())
             {
                 yield return (TT)dr[column];
             }
-            dr.Close();
+            
+            dr.Close();            
         }
     }
 }
