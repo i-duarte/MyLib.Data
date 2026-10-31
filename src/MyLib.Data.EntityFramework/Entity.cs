@@ -111,6 +111,8 @@ namespace MyLib.Data.EntityFramework
                     return Convert.ToSingle(v);
                 case "System.Double":
                     return Convert.ToDouble(v);
+                case "System.Boolean":
+                    return Convert.ToBoolean(v);
                 default:
                     throw
                         new ArgumentException(
